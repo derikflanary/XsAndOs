@@ -9,14 +9,18 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    
+    let startButton = UIButton()
+    
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 45;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
         
-        self.addChild(myLabel)
+        startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
+        startButton.setTitle("Start Game", forState: .Normal)
+        startButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+        startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
+        self.view?.addSubview(startButton)
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -41,5 +45,15 @@ class GameScene: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+    }
+    
+    func newGamePressed(){
+        print("newGamePressed")
+        let secondScene = Board()
+        let transition = SKTransition.flipVerticalWithDuration(1.0)
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+        
+        startButton.removeFromSuperview()
     }
 }

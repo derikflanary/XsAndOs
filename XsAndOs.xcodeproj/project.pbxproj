@@ -16,6 +16,7 @@
 		EE5E818F1BDEC1410004424F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE5E818D1BDEC1410004424F /* LaunchScreen.storyboard */; };
 		EE5E819A1BDEC1410004424F /* XsAndOsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E81991BDEC1410004424F /* XsAndOsTests.swift */; };
 		EE5E81A51BDEC1410004424F /* XsAndOsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E81A41BDEC1410004424F /* XsAndOsUITests.swift */; };
+		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		EE5E81A01BDEC1410004424F /* XsAndOsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XsAndOsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE5E81A41BDEC1410004424F /* XsAndOsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XsAndOsUITests.swift; sourceTree = "<group>"; };
 		EE5E81A61BDEC1410004424F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				EE5E81801BDEC1410004424F /* AppDelegate.swift */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
+				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
 				EE5E818B1BDEC1410004424F /* Assets.xcassets */,
@@ -264,6 +267,7 @@
 			files = (
 				EE5E81851BDEC1410004424F /* GameScene.swift in Sources */,
 				EE5E81871BDEC1410004424F /* GameViewController.swift in Sources */,
+				EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */,
 				EE5E81811BDEC1410004424F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,6 +497,7 @@
 				EE5E81AB1BDEC1410004424F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EE5E81AC1BDEC1410004424F /* Build configuration list for PBXNativeTarget "XsAndOsTests" */ = {
 			isa = XCConfigurationList;
@@ -501,6 +506,7 @@
 				EE5E81AE1BDEC1410004424F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EE5E81AF1BDEC1410004424F /* Build configuration list for PBXNativeTarget "XsAndOsUITests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +515,7 @@
 				EE5E81B11BDEC1410004424F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
