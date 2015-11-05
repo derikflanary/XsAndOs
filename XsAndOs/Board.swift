@@ -9,6 +9,10 @@
 import SpriteKit
 
 class Board: SKScene {
+    
+//    Nodes[,] Nodez;     // an array of Nodes: pts color screen position and array pos
+    var YIsopin : Int?    // distance between nodes Vertical
+    var XIsopin : Int?
 
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
