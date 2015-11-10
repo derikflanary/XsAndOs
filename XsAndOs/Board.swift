@@ -19,12 +19,13 @@ class Board: SKScene {
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
     var grid = Array2D<Nodes>(columns: dim, rows: dim)
+    var selectedNode = SKSpriteNode()
     
     override init(size: CGSize) {
         super.init(size: size)
         
         self.backgroundColor = SKColor.whiteColor()
-        gameLayer.position = CGPointMake(0, 100)
+        gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
 
     }
@@ -57,9 +58,11 @@ class Board: SKScene {
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
                     node.nodeType = NodeType.O
                     node.sprite = SKSpriteNode(imageNamed: "O")
+                    node.sprite?.name = "O"
                 }else if (theRow + 1) % 2 != 0 && (column + 1) % 2 == 0{
                     node.nodeType = NodeType.X
                     node.sprite = SKSpriteNode(imageNamed: "X")
+                    node.sprite?.name = "X"
                 }else{
                     if theRow == 0 || theRow == dim - 1 || column == 0 || column == dim - 1{
                         node.nodeType = NodeType.Intersection
@@ -98,7 +101,7 @@ class Board: SKScene {
     func pointForColumn(column: Int, row: Int) -> CGPoint {
         return CGPoint(
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
-            y: CGFloat(row) * yIsopin! + yIsopin!/2)
+            y: CGFloat(row) * yIsopin! + yIsopin!/2 + 100)
     }
     
     func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
@@ -110,6 +113,24 @@ class Board: SKScene {
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
+        
+        
+        for touch in touches {
+            let location = touch.locationInNode(self.gameLayer)
+            let touchedNode = self.nodeAtPoint(location)
+            
+            if touchedNode.name == "X" || touchedNode.name == "O"{
+                selectedNode.setScale(1.0)
+                selectedNode = touchedNode as! SKSpriteNode
+                selectedNode.setScale(1.25)
+                
+            }else{
+                selectedNode.setScale(1.0)
+            }
+            
+        }
+        
+        
         
     }
     
