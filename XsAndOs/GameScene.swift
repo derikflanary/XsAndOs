@@ -14,6 +14,7 @@ class GameScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         
+        
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
         startButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
@@ -21,6 +22,16 @@ class GameScene: SKScene {
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
         self.view?.addSubview(startButton)
         
+    }
+    
+    override init(size: CGSize) {
+        super.init(size: size)
+        
+        self.backgroundColor = SKColor.whiteColor()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -49,7 +60,7 @@ class GameScene: SKScene {
     
     func newGamePressed(){
         print("newGamePressed")
-        let secondScene = Board()
+        let secondScene = Board(size: self.size)
         let transition = SKTransition.flipVerticalWithDuration(1.0)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
