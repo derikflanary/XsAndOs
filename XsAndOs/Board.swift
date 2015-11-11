@@ -9,6 +9,7 @@
 import SpriteKit
 
 var dim = 7
+let bottomPadding : CGFloat = 100
 
 class Board: SKScene {
     
@@ -19,7 +20,9 @@ class Board: SKScene {
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
     var grid = Array2D<Nodes>(columns: dim, rows: dim)
+    
     var selectedNode = SKSpriteNode()
+    var secondSelectedNode = SKSpriteNode()
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -27,6 +30,10 @@ class Board: SKScene {
         self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
+        
+        xIsopin = self.frame.size.width / CGFloat(dim)
+        yIsopin = xIsopin
+        print(xIsopin, yIsopin)
 
     }
 
@@ -41,8 +48,8 @@ class Board: SKScene {
     }
     
     func startGame(){
-        xIsopin = 50
-        yIsopin = 50
+        
+        
     
         buildArrayOfNodes()
     }
@@ -83,7 +90,7 @@ class Board: SKScene {
         for node in nodes{
 
             if node.sprite != nil{
-                let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!)
+                let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!, size: (node.sprite?.frame.size.width)!)
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
@@ -95,18 +102,18 @@ class Board: SKScene {
             }
             
         }
-            print(self.children)
+        
     }
     
-    func pointForColumn(column: Int, row: Int) -> CGPoint {
+    func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
         return CGPoint(
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
-            y: CGFloat(row) * yIsopin! + yIsopin!/2 + 100)
+            y: CGFloat(row) * yIsopin! + bottomPadding)
     }
     
     func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
-        assert(column >= 0 && column < dim)
-        assert(row >= 0 && row < dim)
+        assert(column >= 0 && column <= dim)
+        assert(row >= 0 && row <= dim)
         return grid[column, row]
     }
     
@@ -120,10 +127,21 @@ class Board: SKScene {
             let touchedNode = self.nodeAtPoint(location)
             
             if touchedNode.name == "X" || touchedNode.name == "O"{
+                
                 selectedNode.setScale(1.0)
                 selectedNode = touchedNode as! SKSpriteNode
                 selectedNode.setScale(1.25)
-                
+                print(selectedNode.position)
+                var (success, column, row) = convertPoint(selectedNode.position)
+                if success {
+                    column = round(column)
+                    row = round(row)
+                    
+//                    print(column, row)
+                    print(round(column), round(row))
+                    let node = gridItemAtColumn(Int(column), row: Int(row))
+                    print(node?.sprite?.name)
+                }
             }else{
                 selectedNode.setScale(1.0)
             }
@@ -132,6 +150,15 @@ class Board: SKScene {
         
         
         
+    }
+    
+    func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
+        if point.x >= 0 && point.x < CGFloat(dim) * xIsopin! &&
+            point.y >= 0 && point.y < CGFloat(dim) * yIsopin! + bottomPadding {
+                return (true, Float((point.x - (xIsopin!/2)) / xIsopin!), Float((point.y - bottomPadding) / yIsopin!))
+        } else {
+            return (false, 0, 0)  // invalid location
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
