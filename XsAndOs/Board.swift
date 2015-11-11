@@ -72,9 +72,9 @@ class Board: SKScene {
                     node.sprite?.name = "X"
                 }else{
                     if theRow == 0 || theRow == dim - 1 || column == 0 || column == dim - 1{
-                        node.nodeType = NodeType.Intersection
-                    }else{
                         node.nodeType = NodeType.Empty
+                    }else{
+                        node.nodeType = NodeType.Intersection
                     }
                 }
                 grid[column,theRow] = node
@@ -100,9 +100,7 @@ class Board: SKScene {
 
                 
             }
-            
         }
-        
     }
     
     func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
@@ -111,11 +109,7 @@ class Board: SKScene {
             y: CGFloat(row) * yIsopin! + bottomPadding)
     }
     
-    func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
-        assert(column >= 0 && column <= dim)
-        assert(row >= 0 && row <= dim)
-        return grid[column, row]
-    }
+    
     
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -140,10 +134,18 @@ class Board: SKScene {
 //                    print(column, row)
                     print(round(column), round(row))
                     let node = gridItemAtColumn(Int(column), row: Int(row))
-                    print(node?.sprite?.name)
+                    print(node?.nodeType)
                 }
             }else{
                 selectedNode.setScale(1.0)
+                
+                var (success, column, row) = convertPoint(location)
+                if success{
+                    column = round(column)
+                    row = round(row)
+                    let node = gridItemAtColumn(Int(column), row: Int(row))
+                    print(node?.nodeType)
+                }
             }
             
         }
@@ -159,6 +161,12 @@ class Board: SKScene {
         } else {
             return (false, 0, 0)  // invalid location
         }
+    }
+    
+    func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
+        assert(column >= 0 && column <= dim)
+        assert(row >= 0 && row <= dim)
+        return grid[column, row]
     }
     
     override func update(currentTime: CFTimeInterval) {
