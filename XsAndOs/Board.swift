@@ -124,7 +124,12 @@ class Board: SKScene {
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode){
                         
                     }
-                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position)
+                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
+                    selectedNode.setScale(1.0)
+                    selectedNode = SKSpriteNode()
+                }else if selectedNode.name == "O" && touchedNode.name == "O"{
+                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
+                    
                     selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
                     
@@ -175,17 +180,21 @@ class Board: SKScene {
         return grid[column, row]
     }
     
-    func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint){
+    func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
         let path = createLineAtPoints(pointA, pointB: pointB)
         
-            let shapeNode = SKShapeNode()
-            shapeNode.path = path
-            shapeNode.name = "line"
+        let shapeNode = SKShapeNode()
+        shapeNode.path = path
+        shapeNode.name = "line"
+        if type == "X"{
             shapeNode.strokeColor = UIColor.redColor()
-            shapeNode.lineWidth = 4
-            shapeNode.zPosition = 0
-            shapeNode.userInteractionEnabled = false
-            gameLayer.addChild(shapeNode)
+        }else{
+            shapeNode.strokeColor = UIColor.blueColor()
+        }
+        shapeNode.lineWidth = 4
+        shapeNode.zPosition = 0
+        shapeNode.userInteractionEnabled = false
+        gameLayer.addChild(shapeNode)
         
     }
     
