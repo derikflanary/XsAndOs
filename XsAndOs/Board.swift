@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-var dim = 7
+var dim = 11
 let bottomPadding : CGFloat = 100
 
 class Board: SKScene {
@@ -94,11 +94,11 @@ class Board: SKScene {
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
-//                sprite?.size = CGSizeMake(25, 25)
+                sprite?.size = CGSizeMake(xIsopin!/2, yIsopin!/2)
                 sprite?.anchorPoint = CGPointMake(0, 0)
+                sprite?.zPosition = 2
                 gameLayer.addChild(sprite!)
 
-                
             }
         }
     }
@@ -108,8 +108,6 @@ class Board: SKScene {
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
             y: CGFloat(row) * yIsopin! + bottomPadding)
     }
-    
-    
     
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -122,20 +120,32 @@ class Board: SKScene {
             
             if touchedNode.name == "X" || touchedNode.name == "O"{
                 
-                selectedNode.setScale(1.0)
-                selectedNode = touchedNode as! SKSpriteNode
-                selectedNode.setScale(1.25)
-                print(selectedNode.position)
-                var (success, column, row) = convertPoint(selectedNode.position)
-                if success {
-                    column = round(column)
-                    row = round(row)
+                if selectedNode.name == "X" && touchedNode.name == "X"{
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode){
+                        
+                    }
+                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position)
+                    selectedNode.setScale(1.0)
+                    selectedNode = SKSpriteNode()
                     
-//                    print(column, row)
-                    print(round(column), round(row))
-                    let node = gridItemAtColumn(Int(column), row: Int(row))
-                    print(node?.nodeType)
+                }else{
+                    selectedNode.setScale(1.0)
+                    selectedNode = touchedNode as! SKSpriteNode
+                    selectedNode.setScale(1.25)
+                    print(selectedNode.position)
                 }
+                
+//                var (success, column, row) = convertPoint(selectedNode.position)
+//                if success {
+//                    column = round(column)
+//                    row = round(row)
+//                    
+////                    print(column, row)
+//                    print(round(column), round(row))
+//                    let node = gridItemAtColumn(Int(column), row: Int(row))
+//                    print(node?.nodeType)
+//                }
+                
             }else{
                 selectedNode.setScale(1.0)
                 
@@ -147,11 +157,7 @@ class Board: SKScene {
                     print(node?.nodeType)
                 }
             }
-            
         }
-        
-        
-        
     }
     
     func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
@@ -167,6 +173,35 @@ class Board: SKScene {
         assert(column >= 0 && column <= dim)
         assert(row >= 0 && row <= dim)
         return grid[column, row]
+    }
+    
+    func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint){
+        let path = createLineAtPoints(pointA, pointB: pointB)
+        
+            let shapeNode = SKShapeNode()
+            shapeNode.path = path
+            shapeNode.name = "line"
+            shapeNode.strokeColor = UIColor.redColor()
+            shapeNode.lineWidth = 4
+            shapeNode.zPosition = 0
+            shapeNode.userInteractionEnabled = false
+            gameLayer.addChild(shapeNode)
+        
+    }
+    
+    func createLineAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
+        let ref = CGPathCreateMutable()
+        CGPathMoveToPoint(ref, nil, pointA.x + selectedNode.frame.size.width/2, pointA.y + selectedNode.frame.size.height/2)
+        CGPathAddLineToPoint(ref, nil, pointB.x + selectedNode.frame.size.width/2, pointB.y + selectedNode.frame.size.height/2)
+        
+        
+        return ref
+        
+    }
+    
+    func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode) -> Bool{
+        
+        return true
     }
     
     override func update(currentTime: CFTimeInterval) {
