@@ -121,7 +121,7 @@ class Board: SKScene {
             if touchedNode.name == "X" || touchedNode.name == "O"{
                 
                 if selectedNode.name == "X" && touchedNode.name == "X"{
-                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode){
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         
                     }
@@ -129,7 +129,7 @@ class Board: SKScene {
                     selectedNode = SKSpriteNode()
                     
                 }else if selectedNode.name == "O" && touchedNode.name == "O"{
-                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode){
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         
                     }
@@ -200,7 +200,7 @@ class Board: SKScene {
         
     }
     
-    func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode) -> Bool{
+    func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
         
         var (success, column, row) = convertPoint(firstSprite.position)
         if success {
@@ -222,8 +222,31 @@ class Board: SKScene {
             if row == row2 || row - row2 == -2 || row - row2 == 2 {
                 print("potential row match")
                 
+                var interRow = 0
+                var interCol = 0
                 if column == column2 || row == row2{
-                    return true
+                    if column == column2{
+                        interCol = Int(column)
+                        if row > row2{
+                            interRow = Int(row2) + 1
+                        }else{
+                            interRow = Int(row) + 1
+                        }
+                    }else{
+                        interRow = Int(row)
+                        if column > column2{
+                            interCol = Int(column2) + 1
+                        }else{
+                            interCol = Int(column) + 1
+                        }
+                    }
+                    let intersection = gridItemAtColumn(interCol, row: interRow)
+                    if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
+                        intersection?.nodePos.ptWho = type
+                        print("drawing line")
+                        return true
+                    }
+                    
                 }
                 
                 
