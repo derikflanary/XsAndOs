@@ -122,14 +122,17 @@ class Board: SKScene {
                 
                 if selectedNode.name == "X" && touchedNode.name == "X"{
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode){
+                        drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         
                     }
-                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
-                }else if selectedNode.name == "O" && touchedNode.name == "O"{
-                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     
+                }else if selectedNode.name == "O" && touchedNode.name == "O"{
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode){
+                        drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
+                        
+                    }
                     selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
                     
@@ -139,17 +142,6 @@ class Board: SKScene {
                     selectedNode.setScale(1.25)
                     print(selectedNode.position)
                 }
-                
-//                var (success, column, row) = convertPoint(selectedNode.position)
-//                if success {
-//                    column = round(column)
-//                    row = round(row)
-//                    
-////                    print(column, row)
-//                    print(round(column), round(row))
-//                    let node = gridItemAtColumn(Int(column), row: Int(row))
-//                    print(node?.nodeType)
-//                }
                 
             }else{
                 selectedNode.setScale(1.0)
@@ -210,7 +202,37 @@ class Board: SKScene {
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode) -> Bool{
         
-        return true
+        var (success, column, row) = convertPoint(firstSprite.position)
+        if success {
+            column = round(column)
+            row = round(row)
+            print(round(column), round(row))
+//                            let node = gridItemAtColumn(Int(column), row: Int(row))
+        }
+        var (success2, column2, row2) = convertPoint(secondSprite.position)
+        if success2{
+            column2 = round(column2)
+            row2 = round(row2)
+            print(column2, row2)
+        }
+        
+        if column == column2 || column - column2 == -2 || column - column2 == 2{
+            print("potential column match")
+            
+            if row == row2 || row - row2 == -2 || row - row2 == 2 {
+                print("potential row match")
+                
+                if column == column2 || row == row2{
+                    return true
+                }
+                
+                
+            }
+        }
+        
+        return false
+        
+       
     }
     
     override func update(currentTime: CFTimeInterval) {
