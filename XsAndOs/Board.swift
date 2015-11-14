@@ -224,17 +224,26 @@ class Board: SKScene {
                 
                 var interRow = 0
                 var interCol = 0
+                
                 if column == column2 || row == row2{
                     if column == column2{
+                        
                         interCol = Int(column)
-                        if row > row2{
+                        
+                        if column == 0 || column2 == Float(dim) - 1{
+                            return false
+                        }else if row > row2{
                             interRow = Int(row2) + 1
                         }else{
                             interRow = Int(row) + 1
                         }
                     }else{
+                        
                         interRow = Int(row)
-                        if column > column2{
+                        
+                        if row == 0 || row2 == Float(dim) - 1{
+                            return false
+                        }else if column > column2{
                             interCol = Int(column2) + 1
                         }else{
                             interCol = Int(column) + 1
@@ -246,16 +255,11 @@ class Board: SKScene {
                         print("drawing line")
                         return true
                     }
-                    
                 }
-                
-                
             }
         }
-        
         return false
-        
-       
+    
     }
     
     override func update(currentTime: CFTimeInterval) {
