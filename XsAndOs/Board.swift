@@ -24,6 +24,8 @@ class Board: SKScene {
     var selectedNode = SKSpriteNode()
     var secondSelectedNode = SKSpriteNode()
     
+    var xTurn : Bool = true
+    
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -121,25 +123,39 @@ class Board: SKScene {
             if touchedNode.name == "X" || touchedNode.name == "O"{
                 
                 if selectedNode.name == "X" && touchedNode.name == "X"{
+                    if !xTurn{
+                        return
+                    }
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                        
+                        xTurn = false
                     }
                     selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
                     
+                    
                 }else if selectedNode.name == "O" && touchedNode.name == "O"{
+                    if xTurn{
+                        return
+                    }
+                    
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                        
+                        xTurn = true
                     }
                     selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
+                    
                     
                 }else{
                     selectedNode.setScale(1.0)
                     selectedNode = touchedNode as! SKSpriteNode
-                    selectedNode.setScale(1.25)
+                    if touchedNode.name == "X" && xTurn{
+                        selectedNode.setScale(1.25)
+                    }else if touchedNode.name == "O" && !xTurn{
+                        selectedNode.setScale(1.25)
+                    }
+                    
                     print(selectedNode.position)
                 }
                 
