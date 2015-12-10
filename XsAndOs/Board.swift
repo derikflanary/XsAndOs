@@ -26,6 +26,9 @@ class Board: SKScene {
     
     var xTurn : Bool = true
     
+    var xLines = [LineShapeNode]()
+    var oLines = [LineShapeNode]()
+    
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -35,7 +38,7 @@ class Board: SKScene {
         
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
-        print(xIsopin, yIsopin)
+//        print(xIsopin, yIsopin)
 
     }
 
@@ -156,7 +159,7 @@ class Board: SKScene {
                         selectedNode.setScale(1.25)
                     }
                     
-                    print(selectedNode.position)
+//                    print(selectedNode.position)
                 }
                 
             }else{
@@ -167,7 +170,7 @@ class Board: SKScene {
                     column = round(column)
                     row = round(row)
                     let node = gridItemAtColumn(Int(column), row: Int(row))
-                    print(node?.nodeType)
+//                    print(node?.nodeType)
                 }
             }
         }
@@ -189,20 +192,96 @@ class Board: SKScene {
     }
     
     func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
+        
+        var columnA : Int = 0
+        var rowA : Int = 0
+        var columnB : Int = 0
+        var rowB : Int = 0
+        
+        var (successA, cA, rA) = convertPoint(pointA)
+        if successA {
+            cA = round(cA)
+            rA = round(rA)
+            columnA = Int(cA)
+            rowA = Int(rA)
+        }
+
+        var (successB, cB, rB) = convertPoint(pointB)
+        if successB {
+            cB = round(cB)
+            rB = round(rB)
+            columnB = Int(cB)
+            rowB = Int(rB)
+        }
+        
+        var match = false
         let path = createLineAtPoints(pointA, pointB: pointB)
         
-        let shapeNode = SKShapeNode()
-        shapeNode.path = path
-        shapeNode.name = "line"
         if type == "X"{
-            shapeNode.strokeColor = UIColor.redColor()
-        }else{
-            shapeNode.strokeColor = UIColor.blueColor()
+            
+            for lineShapeNode in xLines{
+
+                if lineShapeNode.columnA == columnA && lineShapeNode.rowA == rowA || lineShapeNode.columnA == columnB && lineShapeNode.rowA == rowB || lineShapeNode.columnB == columnA && lineShapeNode.rowB == rowA || lineShapeNode.columnB == columnB && lineShapeNode.rowB == rowB {
+                    
+                    print("xs touching lines")
+                    match = true
+                    let originalPath = lineShapeNode.path as! CGMutablePathRef
+                    CGPathAddPath(originalPath, nil, path)
+                    lineShapeNode.path = originalPath
+
+                }
+            }
+            
+            if !match{
+                let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type)
+                shapeNode.path = path
+                shapeNode.name = "line"
+                shapeNode.strokeColor = UIColor.redColor()
+                shapeNode.lineWidth = 4
+                shapeNode.zPosition = 0
+                shapeNode.userInteractionEnabled = false
+                shapeNode.strokeColor = UIColor.redColor()
+
+                gameLayer.addChild(shapeNode)
+                xLines.append(shapeNode)
+            }
+            
+        }else if type == "O"{
+            
+            for lineShapeNode in oLines{
+
+                if lineShapeNode.columnA == columnA && lineShapeNode.rowA == rowA || lineShapeNode.columnA == columnB && lineShapeNode.rowA == rowB || lineShapeNode.columnB == columnA && lineShapeNode.rowB == rowA || lineShapeNode.columnB == columnB && lineShapeNode.rowB == rowB {
+                    print("Os touching lines A")
+                    match = true
+                    let originalPath = lineShapeNode.path as! CGMutablePathRef
+                    CGPathAddPath(originalPath, nil, path)
+                    lineShapeNode.path = originalPath
+                }
+//                }else if lineShapeNode.columnB == columnA && lineShapeNode.rowB == rowA || lineShapeNode.columnB == columnB && lineShapeNode.rowB == rowB{
+//                    print("Os touching lines B")
+//                    match = true
+//                    let originalPath = lineShapeNode.path as! CGMutablePathRef
+//                    CGPathAddPath(originalPath, nil, path)
+//                    lineShapeNode.path = originalPath
+//                }
+            }
+            
+            if !match{
+                let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type)
+                shapeNode.path = path
+                shapeNode.name = "line"
+                shapeNode.strokeColor = UIColor.redColor()
+                shapeNode.lineWidth = 4
+                shapeNode.zPosition = 0
+                shapeNode.userInteractionEnabled = false
+                shapeNode.strokeColor = UIColor.blueColor()
+//                print(shapeNode)
+                gameLayer.addChild(shapeNode)
+                oLines.append(shapeNode)
+            }
         }
-        shapeNode.lineWidth = 4
-        shapeNode.zPosition = 0
-        shapeNode.userInteractionEnabled = false
-        gameLayer.addChild(shapeNode)
+        
+        //check for winner
         
     }
     
@@ -222,21 +301,21 @@ class Board: SKScene {
         if success {
             column = round(column)
             row = round(row)
-            print(round(column), round(row))
+//            print(round(column), round(row))
 //                            let node = gridItemAtColumn(Int(column), row: Int(row))
         }
         var (success2, column2, row2) = convertPoint(secondSprite.position)
         if success2{
             column2 = round(column2)
             row2 = round(row2)
-            print(column2, row2)
+//            print(column2, row2)
         }
         
         if column == column2 || column - column2 == -2 || column - column2 == 2{
-            print("potential column match")
+//            print("potential column match")
             
-            if row == row2 || row - row2 == -2 || row - row2 == 2 {
-                print("potential row match")
+            if row == row2 && column != column2 || row - row2 == -2 || row - row2 == 2 {
+//                print("potential row match")
                 
                 var interRow = 0
                 var interCol = 0
@@ -268,7 +347,7 @@ class Board: SKScene {
                     let intersection = gridItemAtColumn(interCol, row: interRow)
                     if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
                         intersection?.nodePos.ptWho = type
-                        print("drawing line")
+
                         return true
                     }
                 }
@@ -277,6 +356,7 @@ class Board: SKScene {
         return false
     
     }
+    
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
