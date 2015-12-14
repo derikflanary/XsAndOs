@@ -233,7 +233,9 @@ class Board: SKScene {
                         
                         lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                         
-                        checkForWinner(lineShapeNode)
+                        if checkForWinner(lineShapeNode){
+                            print("X wins")
+                        }
                     }
 
                 }
@@ -269,7 +271,9 @@ class Board: SKScene {
                         
                         lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                         
-                        checkForWinner(lineShapeNode)
+                        if checkForWinner(lineShapeNode){
+                            print("O Wins")
+                        }
                     }
                 }
             }
@@ -366,17 +370,47 @@ class Board: SKScene {
     
     }
     
-    func checkForWinner(line: LineShapeNode){
+    func checkForWinner(line: LineShapeNode) -> Bool{
+        
+        var edgeOne = false
+        var edgeTwo = false
+        
         if line.team == "X"{
             for coordinate in line.coordinates{
                 print(coordinate)
+                if coordinate.rowA == 10 || coordinate.rowB == 10{
+                    edgeOne = true
+                }
+                
+                if coordinate.rowA == 0 || coordinate.rowB == 0{
+                    edgeTwo = true
+                }
+                
+                if edgeOne && edgeTwo{
+                    return true
+                }
             }
-            print(line.path)
+            return false
+          
         }else if line.team == "O"{
             for coordinate in line.coordinates{
                 print(coordinate)
+                if coordinate.columnA == 10 || coordinate.columnB == 10{
+                    edgeOne = true
+                }
+                
+                if coordinate.columnA == 0 || coordinate.columnB == 0{
+                    edgeTwo = true
+                }
+                
+                if edgeOne && edgeTwo{
+                    return true
+                }
             }
+            return false
         }
+        
+        return false
     }
     
     override func update(currentTime: CFTimeInterval) {
