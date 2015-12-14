@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-var dim = 11
+var dim = 9
 let bottomPadding : CGFloat = 100
 
 class Board: SKScene {
@@ -364,7 +364,7 @@ class Board: SKScene {
         if line.team == "X"{
             for coordinate in line.coordinates{
                 print(coordinate)
-                if coordinate.rowA == 10 || coordinate.rowB == 10{
+                if coordinate.rowA == dim - 1 || coordinate.rowB == dim - 1{
                     edgeOne = true
                 }
                 
@@ -381,7 +381,7 @@ class Board: SKScene {
         }else if line.team == "O"{
             for coordinate in line.coordinates{
                 print(coordinate)
-                if coordinate.columnA == 10 || coordinate.columnB == 10{
+                if coordinate.columnA == dim - 1 || coordinate.columnB == dim - 1{
                     edgeOne = true
                 }
                 
@@ -420,16 +420,18 @@ class Board: SKScene {
         xLines.removeAll()
         oLines.removeAll()
         grid.removeArray()
-//        grid = Array2D(columns: dim, rows: dim)
         
-        let secondScene = Board(size: self.size)
-        let transition = SKTransition.flipVerticalWithDuration(1.0)
-        secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        self.scene!.view?.presentScene(secondScene, transition: transition)
+        tranistionToNewBoard()
+//        grid = Array2D(columns: dim, rows: dim)
 //        self.startGame()
     }
     
-    
+    func tranistionToNewBoard(){
+        let secondScene = Board(size: self.size)
+        let transition = SKTransition.flipVerticalWithDuration(0.75)
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+    }
     
 //SUPPORT FUNCTIONS
     func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
