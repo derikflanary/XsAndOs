@@ -27,4 +27,8 @@ struct Array2D<T> {
             array[row*columns + column] = newValue
         }
     }
+    
+    mutating func removeArray(){
+        array.removeAll()
+    }
 }

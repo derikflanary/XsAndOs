@@ -29,33 +29,33 @@ class Board: SKScene {
     var xLines = [LineShapeNode]()
     var oLines = [LineShapeNode]()
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override init(size: CGSize) {
         super.init(size: size)
-        
-        self.backgroundColor = SKColor.whiteColor()
-        gameLayer.position = CGPointMake(0, 0)
-        addChild(gameLayer)
         
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
 //        print(xIsopin, yIsopin)
 
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         startGame()
-        
     }
     
-    func startGame(){
-        
-        
     
+//GAME SETUP
+    func startGame(){
+        self.backgroundColor = SKColor.whiteColor()
+        gameLayer.position = CGPointMake(0, 0)
+        addChild(gameLayer)
+        
+        xTurn = true
+        
         buildArrayOfNodes()
     }
     
@@ -110,10 +110,11 @@ class Board: SKScene {
     
     func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
         return CGPoint(
-            x: CGFloat(column) * xIsopin! + xIsopin!/2,
+            x: CGFloat(column) * xIsopin! + xIsopin!/4,
             y: CGFloat(row) * yIsopin! + bottomPadding)
     }
     
+//TOUCHING AND DRAWING FUNCTIONS
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
@@ -176,20 +177,68 @@ class Board: SKScene {
         }
     }
     
-    func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
-        if point.x >= 0 && point.x < CGFloat(dim) * xIsopin! &&
-            point.y >= 0 && point.y < CGFloat(dim) * yIsopin! + bottomPadding {
-                return (true, Float((point.x - (xIsopin!/2)) / xIsopin!), Float((point.y - bottomPadding) / yIsopin!))
-        } else {
-            return (false, 0, 0)  // invalid location
+    func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
+        
+        var (success, column, row) = convertPoint(firstSprite.position)
+        if success {
+            column = round(column)
+            row = round(row)
+            //            print(round(column), round(row))
+            //                            let node = gridItemAtColumn(Int(column), row: Int(row))
         }
+        var (success2, column2, row2) = convertPoint(secondSprite.position)
+        if success2{
+            column2 = round(column2)
+            row2 = round(row2)
+            //            print(column2, row2)
+        }
+        
+        if column == column2 || column - column2 == -2 || column - column2 == 2{
+            //            print("potential column match")
+            
+            if row == row2 && column != column2 || row - row2 == -2 || row - row2 == 2 {
+                //                print("potential row match")
+                
+                var interRow = 0
+                var interCol = 0
+                
+                if column == column2 || row == row2{
+                    if column == column2{
+                        
+                        interCol = Int(column)
+                        
+                        if column == 0 || column2 == Float(dim) - 1{
+                            return false
+                        }else if row > row2{
+                            interRow = Int(row2) + 1
+                        }else{
+                            interRow = Int(row) + 1
+                        }
+                    }else{
+                        
+                        interRow = Int(row)
+                        
+                        if row == 0 || row2 == Float(dim) - 1{
+                            return false
+                        }else if column > column2{
+                            interCol = Int(column2) + 1
+                        }else{
+                            interCol = Int(column) + 1
+                        }
+                    }
+                    let intersection = gridItemAtColumn(interCol, row: interRow)
+                    if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
+                        intersection?.nodePos.ptWho = type
+                        
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+        
     }
     
-    func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
-        assert(column >= 0 && column <= dim)
-        assert(row >= 0 && row <= dim)
-        return grid[column, row]
-    }
     
     func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
         
@@ -234,6 +283,7 @@ class Board: SKScene {
                         lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                         
                         if checkForWinner(lineShapeNode){
+                            self.declareWinner(lineShapeNode.team!)
                             print("X wins")
                         }
                     }
@@ -273,6 +323,7 @@ class Board: SKScene {
                         
                         if checkForWinner(lineShapeNode){
                             print("O Wins")
+                            self.declareWinner(lineShapeNode.team!)
                         }
                     }
                 }
@@ -294,82 +345,17 @@ class Board: SKScene {
             }
         }
         
-        
-        
     }
     
     func createLineAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
         let ref = CGPathCreateMutable()
         CGPathMoveToPoint(ref, nil, pointA.x + selectedNode.frame.size.width/2, pointA.y + selectedNode.frame.size.height/2)
         CGPathAddLineToPoint(ref, nil, pointB.x + selectedNode.frame.size.width/2, pointB.y + selectedNode.frame.size.height/2)
-        
-        
-        return ref
-        
-    }
-    
-    func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
-        
-        var (success, column, row) = convertPoint(firstSprite.position)
-        if success {
-            column = round(column)
-            row = round(row)
-//            print(round(column), round(row))
-//                            let node = gridItemAtColumn(Int(column), row: Int(row))
-        }
-        var (success2, column2, row2) = convertPoint(secondSprite.position)
-        if success2{
-            column2 = round(column2)
-            row2 = round(row2)
-//            print(column2, row2)
-        }
-        
-        if column == column2 || column - column2 == -2 || column - column2 == 2{
-//            print("potential column match")
-            
-            if row == row2 && column != column2 || row - row2 == -2 || row - row2 == 2 {
-//                print("potential row match")
-                
-                var interRow = 0
-                var interCol = 0
-                
-                if column == column2 || row == row2{
-                    if column == column2{
-                        
-                        interCol = Int(column)
-                        
-                        if column == 0 || column2 == Float(dim) - 1{
-                            return false
-                        }else if row > row2{
-                            interRow = Int(row2) + 1
-                        }else{
-                            interRow = Int(row) + 1
-                        }
-                    }else{
-                        
-                        interRow = Int(row)
-                        
-                        if row == 0 || row2 == Float(dim) - 1{
-                            return false
-                        }else if column > column2{
-                            interCol = Int(column2) + 1
-                        }else{
-                            interCol = Int(column) + 1
-                        }
-                    }
-                    let intersection = gridItemAtColumn(interCol, row: interRow)
-                    if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
-                        intersection?.nodePos.ptWho = type
 
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    
+        return ref
     }
     
+//WINNING FUNCTIONS
     func checkForWinner(line: LineShapeNode) -> Bool{
         
         var edgeOne = false
@@ -413,8 +399,57 @@ class Board: SKScene {
         return false
     }
     
+    func declareWinner(winningTeam: String){
+        let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+            self.resetBoard()
+        }
+        
+        alertController.addAction(cancelAction)
+        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+    }
+
+//RESETTING GAME
+    
+    func resetBoard(){
+        self.removeAllChildren()
+        self.removeAllActions()
+        nodeX.removeAll()
+        nodeO.removeAll()
+        xLines.removeAll()
+        oLines.removeAll()
+        grid.removeArray()
+//        grid = Array2D(columns: dim, rows: dim)
+        
+        let secondScene = Board(size: self.size)
+        let transition = SKTransition.flipVerticalWithDuration(1.0)
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+//        self.startGame()
+    }
+    
+    
+    
+//SUPPORT FUNCTIONS
+    func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
+        if point.x >= 0 && point.x < CGFloat(dim) * xIsopin! &&
+            point.y >= 0 && point.y < CGFloat(dim) * yIsopin! + bottomPadding {
+                return (true, Float((point.x - (xIsopin!/2)) / xIsopin!), Float((point.y - bottomPadding) / yIsopin!))
+        } else {
+            return (false, 0, 0)  // invalid location
+        }
+    }
+    
+    func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
+        assert(column >= 0 && column <= dim)
+        assert(row >= 0 && row <= dim)
+        return grid[column, row]
+    }
+    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
+
 
 }
