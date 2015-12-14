@@ -220,16 +220,24 @@ class Board: SKScene {
         if type == "X"{
             
             for lineShapeNode in xLines{
-
-                if lineShapeNode.columnA == columnA && lineShapeNode.rowA == rowA || lineShapeNode.columnA == columnB && lineShapeNode.rowA == rowB || lineShapeNode.columnB == columnA && lineShapeNode.rowB == rowA || lineShapeNode.columnB == columnB && lineShapeNode.rowB == rowB {
+                
+                for coordinate in lineShapeNode.coordinates{
                     
-                    print("xs touching lines")
-                    match = true
-                    let originalPath = lineShapeNode.path as! CGMutablePathRef
-                    CGPathAddPath(originalPath, nil, path)
-                    lineShapeNode.path = originalPath
+                    if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
+                        
+                        print("xs touching lines")
+                        match = true
+                        let originalPath = lineShapeNode.path as! CGMutablePathRef
+                        CGPathAddPath(originalPath, nil, path)
+                        lineShapeNode.path = originalPath
+                        
+                        lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+                        
+                        checkForWinner(lineShapeNode)
+                    }
 
                 }
+                
             }
             
             if !match{
@@ -241,29 +249,29 @@ class Board: SKScene {
                 shapeNode.zPosition = 0
                 shapeNode.userInteractionEnabled = false
                 shapeNode.strokeColor = UIColor.redColor()
-
-                gameLayer.addChild(shapeNode)
+                addChild(shapeNode)
                 xLines.append(shapeNode)
             }
             
         }else if type == "O"{
             
             for lineShapeNode in oLines{
-
-                if lineShapeNode.columnA == columnA && lineShapeNode.rowA == rowA || lineShapeNode.columnA == columnB && lineShapeNode.rowA == rowB || lineShapeNode.columnB == columnA && lineShapeNode.rowB == rowA || lineShapeNode.columnB == columnB && lineShapeNode.rowB == rowB {
-                    print("Os touching lines A")
-                    match = true
-                    let originalPath = lineShapeNode.path as! CGMutablePathRef
-                    CGPathAddPath(originalPath, nil, path)
-                    lineShapeNode.path = originalPath
+                
+                for coordinate in lineShapeNode.coordinates{
+                    
+                    if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
+                        
+                        print("Os touching lines A")
+                        match = true
+                        let originalPath = lineShapeNode.path as! CGMutablePathRef
+                        CGPathAddPath(originalPath, nil, path)
+                        lineShapeNode.path = originalPath
+                        
+                        lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+                        
+                        checkForWinner(lineShapeNode)
+                    }
                 }
-//                }else if lineShapeNode.columnB == columnA && lineShapeNode.rowB == rowA || lineShapeNode.columnB == columnB && lineShapeNode.rowB == rowB{
-//                    print("Os touching lines B")
-//                    match = true
-//                    let originalPath = lineShapeNode.path as! CGMutablePathRef
-//                    CGPathAddPath(originalPath, nil, path)
-//                    lineShapeNode.path = originalPath
-//                }
             }
             
             if !match{
@@ -275,13 +283,14 @@ class Board: SKScene {
                 shapeNode.zPosition = 0
                 shapeNode.userInteractionEnabled = false
                 shapeNode.strokeColor = UIColor.blueColor()
-//                print(shapeNode)
-                gameLayer.addChild(shapeNode)
+                addChild(shapeNode)
                 oLines.append(shapeNode)
+            }else{
+                
             }
         }
         
-        //check for winner
+        
         
     }
     
@@ -357,6 +366,18 @@ class Board: SKScene {
     
     }
     
+    func checkForWinner(line: LineShapeNode){
+        if line.team == "X"{
+            for coordinate in line.coordinates{
+                print(coordinate)
+            }
+            print(line.path)
+        }else if line.team == "O"{
+            for coordinate in line.coordinates{
+                print(coordinate)
+            }
+        }
+    }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
