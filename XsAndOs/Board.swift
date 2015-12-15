@@ -170,8 +170,8 @@ class Board: SKScene {
                 if success{
                     column = round(column)
                     row = round(row)
-                    let node = gridItemAtColumn(Int(column), row: Int(row))
-//                    print(node?.nodeType)
+//                    let node = gridItemAtColumn(Int(column), row: Int(row))
+
                 }
             }
         }
@@ -246,7 +246,7 @@ class Board: SKScene {
         var rowA : Int = 0
         var columnB : Int = 0
         var rowB : Int = 0
-        
+    //return a row and column for the two selected points
         var (successA, cA, rA) = convertPoint(pointA)
         if successA {
             cA = round(cA)
@@ -267,19 +267,15 @@ class Board: SKScene {
         let path = createLineAtPoints(pointA, pointB: pointB)
         
         if type == "X"{
-            
+        //check every coordinate in xlines to see if any existing lines touch the new line then add new line
             for lineShapeNode in xLines{
                 
                 for coordinate in lineShapeNode.coordinates{
                     
                     if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
                         
-                        print("xs touching lines")
                         match = true
-                        let originalPath = lineShapeNode.path as! CGMutablePathRef
-                        CGPathAddPath(originalPath, nil, path)
-                        lineShapeNode.path = originalPath
-                        
+                        lineShapeNode.appendPath(path)
                         lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                         
                         if checkForWinner(lineShapeNode){
@@ -291,20 +287,16 @@ class Board: SKScene {
                 }
                 
             }
-            
+            //If new line doesn't touch an existing line, make a new line
             if !match{
                 let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type)
-                shapeNode.path = path
-                shapeNode.name = "line"
-                shapeNode.strokeColor = UIColor.redColor()
-                shapeNode.lineWidth = 4
-                shapeNode.zPosition = 0
-                shapeNode.userInteractionEnabled = false
+                shapeNode.setShapeAspects(path)
                 shapeNode.strokeColor = UIColor.redColor()
                 addChild(shapeNode)
                 xLines.append(shapeNode)
             }
             
+        //Repeat for O's
         }else if type == "O"{
             
             for lineShapeNode in oLines{
@@ -312,13 +304,9 @@ class Board: SKScene {
                 for coordinate in lineShapeNode.coordinates{
                     
                     if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
-                        
-                        print("Os touching lines A")
+           
                         match = true
-                        let originalPath = lineShapeNode.path as! CGMutablePathRef
-                        CGPathAddPath(originalPath, nil, path)
-                        lineShapeNode.path = originalPath
-                        
+                        lineShapeNode.appendPath(path)
                         lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                         
                         if checkForWinner(lineShapeNode){
@@ -331,12 +319,7 @@ class Board: SKScene {
             
             if !match{
                 let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type)
-                shapeNode.path = path
-                shapeNode.name = "line"
-                shapeNode.strokeColor = UIColor.redColor()
-                shapeNode.lineWidth = 4
-                shapeNode.zPosition = 0
-                shapeNode.userInteractionEnabled = false
+                shapeNode.setShapeAspects(path)
                 shapeNode.strokeColor = UIColor.blueColor()
                 addChild(shapeNode)
                 oLines.append(shapeNode)
@@ -361,6 +344,7 @@ class Board: SKScene {
         var edgeOne = false
         var edgeTwo = false
         
+        //check each coordinate on the newly appended line to see if it touches both ends of the board
         if line.team == "X"{
             for coordinate in line.coordinates{
                 print(coordinate)
@@ -401,11 +385,9 @@ class Board: SKScene {
     
     func declareWinner(winningTeam: String){
         let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
-        
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
             self.resetBoard()
         }
-        
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
@@ -413,6 +395,7 @@ class Board: SKScene {
 //RESETTING GAME
     
     func resetBoard(){
+        //delete all objects on the board
         self.removeAllChildren()
         self.removeAllActions()
         nodeX.removeAll()
@@ -434,6 +417,8 @@ class Board: SKScene {
     }
     
 //SUPPORT FUNCTIONS
+    
+    //Takes a point and returns the column and row for that point
     func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
         if point.x >= 0 && point.x < CGFloat(dim) * xIsopin! &&
             point.y >= 0 && point.y < CGFloat(dim) * yIsopin! + bottomPadding {

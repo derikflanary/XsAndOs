@@ -210,6 +210,7 @@
 				TargetAttributes = {
 					EE5E817C1BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = 92H4P6C5WB;
 					};
 					EE5E81941BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;
@@ -422,10 +423,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = XsAndOs/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = derikflanary.XsAndOs;
+				PRODUCT_BUNDLE_IDENTIFIER = com.derikflanary.XsAndOs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -433,10 +436,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = XsAndOs/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = derikflanary.XsAndOs;
+				PRODUCT_BUNDLE_IDENTIFIER = com.derikflanary.XsAndOs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
