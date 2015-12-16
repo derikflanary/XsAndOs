@@ -61,7 +61,7 @@ class GameScene: SKScene {
     func newGamePressed(){
         print("newGamePressed")
         let secondScene = Board(size: self.size)
-        let transition = SKTransition.flipVerticalWithDuration(1.0)
+        let transition = SKTransition.crossFadeWithDuration(1)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
         

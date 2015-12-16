@@ -57,6 +57,15 @@ class Board: SKScene {
         xTurn = true
         
         buildArrayOfNodes()
+        
+        let restartButton = UIButton()
+        restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
+        restartButton.tintColor = UIColor.blackColor()
+        restartButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        restartButton.setTitle("Restart", forState: UIControlState.Normal)
+        restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
+        self.view?.addSubview(restartButton)
+        
     }
     
     func buildArrayOfNodes(){
@@ -99,7 +108,7 @@ class Board: SKScene {
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
-                sprite?.size = CGSizeMake(xIsopin!/2, yIsopin!/2)
+                sprite?.size = CGSizeMake(xIsopin!/1.6, yIsopin!/1.6)
                 sprite?.anchorPoint = CGPointMake(0, 0)
                 sprite?.zPosition = 2
                 gameLayer.addChild(sprite!)
@@ -411,7 +420,7 @@ class Board: SKScene {
     
     func tranistionToNewBoard(){
         let secondScene = Board(size: self.size)
-        let transition = SKTransition.flipVerticalWithDuration(0.75)
+        let transition = SKTransition.crossFadeWithDuration(0.75)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
@@ -438,5 +447,7 @@ class Board: SKScene {
         /* Called before each frame is rendered */
     }
 
-
+    func restartPressed(){
+        resetBoard()
+    }
 }
