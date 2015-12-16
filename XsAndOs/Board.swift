@@ -60,8 +60,8 @@ class Board: SKScene {
         
         let restartButton = UIButton()
         restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
-        restartButton.tintColor = UIColor.blackColor()
-        restartButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        restartButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
         restartButton.setTitle("Restart", forState: UIControlState.Normal)
         restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
         self.view?.addSubview(restartButton)
@@ -168,18 +168,15 @@ class Board: SKScene {
                     }else if touchedNode.name == "O" && !xTurn{
                         selectedNode.setScale(1.25)
                     }
-                    
-//                    print(selectedNode.position)
                 }
                 
             }else{
                 selectedNode.setScale(1.0)
-                
+                selectedNode = SKSpriteNode()
                 var (success, column, row) = convertPoint(location)
                 if success{
                     column = round(column)
                     row = round(row)
-//                    let node = gridItemAtColumn(Int(column), row: Int(row))
 
                 }
             }
