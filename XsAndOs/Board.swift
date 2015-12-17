@@ -68,6 +68,7 @@ class Board: SKScene {
         
     }
     
+//DRAWING THE BOARD
     func buildArrayOfNodes(){
         var set = Set<Nodes>()
         
@@ -78,11 +79,11 @@ class Board: SKScene {
                 
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
                     node.nodeType = NodeType.O
-                    node.sprite = SKSpriteNode(imageNamed: "O")
+                    node.sprite = SKSpriteNode(imageNamed: "o")
                     node.sprite?.name = "O"
                 }else if (theRow + 1) % 2 != 0 && (column + 1) % 2 == 0{
                     node.nodeType = NodeType.X
-                    node.sprite = SKSpriteNode(imageNamed: "X")
+                    node.sprite = SKSpriteNode(imageNamed: "x")
                     node.sprite?.name = "X"
                 }else{
                     if theRow == 0 || theRow == dim - 1 || column == 0 || column == dim - 1{
@@ -139,11 +140,11 @@ class Board: SKScene {
                     if !xTurn{
                         return
                     }
+                    selectedNode.setScale(1.0)
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         xTurn = false
                     }
-                    selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
                     
                     
@@ -151,12 +152,11 @@ class Board: SKScene {
                     if xTurn{
                         return
                     }
-                    
+                    selectedNode.setScale(1.0)
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         xTurn = true
                     }
-                    selectedNode.setScale(1.0)
                     selectedNode = SKSpriteNode()
                     
                     
