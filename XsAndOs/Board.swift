@@ -109,7 +109,7 @@ class Board: SKScene {
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
-                sprite?.size = CGSizeMake(xIsopin!/1.6, yIsopin!/1.6)
+                sprite?.size = CGSizeMake(xIsopin!/1.4, yIsopin!/1.4)
                 sprite?.anchorPoint = CGPointMake(0, 0)
                 sprite?.zPosition = 2
                 gameLayer.addChild(sprite!)
@@ -120,7 +120,7 @@ class Board: SKScene {
     
     func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
         return CGPoint(
-            x: CGFloat(column) * xIsopin! + xIsopin!/4,
+            x: CGFloat(column) * xIsopin! + xIsopin!/6,
             y: CGFloat(row) * yIsopin! + bottomPadding)
     }
     
