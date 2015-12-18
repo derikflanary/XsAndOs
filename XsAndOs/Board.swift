@@ -270,6 +270,7 @@ class Board: SKScene {
         }
         
         var match = false
+        var matchedLine = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         let path = createLineAtPoints(pointA, pointB: pointB)
         
         if type == "X"{
@@ -279,10 +280,19 @@ class Board: SKScene {
                 for coordinate in lineShapeNode.coordinates{
                     
                     if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
-                        
-                        match = true
-                        lineShapeNode.appendPath(path)
-                        lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+
+                        if match{
+                            //If the new line connects two existing lines, add the second path to the first one
+                            lineShapeNode.appendPath(matchedLine.path!)
+                            for coordinate in matchedLine.coordinates{
+                                lineShapeNode.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
+                            }
+                        }else{
+                            match = true
+                            matchedLine = lineShapeNode
+                            lineShapeNode.appendPath(path)
+                            lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+                        }
                         
                         if checkForWinner(lineShapeNode){
                             self.declareWinner(lineShapeNode.team!)
@@ -311,10 +321,18 @@ class Board: SKScene {
                     
                     if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
            
-                        match = true
-                        lineShapeNode.appendPath(path)
-                        lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
-                        
+                        if match{
+                            lineShapeNode.appendPath(matchedLine.path!)
+                            for coordinate in matchedLine.coordinates{
+                                lineShapeNode.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
+                            }
+                        }else{
+                            match = true
+                            matchedLine = lineShapeNode
+                            lineShapeNode.appendPath(path)
+                            lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+                        }
+
                         if checkForWinner(lineShapeNode){
                             print("O Wins")
                             self.declareWinner(lineShapeNode.team!)
