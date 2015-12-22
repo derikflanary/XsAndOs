@@ -8,18 +8,20 @@
 
 import SpriteKit
 
-var dim = 9
+//var dim = 9
 let bottomPadding : CGFloat = 100
 
 class Board: SKScene {
     
+    var dim : Int
     var nodeX = [Nodes]()
     var nodeO = [Nodes]()
 //    Nodes[,] Nodez;     // an array of Nodes: pts color screen position and array pos
     var yIsopin : CGFloat?    // distance between nodes Vertical
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
-    var grid = Array2D<Nodes>(columns: dim, rows: dim)
+    var grid : Array2D<Nodes>
+//    var grid = Array2D<Nodes>(columns: dim, rows: dim)
     
     var selectedNode = SKSpriteNode()
     var secondSelectedNode = SKSpriteNode()
@@ -33,9 +35,12 @@ class Board: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override init(size: CGSize) {
-        super.init(size: size)
+    init(size: CGSize, theDim: Int) {
+        dim = theDim
+        grid = Array2D(columns: dim, rows: dim)
         
+        super.init(size: size)
+
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
 //        print(xIsopin, yIsopin)
@@ -64,7 +69,17 @@ class Board: SKScene {
         restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
         restartButton.setTitle("Restart", forState: UIControlState.Normal)
         restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
+        restartButton.tag = 10
         self.view?.addSubview(restartButton)
+        
+        let backButton = UIButton()
+        backButton.frame = CGRectMake(10, 20, 50, 30)
+        backButton.setTitle("Main", forState: .Normal)
+        backButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
+        backButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
+        backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
+        backButton.tag = 20
+        self.view?.addSubview(backButton)
         
     }
     
@@ -92,7 +107,7 @@ class Board: SKScene {
                         node.nodeType = NodeType.Intersection
                     }
                 }
-                grid[column,theRow] = node
+                grid[column, theRow] = node
                 set.insert(node)
                 
             }
@@ -109,8 +124,8 @@ class Board: SKScene {
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
-                sprite?.size = CGSizeMake(xIsopin!/1.4, yIsopin!/1.4)
-                sprite?.anchorPoint = CGPointMake(0, 0)
+                sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
+                sprite?.anchorPoint = CGPointMake(0.5, 0.5)
                 sprite?.zPosition = 2
                 gameLayer.addChild(sprite!)
 
@@ -120,7 +135,7 @@ class Board: SKScene {
     
     func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
         return CGPoint(
-            x: CGFloat(column) * xIsopin! + xIsopin!/6,
+            x: CGFloat(column) * xIsopin! + xIsopin!/2,
             y: CGFloat(row) * yIsopin! + bottomPadding)
     }
     
@@ -140,6 +155,7 @@ class Board: SKScene {
                     if !xTurn{
                         return
                     }
+
                     selectedNode.setScale(1.0)
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
@@ -189,8 +205,7 @@ class Board: SKScene {
         if success {
             column = round(column)
             row = round(row)
-            //            print(round(column), round(row))
-            //                            let node = gridItemAtColumn(Int(column), row: Int(row))
+            
         }
         var (success2, column2, row2) = convertPoint(secondSprite.position)
         if success2{
@@ -356,9 +371,10 @@ class Board: SKScene {
     
     func createLineAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
         let ref = CGPathCreateMutable()
-        CGPathMoveToPoint(ref, nil, pointA.x + selectedNode.frame.size.width/2, pointA.y + selectedNode.frame.size.height/2)
-        CGPathAddLineToPoint(ref, nil, pointB.x + selectedNode.frame.size.width/2, pointB.y + selectedNode.frame.size.height/2)
-
+        CGPathMoveToPoint(ref, nil, pointA.x, pointA.y)
+//        CGPathMoveToPoint(ref, nil, pointA.x + selectedNode.frame.size.width/2, pointA.y + selectedNode.frame.size.height/2)
+        CGPathAddLineToPoint(ref, nil, pointB.x, pointB.y)
+//        CGPathAddLineToPoint(ref, nil, pointB.x + selectedNode.frame.size.width/2, pointB.y + selectedNode.frame.size.height/2)
         return ref
     }
     
@@ -429,12 +445,11 @@ class Board: SKScene {
         grid.removeArray()
         
         tranistionToNewBoard()
-//        grid = Array2D(columns: dim, rows: dim)
-//        self.startGame()
+
     }
     
     func tranistionToNewBoard(){
-        let secondScene = Board(size: self.size)
+        let secondScene = Board(size: self.size, theDim: dim)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
@@ -461,8 +476,19 @@ class Board: SKScene {
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
-
+    
+//BUTTON FUNCTIONS
+    
     func restartPressed(){
         resetBoard()
+    }
+    
+    func mainPressed(){
+        let mainScene = GameScene(size: self.size)
+        let transition = SKTransition.crossFadeWithDuration(0.75)
+        mainScene.scaleMode = .AspectFill
+        self.scene?.view?.presentScene(mainScene, transition: transition)
+        self.view?.viewWithTag(10)?.removeFromSuperview()
+        self.view?.viewWithTag(20)?.removeFromSuperview()
     }
 }
