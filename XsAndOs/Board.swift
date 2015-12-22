@@ -124,7 +124,12 @@ class Board: SKScene {
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
-                sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
+                if dim > 11{
+                    sprite?.size = CGSizeMake(xIsopin!/1.0, yIsopin!/1.0)
+                }else{
+                    sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
+                }
+                
                 sprite?.anchorPoint = CGPointMake(0.5, 0.5)
                 sprite?.zPosition = 2
                 gameLayer.addChild(sprite!)

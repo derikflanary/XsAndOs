@@ -27,7 +27,7 @@ class GameScene: SKScene, UITextFieldDelegate {
         
         label.frame = CGRectMake(0, 150, self.view!.frame.size.width, 40)
         label.numberOfLines = 0
-        label.text = "Choose the number of Rows and Columns (Min:4 Max 8)"
+        label.text = "Choose the number of Rows and Columns (Min:4 | Max:8)"
         label.textAlignment = .Center
         
         sizeField.frame = CGRectZero
@@ -78,7 +78,7 @@ class GameScene: SKScene, UITextFieldDelegate {
         let transition = SKTransition.crossFadeWithDuration(1)
         
         var dim = Int(sizeField.text!)
-        if sizeField.text != nil{
+        if dim != nil{
             if dim < 5{
                 dim = 3
             }else if dim == 6{
