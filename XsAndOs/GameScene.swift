@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, UITextFieldDelegate {
     
     let startButton = UIButton()
     let sizeField = UITextField()
@@ -27,7 +27,7 @@ class GameScene: SKScene {
         
         label.frame = CGRectMake(0, 150, self.view!.frame.size.width, 40)
         label.numberOfLines = 0
-        label.text = "Choose the number of Rows and Columns (Min:5 Max 8)"
+        label.text = "Choose the number of Rows and Columns (Min:4 Max 8)"
         label.textAlignment = .Center
         
         sizeField.frame = CGRectZero
@@ -35,6 +35,7 @@ class GameScene: SKScene {
         sizeField.keyboardType = UIKeyboardType.NumberPad
         sizeField.textAlignment = .Center
         sizeField.borderStyle = .RoundedRect
+        sizeField.delegate = self
         
         stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField])
         stackView.axis = .Vertical
@@ -79,7 +80,7 @@ class GameScene: SKScene {
         var dim = Int(sizeField.text!)
         if sizeField.text != nil{
             if dim < 5{
-                dim = 5
+                dim = 3
             }else if dim == 6{
                 dim = 7
             }else if dim == 7{
@@ -97,5 +98,12 @@ class GameScene: SKScene {
         self.scene!.view?.presentScene(secondScene, transition: transition)
         
         stackView.removeFromSuperview()
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        
+        let newLength = text.utf16.count + string.utf16.count - range.length
+        return newLength <= 1 // Bool
     }
 }
