@@ -76,24 +76,28 @@ class GameScene: SKScene, UITextFieldDelegate {
         print("newGamePressed")
 
         let transition = SKTransition.crossFadeWithDuration(1)
+        var dim = 9
+        var rows = Int(sizeField.text!)
         
-        var dim = Int(sizeField.text!)
-        if dim != nil{
-            if dim < 5{
+        if rows != nil{
+            if rows < 5{
+                rows = 4
                 dim = 3
-            }else if dim == 6{
+            }else if rows == 6{
                 dim = 7
-            }else if dim == 7{
+            }else if rows == 7{
                 dim = 9
-            }else if dim >= 8{
+            }else if rows >= 8{
+                rows = 8
                 dim = 11
             }
-            dim = dim! + 4
+            dim = dim + 4
         }else{
             dim = 9
+            rows = 5
         }
         
-        let secondScene = Board(size: self.size, theDim: dim!)
+        let secondScene = Board(size: self.size, theDim: dim, theRows: rows!)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
         

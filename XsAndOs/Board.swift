@@ -13,21 +13,17 @@ let bottomPadding : CGFloat = 100
 
 class Board: SKScene {
     
+    var rows : Int
     var dim : Int
     var nodeX = [Nodes]()
     var nodeO = [Nodes]()
-//    Nodes[,] Nodez;     // an array of Nodes: pts color screen position and array pos
     var yIsopin : CGFloat?    // distance between nodes Vertical
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
     var grid : Array2D<Nodes>
-//    var grid = Array2D<Nodes>(columns: dim, rows: dim)
-    
     var selectedNode = SKSpriteNode()
     var secondSelectedNode = SKSpriteNode()
-    
     var xTurn : Bool = true
-    
     var xLines = [LineShapeNode]()
     var oLines = [LineShapeNode]()
     
@@ -35,16 +31,14 @@ class Board: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(size: CGSize, theDim: Int) {
+    init(size: CGSize, theDim: Int, theRows: Int) {
         dim = theDim
         grid = Array2D(columns: dim, rows: dim)
-        
+        rows = theRows
         super.init(size: size)
 
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
-//        print(xIsopin, yIsopin)
-
     }
     
     override func didMoveToView(view: SKView) {
@@ -62,6 +56,7 @@ class Board: SKScene {
         xTurn = true
         
         buildArrayOfNodes()
+        drawSquare()
         
         let restartButton = UIButton()
         restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
@@ -142,6 +137,22 @@ class Board: SKScene {
         return CGPoint(
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
             y: CGFloat(row) * yIsopin! + bottomPadding)
+    }
+    
+    func drawSquare(){
+        
+        let x = xIsopin! * (CGFloat(dim) - CGFloat(rows) + 0.5)
+        let y = bottomPadding + (yIsopin! * (CGFloat(dim) - CGFloat(rows)))
+        let width = (self.view?.frame.size.width)! - (xIsopin! * 2)
+        let height = width
+        let square = SKShapeNode(rectOfSize: CGSize(width: width, height: height))
+        square.name = "square"
+        square.fillColor = SKColor.clearColor()
+        square.position = CGPointMake(x, y)
+        square.zPosition = 0
+        square.strokeColor = SKColor.lightGrayColor()
+        self.addChild(square)
+
     }
     
 //TOUCHING AND DRAWING FUNCTIONS
@@ -484,7 +495,7 @@ class Board: SKScene {
     }
     
     func tranistionToNewBoard(){
-        let secondScene = Board(size: self.size, theDim: dim)
+        let secondScene = Board(size: self.size, theDim: dim, theRows: rows)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
