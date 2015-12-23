@@ -471,10 +471,18 @@ class Board: SKScene {
     
     func declareWinner(winningTeam: String){
         let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
+        
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
             self.resetBoard()
         }
         alertController.addAction(cancelAction)
+        
+//        let subview = alertController.view.subviews.first! as UIView
+//        let alertContentView = subview.subviews.first! as UIView
+//        alertContentView.backgroundColor = UIColor(red: 0.76, green: 0.22, blue: 0.18, alpha: 0.8)
+//        alertContentView.layer.cornerRadius = 5;
+//        alertController.view.tintColor = UIColor.whiteColor()
+
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
 
@@ -489,6 +497,8 @@ class Board: SKScene {
         xLines.removeAll()
         oLines.removeAll()
         grid.removeArray()
+        self.view?.viewWithTag(10)?.removeFromSuperview()
+        self.view?.viewWithTag(20)?.removeFromSuperview()
         
         tranistionToNewBoard()
 
