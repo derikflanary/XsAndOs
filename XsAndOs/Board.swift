@@ -125,7 +125,7 @@ class Board: SKScene {
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
                 if dim > 11{
-                    sprite?.size = CGSizeMake(xIsopin!/1.0, yIsopin!/1.0)
+                    sprite?.size = CGSizeMake(xIsopin!/1.1, yIsopin!/1.1)
                 }else{
                     sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
                 }
@@ -307,22 +307,38 @@ class Board: SKScene {
                             for coordinate in matchedLine.coordinates{
                                 lineShapeNode.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
                             }
+                            
+                            //remove the extra line
+                            if matchedLine.team != "N"{
+                                if let index = xLines.indexOf(matchedLine){
+                                    xLines.removeAtIndex(index)
+                                }
+                            }
+                            if checkForWinner(lineShapeNode){
+                                self.declareWinner(lineShapeNode.team!)
+                                print("X wins")
+                            }
+                            
+                            break
+                            
                         }else{
+                            //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
                             match = true
                             matchedLine = lineShapeNode
                             lineShapeNode.appendPath(path)
                             lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
-                        }
-                        
-                        if checkForWinner(lineShapeNode){
-                            self.declareWinner(lineShapeNode.team!)
-                            print("X wins")
+                            
+                            if rowA == dim - 1 || rowB == dim - 1 || rowA == 0 || rowB == 0{
+                                if checkForWinner(lineShapeNode){
+                                    self.declareWinner(lineShapeNode.team!)
+                                    print("X wins")
+                                }
+                            }
                         }
                     }
-
                 }
-                
             }
+            
             //If new line doesn't touch an existing line, make a new line
             if !match{
                 let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type)
@@ -346,16 +362,32 @@ class Board: SKScene {
                             for coordinate in matchedLine.coordinates{
                                 lineShapeNode.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
                             }
+                            
+                            if matchedLine.team != "N"{
+                                if let index = oLines.indexOf(matchedLine){
+                                    oLines.removeAtIndex(index)
+                                }
+                                
+                            }
+                            
+                            if checkForWinner(lineShapeNode){
+                                print("O Wins")
+                                self.declareWinner(lineShapeNode.team!)
+                            }
+                            
+                            break
                         }else{
                             match = true
                             matchedLine = lineShapeNode
                             lineShapeNode.appendPath(path)
                             lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
-                        }
-
-                        if checkForWinner(lineShapeNode){
-                            print("O Wins")
-                            self.declareWinner(lineShapeNode.team!)
+                            
+                            if columnA == dim - 1 || columnB == dim - 1 || columnA == 0 || columnB == 0{
+                                if checkForWinner(lineShapeNode){
+                                    print("O Wins")
+                                    self.declareWinner(lineShapeNode.team!)
+                                }
+                            }
                         }
                     }
                 }
@@ -377,9 +409,7 @@ class Board: SKScene {
     func createLineAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
         let ref = CGPathCreateMutable()
         CGPathMoveToPoint(ref, nil, pointA.x, pointA.y)
-//        CGPathMoveToPoint(ref, nil, pointA.x + selectedNode.frame.size.width/2, pointA.y + selectedNode.frame.size.height/2)
         CGPathAddLineToPoint(ref, nil, pointB.x, pointB.y)
-//        CGPathAddLineToPoint(ref, nil, pointB.x + selectedNode.frame.size.width/2, pointB.y + selectedNode.frame.size.height/2)
         return ref
     }
     
@@ -392,7 +422,7 @@ class Board: SKScene {
         //check each coordinate on the newly appended line to see if it touches both ends of the board
         if line.team == "X"{
             for coordinate in line.coordinates{
-                print(coordinate)
+//                print(coordinate)
                 if coordinate.rowA == dim - 1 || coordinate.rowB == dim - 1{
                     edgeOne = true
                 }
@@ -409,7 +439,7 @@ class Board: SKScene {
           
         }else if line.team == "O"{
             for coordinate in line.coordinates{
-                print(coordinate)
+//                print(coordinate)
                 if coordinate.columnA == dim - 1 || coordinate.columnB == dim - 1{
                     edgeOne = true
                 }
