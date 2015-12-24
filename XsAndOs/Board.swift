@@ -80,7 +80,7 @@ class Board: SKScene {
         self.view?.addSubview(backButton)
         
         turnLabel = SKLabelNode(text: "X")
-        turnLabel.position = CGPointMake(self.frame.width/2, 500)
+        turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
         turnLabel.fontColor = SKColor.blackColor()
         turnLabel.zPosition = 3
         self.addChild(turnLabel)
