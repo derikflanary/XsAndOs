@@ -383,21 +383,23 @@ class Board: SKScene {
 
                         if match{
                             //If the new line connects two existing lines, add the second path to the first one
-                            lineShapeNode.appendPath(matchedLine.path!)
-                            for coordinate in matchedLine.coordinates{
-                                lineShapeNode.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
+                            matchedLine.appendPath(lineShapeNode.path!)
+                            for coordinate in lineShapeNode.coordinates{
+                                matchedLine.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
                             }
                             
-                            //remove the extra line
-                            if matchedLine.team != "N"{
-                                if let index = xLines.indexOf(matchedLine){
-                                    xLines.removeAtIndex(index)
-                                }
-                            }
-                            if checkForWinner(lineShapeNode){
-                                self.declareWinner(lineShapeNode.team!)
+//                            //remove the extra line
+//                            if matchedLine.team != "N"{
+//                                if let index = xLines.indexOf(matchedLine){
+//                                    xLines.removeAtIndex(index)
+//                                }
+//                            }
+                            if checkForWinner(matchedLine){
+                                self.declareWinner(matchedLine.team!)
                                 print("X wins")
                             }
+                            
+                            break
                             
                         }else{
                             //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
@@ -433,20 +435,22 @@ class Board: SKScene {
                     if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
            
                         if match{
-                            lineShapeNode.appendPath(matchedLine.path!)
-                            for coordinate in matchedLine.coordinates{
-                                lineShapeNode.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
+                            matchedLine.appendPath(lineShapeNode.path!)
+                            for coordinate in lineShapeNode.coordinates{
+                                matchedLine.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
                             }
-                            if matchedLine.team != "N"{
-                                if let index = oLines.indexOf(matchedLine){
-                                    oLines.removeAtIndex(index)
-                                }
-                                
-                            }
-                            if checkForWinner(lineShapeNode){
+//                            if matchedLine.team != "N"{
+//                                if let index = oLines.indexOf(matchedLine){
+//                                    oLines.removeAtIndex(index)
+//                                }
+//                                
+//                            }
+                            if checkForWinner(matchedLine){
                                 print("O Wins")
-                                self.declareWinner(lineShapeNode.team!)
+                                self.declareWinner(matchedLine.team!)
                             }
+                            
+                            break
                             
                         }else{
                             match = true
