@@ -30,6 +30,11 @@ class Board: SKScene {
     var touchedLocations = [CGPoint]()
     var turnLabel = SKLabelNode()
     
+    var startPoint = CGPoint()
+    var nextPoint = CGPoint()
+    var pointsConnected = false
+    var potentialShapeNode = SKShapeNode()
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -169,7 +174,6 @@ class Board: SKScene {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         
-        
         for touch in touches {
             let location = touch.locationInNode(self.gameLayer)
             let touchedNode = self.nodeAtPoint(location)
@@ -208,8 +212,10 @@ class Board: SKScene {
                     selectedNode = touchedNode as! SKSpriteNode
                     if touchedNode.name == "X" && xTurn{
                         selectedNode.setScale(1.25)
+                        startPoint = selectedNode.position
                     }else if touchedNode.name == "O" && !xTurn{
                         selectedNode.setScale(1.25)
+                        startPoint = selectedNode.position
                     }
                 }
                 
@@ -229,10 +235,41 @@ class Board: SKScene {
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch: AnyObject in touches{
             touchedLocations.append(touch.locationInNode(self.gameLayer))
+            
+            let location = touch.locationInNode(self.gameLayer)
+            let touchedNode = self.nodeAtPoint(location)
+            
+            if !pointsConnected{
+                if touchedNode.name == "X" && xTurn && touchedNode != selectedNode{
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
+                        nextPoint = touchedNode.position
+                        drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "X")
+                        pointsConnected = true
+                        return
+                    }
+                }else if touchedNode.name == "O" && !xTurn{
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
+                        nextPoint = touchedNode.position
+                        drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "O")
+                        pointsConnected = true
+                        return
+                    }
+                }else{
+                    nextPoint = location
+                    drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "")
+                }
+                
+            }else{
+                return
+                
+            }
         }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        potentialShapeNode.removeFromParent()
+        pointsConnected = false
         
         for theTouch: AnyObject in touches{
             touchedLocations.append(theTouch.locationInNode(self.gameLayer))
@@ -251,6 +288,7 @@ class Board: SKScene {
                 
                 
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
+                    
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     xTurn = false
                     turnLabel.text = "O"
@@ -267,6 +305,9 @@ class Board: SKScene {
                 }
                 
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
+                    potentialShapeNode.removeFromParent()
+                    pointsConnected = false
+                    
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     xTurn = true
                     turnLabel.text = "X"
@@ -345,6 +386,16 @@ class Board: SKScene {
         
     }
     
+    func drawPotentialLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
+        
+        potentialShapeNode.removeFromParent()
+        let path = createLineAtPoints(pointA, pointB: pointB)
+        potentialShapeNode = SKShapeNode(path: path)
+        potentialShapeNode.strokeColor = UIColor(white: 0.4, alpha: 0.6)
+        potentialShapeNode.lineWidth = 3
+        addChild(potentialShapeNode)
+        
+    }
     
     func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
         
