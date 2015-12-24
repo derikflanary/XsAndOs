@@ -26,6 +26,9 @@ class Board: SKScene {
     var xTurn : Bool = true
     var xLines = [LineShapeNode]()
     var oLines = [LineShapeNode]()
+    var movingTouches = Set<UITouch>()
+    var touchedLocations = [CGPoint]()
+    var turnLabel = SKLabelNode()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -75,6 +78,12 @@ class Board: SKScene {
         backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
         backButton.tag = 20
         self.view?.addSubview(backButton)
+        
+        turnLabel = SKLabelNode(text: "X")
+        turnLabel.position = CGPointMake(self.frame.width/2, 500)
+        turnLabel.fontColor = SKColor.blackColor()
+        turnLabel.zPosition = 3
+        self.addChild(turnLabel)
         
     }
     
@@ -176,6 +185,7 @@ class Board: SKScene {
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         xTurn = false
+                        turnLabel.text = "O"
                     }
                     selectedNode = SKSpriteNode()
                     
@@ -188,6 +198,7 @@ class Board: SKScene {
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         xTurn = true
+                        turnLabel.text = "X"
                     }
                     selectedNode = SKSpriteNode()
                     
@@ -213,6 +224,64 @@ class Board: SKScene {
                 }
             }
         }
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch: AnyObject in touches{
+            touchedLocations.append(touch.locationInNode(self.gameLayer))
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        for theTouch: AnyObject in touches{
+            touchedLocations.append(theTouch.locationInNode(self.gameLayer))
+        }
+        
+        for location: CGPoint in touchedLocations {
+            //Get the location of your touch
+//            let location = touch.locationInNode(self.gameLayer)
+            let touchedNode = self.nodeAtPoint(location)
+            
+            if selectedNode.name == "X" && touchedNode.name == "X"{
+                if !xTurn{
+                    touchedLocations.removeAll()
+                    return
+                }
+                
+                
+                if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
+                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
+                    xTurn = false
+                    turnLabel.text = "O"
+                    selectedNode.setScale(1.0)
+                    selectedNode = SKSpriteNode()
+                    touchedLocations.removeAll()
+                    return
+                }
+                
+            }else if selectedNode.name == "O" && touchedNode.name == "O"{
+                if xTurn{
+                    touchedLocations.removeAll()
+                    return
+                }
+                
+                if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
+                    drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
+                    xTurn = true
+                    turnLabel.text = "X"
+                    selectedNode.setScale(1.0)
+                    selectedNode = SKSpriteNode()
+                    touchedLocations.removeAll()
+                    return
+                }
+            
+            }else{
+                touchedLocations.removeAll()
+            }
+        }
+        touchedLocations.removeAll()
+
     }
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
@@ -471,18 +540,10 @@ class Board: SKScene {
     
     func declareWinner(winningTeam: String){
         let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
-        
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
             self.resetBoard()
         }
         alertController.addAction(cancelAction)
-        
-//        let subview = alertController.view.subviews.first! as UIView
-//        let alertContentView = subview.subviews.first! as UIView
-//        alertContentView.backgroundColor = UIColor(red: 0.76, green: 0.22, blue: 0.18, alpha: 0.8)
-//        alertContentView.layer.cornerRadius = 5;
-//        alertController.view.tintColor = UIColor.whiteColor()
-
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
 
