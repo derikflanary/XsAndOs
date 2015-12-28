@@ -83,6 +83,8 @@ class GameScene: SKScene, UITextFieldDelegate {
             if rows < 5{
                 rows = 4
                 dim = 3
+            }else if rows == 5{
+                dim = 5
             }else if rows == 6{
                 dim = 7
             }else if rows == 7{
