@@ -239,7 +239,7 @@ class Board: SKScene {
             let location = touch.locationInNode(self.gameLayer)
             let touchedNode = self.nodeAtPoint(location)
             
-            if !pointsConnected{
+            if !pointsConnected && startPoint != CGPointZero{
                 if touchedNode.name == "X" && xTurn && touchedNode != selectedNode{
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
                         nextPoint = touchedNode.position
@@ -270,6 +270,7 @@ class Board: SKScene {
         
         potentialShapeNode.removeFromParent()
         pointsConnected = false
+        startPoint = CGPointZero
         
         for theTouch: AnyObject in touches{
             touchedLocations.append(theTouch.locationInNode(self.gameLayer))
