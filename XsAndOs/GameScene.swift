@@ -7,6 +7,8 @@
 //
 
 import SpriteKit
+import Parse
+import ParseFacebookUtilsV4
 
 class GameScene: SKScene, UITextFieldDelegate {
     
@@ -14,6 +16,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     let sizeField = UITextField()
     let label = UILabel()
     var stackView = UIStackView()
+    let fbLoginbutton = UIButton()
     
     override func didMoveToView(view: SKView) {
         
@@ -37,7 +40,15 @@ class GameScene: SKScene, UITextFieldDelegate {
         sizeField.borderStyle = .RoundedRect
         sizeField.delegate = self
         
-        stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField])
+        
+        fbLoginbutton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
+        fbLoginbutton.setTitle("Log in with Facebook", forState: .Normal)
+        fbLoginbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        fbLoginbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        fbLoginbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+        fbLoginbutton.addTarget(self, action: "fbLoginPressed", forControlEvents: .TouchUpInside)
+        
+        stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton])
         stackView.axis = .Vertical
         stackView.spacing = 20
         stackView.distribution = .FillEqually
@@ -51,6 +62,12 @@ class GameScene: SKScene, UITextFieldDelegate {
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
         stackView.heightAnchor.constraintEqualToConstant(200).active = true
         
+        
+        let testObject = PFObject(className: "TestObject")
+        testObject["foo"] = "bar"
+        testObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            print("Object has been saved.")
+        }
     }
     
     override init(size: CGSize) {
@@ -104,6 +121,45 @@ class GameScene: SKScene, UITextFieldDelegate {
         self.scene!.view?.presentScene(secondScene, transition: transition)
         
         stackView.removeFromSuperview()
+    }
+    
+    func fbLoginPressed(){
+        print("fbLoginPressed")
+        
+        PFFacebookUtils.logInInBackgroundWithReadPermissions(["public_profile", "user_friends", "user_birthday"]) {
+            (user: PFUser?, error: NSError?) -> Void in
+            
+            guard let user = user else{
+                print("Uh oh. The user cancelled the Facebook login.")
+                return
+            }
+            
+            if user.isNew {
+                print("User signed up and logged in through Facebook!");
+                let request = FBSDKGraphRequest(graphPath:"/me/taggable_friends", parameters: nil);
+                
+                request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+                    if error == nil {
+                        print("Friends are : \(result)")
+                    } else {
+                        print("Error Getting Friends \(error)");
+                    }
+                }
+            } else {
+                print("User logged in through Facebook!");
+                let request = FBSDKGraphRequest(graphPath:"/me/taggable_friends", parameters: nil);
+                
+                request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+                    if error == nil {
+                        print("Friends are : \(result)")
+                    } else {
+                        print("Error Getting Friends \(error)");
+                    }
+                }
+
+            }
+        }
+        
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
