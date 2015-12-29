@@ -121,9 +121,15 @@ class GameScene: SKScene, UITextFieldDelegate {
     func fbLoginPressed(){
         print("fbLoginPressed")
         
-        FacebookController.Singleton.sharedInstance.loginToFacebook { (success) -> Void in
+        FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
-                print("successful login")   
+                print("successful login")
+                let fVC = FriendsListViewController()
+                print(friendList)
+                fVC.friends = friendList
+                let navController = UINavigationController(rootViewController: fVC)
+                self.view?.window?.rootViewController? = navController
+                
             }
         }
         
