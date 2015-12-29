@@ -18,6 +18,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     var stackView = UIStackView()
     let fbLoginbutton = UIButton()
     
+    
     override func didMoveToView(view: SKView) {
         
         
@@ -60,14 +61,8 @@ class GameScene: SKScene, UITextFieldDelegate {
         stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
         stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
-        stackView.heightAnchor.constraintEqualToConstant(200).active = true
+        stackView.heightAnchor.constraintEqualToConstant(250).active = true
         
-        
-        let testObject = PFObject(className: "TestObject")
-        testObject["foo"] = "bar"
-        testObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            print("Object has been saved.")
-        }
     }
     
     override init(size: CGSize) {
@@ -126,40 +121,14 @@ class GameScene: SKScene, UITextFieldDelegate {
     func fbLoginPressed(){
         print("fbLoginPressed")
         
-        PFFacebookUtils.logInInBackgroundWithReadPermissions(["public_profile", "user_friends", "user_birthday"]) {
-            (user: PFUser?, error: NSError?) -> Void in
-            
-            guard let user = user else{
-                print("Uh oh. The user cancelled the Facebook login.")
-                return
-            }
-            
-            if user.isNew {
-                print("User signed up and logged in through Facebook!");
-                let request = FBSDKGraphRequest(graphPath:"/me/taggable_friends", parameters: nil);
-                
-                request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
-                    if error == nil {
-                        print("Friends are : \(result)")
-                    } else {
-                        print("Error Getting Friends \(error)");
-                    }
-                }
-            } else {
-                print("User logged in through Facebook!");
-                let request = FBSDKGraphRequest(graphPath:"/me/taggable_friends", parameters: nil);
-                
-                request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
-                    if error == nil {
-                        print("Friends are : \(result)")
-                    } else {
-                        print("Error Getting Friends \(error)");
-                    }
-                }
-
+        FacebookController.Singleton.sharedInstance.loginToFacebook { (success) -> Void in
+            if success{
+                print("successful login")   
             }
         }
         
+        
+                
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
