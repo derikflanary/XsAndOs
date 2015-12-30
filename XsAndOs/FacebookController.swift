@@ -9,11 +9,6 @@
 import Foundation
 import ParseFacebookUtilsV4
 
-struct Friend {
-    let name : String
-    let id : String
-}
-
 class FacebookController: NSObject {
     
         class Singleton  {
@@ -42,7 +37,6 @@ class FacebookController: NSObject {
                             }
                             
                             if (result != nil) {
-//                                 print(result)
 
                                 let userName: String = result.valueForKey("name") as! String
                                 user.setObject(userName, forKey: "name")
@@ -61,7 +55,7 @@ class FacebookController: NSObject {
                                 let data : NSArray = resultdict.objectForKey("data") as! NSArray
                                 user.setObject(data, forKey: "friends")
                                 user.saveInBackground()
-                                
+                                completion(true, data as! [[String : String]])
                             } else {
                                 print("Error Getting Friends \(error)");
                             }
@@ -69,27 +63,12 @@ class FacebookController: NSObject {
                     } else {
                         print("User logged in through Facebook!");
                         
-                        var friendList = [Friend]()
                         
                         if let friends = user["friends"] as? [[String:String]]{
-                            for dict in friends{
-                                let friend = Friend(name: dict["name"]!, id: dict["id"]!)
-                                friendList.append(friend)
-                            }
+                            
                             print(friends)
                             completion(true, friends)
                         }
-                        
-                        
-                        //                        let request = FBSDKGraphRequest(graphPath:"/me/friends", parameters: ["fields": "id, name, email"]);
-//
-//                        request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
-//                            if error == nil {
-//                                print("Friends are : \(result)")
-//                            } else {
-//                                print("Error Getting Friends \(error)");
-//                            }
-//                        }
                         
                     }
 
