@@ -17,6 +17,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     let label = UILabel()
     var stackView = UIStackView()
     let fbLoginbutton = UIButton()
+    var friendsList = [[String:String]]()
     
     
     override func didMoveToView(view: SKView) {
@@ -65,7 +66,6 @@ class GameScene: SKScene, UITextFieldDelegate {
     
     override init(size: CGSize) {
         super.init(size: size)
-        
         self.backgroundColor = SKColor.whiteColor()
     }
 
@@ -125,9 +125,24 @@ class GameScene: SKScene, UITextFieldDelegate {
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
                 //update the UI here
-                self.transitionToFriendList(friendList)
+//                self.transitionToFriendList(friendList)
+                self.friendsList = friendList
+                let friendbutton = UIButton(frame: CGRectZero)
+                friendbutton.setTitle("Play with Friends", forState: .Normal)
+                friendbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+                friendbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+                friendbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+                friendbutton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
+                
+                self.stackView.removeArrangedSubview(self.fbLoginbutton)
+                self.fbLoginbutton.removeFromSuperview()
+                self.stackView.addArrangedSubview(friendbutton)
             }
         }
+    }
+    
+    func friendPressed(){
+        transitionToFriendList(friendsList)
     }
     
     private func transitionToFriendList(friendList : [[String:String]]){
