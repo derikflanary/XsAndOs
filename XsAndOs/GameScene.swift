@@ -21,7 +21,6 @@ class GameScene: SKScene, UITextFieldDelegate {
     
     override func didMoveToView(view: SKView) {
         
-        
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
         startButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
@@ -40,7 +39,6 @@ class GameScene: SKScene, UITextFieldDelegate {
         sizeField.textAlignment = .Center
         sizeField.borderStyle = .RoundedRect
         sizeField.delegate = self
-        
         
         fbLoginbutton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         fbLoginbutton.setTitle("Log in with Facebook", forState: .Normal)
@@ -76,46 +74,49 @@ class GameScene: SKScene, UITextFieldDelegate {
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-       /* Called when a touch begins */
-      
     }
    
     override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
     }
     
     func newGamePressed(){
-        print("newGamePressed")
-
-        let transition = SKTransition.crossFadeWithDuration(1)
-        var dim = 9
+        var dim : Int
         var rows = Int(sizeField.text!)
-        
-        if rows != nil{
-            if rows < 5{
-                rows = 4
-                dim = 3
-            }else if rows == 5{
-                dim = 5
-            }else if rows == 6{
-                dim = 7
-            }else if rows == 7{
-                dim = 9
-            }else if rows >= 8{
-                rows = 8
-                dim = 11
-            }
-            dim = dim + 4
-        }else{
+
+        if rows == nil{
             dim = 9
             rows = 5
+        }else{
+            dim = calculateDim(rows!)
         }
-        
-        let secondScene = Board(size: self.size, theDim: dim, theRows: rows!)
+        transitionToBoardScene(dim, rows: rows!)
+        stackView.removeFromSuperview()
+    }
+    
+    private func calculateDim(var rows : Int) -> Int{
+       var dim = 9
+        if rows < 5{
+            rows = 4
+            dim = 3
+        }else if rows == 5{
+            dim = 5
+        }else if rows == 6{
+            dim = 7
+        }else if rows == 7{
+            dim = 9
+        }else if rows >= 8{
+            rows = 8
+            dim = 11
+        }
+        dim = dim + 4
+        return dim
+    }
+    
+    private func transitionToBoardScene(dim : Int, rows : Int){
+        let transition = SKTransition.crossFadeWithDuration(1)
+        let secondScene = Board(size: self.size, theDim: dim, theRows: rows)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
-        
-        stackView.removeFromSuperview()
     }
     
     func fbLoginPressed(){
@@ -123,18 +124,17 @@ class GameScene: SKScene, UITextFieldDelegate {
         
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
-                print("successful login")
-                let fVC = FriendsListViewController()
-                print(friendList)
-                fVC.friends = friendList
-                let navController = UINavigationController(rootViewController: fVC)
-                self.view?.window?.rootViewController? = navController
-                
+                //update the UI here
+                self.transitionToFriendList(friendList)
             }
         }
-        
-        
-                
+    }
+    
+    private func transitionToFriendList(friendList : [[String:String]]){
+        let fVC = FriendsListViewController()
+        fVC.friends = friendList
+        let navController = UINavigationController(rootViewController: fVC)
+        self.view?.window?.rootViewController? = navController
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {

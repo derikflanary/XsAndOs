@@ -25,54 +25,56 @@ class FacebookController: NSObject {
                         completion(false, Array())
                         return
                     }
+                    print("User logged in through Facebook!");
                     
                     if user.isNew {
-                    
-                        let userDetails = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"])
-                        userDetails.startWithCompletionHandler { (connection, result, error: NSError!) -> Void in
-                            
-                            if (error != nil) {
-                                print("error \(error.localizedDescription) ")
-                                return
-                            }
-                            
-                            if (result != nil) {
-
-                                let userName: String = result.valueForKey("name") as! String
-                                user.setObject(userName, forKey: "name")
-//                              user.setObject(userEmail!, forKey: "email")
-                                user.saveInBackground()
-                            }
-                        }
-                        
-                        print("User signed up and logged in through Facebook!");
-                        let request = FBSDKGraphRequest(graphPath:"/me/friends", parameters:["fields": "id, name, email"]);
-                        
-                        request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
-                            if error == nil {
-//                                print("Friends are : \(result)")
-                                let resultdict = result as! NSDictionary
-                                let data : NSArray = resultdict.objectForKey("data") as! NSArray
-                                user.setObject(data, forKey: "friends")
-                                user.saveInBackground()
-                                completion(true, data as! [[String : String]])
-                            } else {
-                                print("Error Getting Friends \(error)");
-                            }
-                        }
-                    } else {
-                        print("User logged in through Facebook!");
-                        
-                        
-                        if let friends = user["friends"] as? [[String:String]]{
-                            
-                            print(friends)
-                            completion(true, friends)
-                        }
-                        
+                        self.fetchFacebookDetailsForUser(user, completion: { (success) -> Void in
+                        })
                     }
-
+                    
+                    self.fetchFriendsForUser(user, completion: { (success, friends) -> Void in
+                        guard success else{completion(false, friends) ; return}
+                        completion(true, friends)
+                    })
                 }
             }
+            
+            func fetchFacebookDetailsForUser(user: PFUser, completion: (Bool) -> Void){
+                let userDetails = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"])
+                userDetails.startWithCompletionHandler { (connection, result, error: NSError!) -> Void in
+                    
+                    if (error != nil) {
+                        print("error \(error.localizedDescription) ")
+                        completion(false)
+                    }
+                    let userName: String = result.valueForKey("name") as! String
+                    user.setObject(userName, forKey: "name")
+                    user.saveInBackground()
+                }
+            }
+            
+            func fetchFriendsForUser(user : PFUser, completion: (Bool, [[String:String]]) -> Void){
+                let request = FBSDKGraphRequest(graphPath:"/me/friends", parameters:["fields": "id, name, email"]);
+                request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+                    
+                    if error == nil {
+                        let resultdict = result as! NSDictionary
+                        let data : NSArray = resultdict.objectForKey("data") as! NSArray
+                        user.setObject(data, forKey: "friends")
+                        user.saveInBackground()
+                        completion(true, data as! [[String : String]])
+                        
+                    } else {
+                        print("Error Getting Friends \(error)");
+                        completion(false, result as! [[String : String]])
+                    }
+                }
+            }
+            
+            
+            
+            
         }
 }
+
+    

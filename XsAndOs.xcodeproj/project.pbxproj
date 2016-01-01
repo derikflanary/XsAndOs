@@ -36,6 +36,7 @@
 		EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5131BF158F0009191EA /* Array2D.swift */; };
 		EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5151BF15E4A009191EA /* Nodes.swift */; };
 		EEB5FA761C33432600F79121 /* FriendsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB5FA751C33432600F79121 /* FriendsListViewController.swift */; };
+		EEB5FA781C37035B00F79121 /* GCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB5FA771C37035B00F79121 /* GCStackView.swift */; };
 		EEF335221C1A241C00E603CD /* LineShapeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF335211C1A241C00E603CD /* LineShapeNode.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
@@ -94,6 +95,7 @@
 		EE8FD5131BF158F0009191EA /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		EE8FD5151BF15E4A009191EA /* Nodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nodes.swift; sourceTree = "<group>"; };
 		EEB5FA751C33432600F79121 /* FriendsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FriendsListViewController.swift; path = ../FriendsListViewController.swift; sourceTree = "<group>"; };
+		EEB5FA771C37035B00F79121 /* GCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCStackView.swift; sourceTree = "<group>"; };
 		EEF335211C1A241C00E603CD /* LineShapeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineShapeNode.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,6 +176,7 @@
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
 				EEB5FA751C33432600F79121 /* FriendsListViewController.swift */,
 				EE65F55C1C31F1D700E51138 /* FacebookController.swift */,
+				EEB5FA771C37035B00F79121 /* GCStackView.swift */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
 				EE5E818B1BDEC1410004424F /* Assets.xcassets */,
 				EE5E818D1BDEC1410004424F /* LaunchScreen.storyboard */,
@@ -373,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE5E81851BDEC1410004424F /* GameScene.swift in Sources */,
+				EEB5FA781C37035B00F79121 /* GCStackView.swift in Sources */,
 				EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */,
 				EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */,
 				EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */,
