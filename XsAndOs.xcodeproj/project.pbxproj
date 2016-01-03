@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE2FB4AB1C389AE500C91D68 /* SwiftSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */; };
+		EE2FB4D11C38A4F300C91D68 /* JTSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */; };
+		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
 		EE5E81811BDEC1410004424F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E81801BDEC1410004424F /* AppDelegate.swift */; };
 		EE5E81831BDEC1410004424F /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = EE5E81821BDEC1410004424F /* GameScene.sks */; };
 		EE5E81851BDEC1410004424F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E81841BDEC1410004424F /* GameScene.swift */; };
@@ -36,7 +39,6 @@
 		EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5131BF158F0009191EA /* Array2D.swift */; };
 		EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5151BF15E4A009191EA /* Nodes.swift */; };
 		EEB5FA761C33432600F79121 /* FriendsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB5FA751C33432600F79121 /* FriendsListViewController.swift */; };
-		EEB5FA781C37035B00F79121 /* GCStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB5FA771C37035B00F79121 /* GCStackView.swift */; };
 		EEF335221C1A241C00E603CD /* LineShapeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF335211C1A241C00E603CD /* LineShapeNode.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
@@ -59,6 +61,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
+		EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTSplashView.swift; sourceTree = "<group>"; };
+		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
 		EE5E817D1BDEC1410004424F /* XsAndOs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XsAndOs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE5E81801BDEC1410004424F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE5E81821BDEC1410004424F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -95,7 +100,6 @@
 		EE8FD5131BF158F0009191EA /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		EE8FD5151BF15E4A009191EA /* Nodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nodes.swift; sourceTree = "<group>"; };
 		EEB5FA751C33432600F79121 /* FriendsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FriendsListViewController.swift; path = ../FriendsListViewController.swift; sourceTree = "<group>"; };
-		EEB5FA771C37035B00F79121 /* GCStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCStackView.swift; sourceTree = "<group>"; };
 		EEF335211C1A241C00E603CD /* LineShapeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineShapeNode.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +145,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EE2FB4A91C389AE500C91D68 /* SwiftSpinner */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */,
+			);
+			path = SwiftSpinner;
+			sourceTree = "<group>";
+		};
 		EE5E81741BDEC1410004424F = {
 			isa = PBXGroup;
 			children = (
@@ -170,13 +182,15 @@
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
 				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
+				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
 				EE8FD5151BF15E4A009191EA /* Nodes.swift */,
 				EE8FD5131BF158F0009191EA /* Array2D.swift */,
 				EEF335211C1A241C00E603CD /* LineShapeNode.swift */,
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
 				EEB5FA751C33432600F79121 /* FriendsListViewController.swift */,
 				EE65F55C1C31F1D700E51138 /* FacebookController.swift */,
-				EEB5FA771C37035B00F79121 /* GCStackView.swift */,
+				EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */,
+				EE2FB4A91C389AE500C91D68 /* SwiftSpinner */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
 				EE5E818B1BDEC1410004424F /* Assets.xcassets */,
 				EE5E818D1BDEC1410004424F /* LaunchScreen.storyboard */,
@@ -376,11 +390,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE5E81851BDEC1410004424F /* GameScene.swift in Sources */,
-				EEB5FA781C37035B00F79121 /* GCStackView.swift in Sources */,
 				EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */,
+				EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */,
 				EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */,
+				EE2FB4D11C38A4F300C91D68 /* JTSplashView.swift in Sources */,
 				EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */,
 				EEB5FA761C33432600F79121 /* FriendsListViewController.swift in Sources */,
+				EE2FB4AB1C389AE500C91D68 /* SwiftSpinner.swift in Sources */,
 				EE5E81871BDEC1410004424F /* GameViewController.swift in Sources */,
 				EEF335221C1A241C00E603CD /* LineShapeNode.swift in Sources */,
 				EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */,

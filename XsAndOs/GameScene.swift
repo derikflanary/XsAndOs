@@ -18,7 +18,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     var stackView = UIStackView()
     let fbLoginbutton = UIButton()
     var friendsList = [[String:String]]()
-    
+    var activityIndicator = UIActivityIndicatorView()
     
     override func didMoveToView(view: SKView) {
         
@@ -61,7 +61,12 @@ class GameScene: SKScene, UITextFieldDelegate {
         stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
         stackView.heightAnchor.constraintEqualToConstant(250).active = true
-        
+     
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "facebookLoggedIn",
+            name: "FacebookLoggedIn",
+            object: nil)
     }
     
     override init(size: CGSize) {
@@ -120,25 +125,34 @@ class GameScene: SKScene, UITextFieldDelegate {
     }
     
     func fbLoginPressed(){
+
         print("fbLoginPressed")
-        
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
                 //update the UI here
-//                self.transitionToFriendList(friendList)
-                self.friendsList = friendList
-                let friendbutton = UIButton(frame: CGRectZero)
-                friendbutton.setTitle("Play with Friends", forState: .Normal)
-                friendbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
-                friendbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-                friendbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
-                friendbutton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
-                
-                self.stackView.removeArrangedSubview(self.fbLoginbutton)
-                self.fbLoginbutton.removeFromSuperview()
-                self.stackView.addArrangedSubview(friendbutton)
+                dispatch_async(dispatch_get_main_queue(),{
+                    
+                    self.friendsList = friendList
+                    let friendbutton = UIButton(frame: CGRectZero)
+                    friendbutton.setTitle("Play with Friends", forState: .Normal)
+                    friendbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+                    friendbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+                    friendbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+                    friendbutton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
+                    self.stackView.removeArrangedSubview(self.fbLoginbutton)
+                    self.fbLoginbutton.removeFromSuperview()
+                    self.stackView.addArrangedSubview(friendbutton)
+                })
+            }else{
+                self.fbLoginbutton.enabled = true
             }
         }
+        self.fbLoginbutton.enabled = false
+        fbLoginbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.8), forState: .Normal)
+    }
+    
+    func facebookLoggedIn(){
+
     }
     
     func friendPressed(){
@@ -146,10 +160,13 @@ class GameScene: SKScene, UITextFieldDelegate {
     }
     
     private func transitionToFriendList(friendList : [[String:String]]){
-        let fVC = FriendsListViewController()
-        fVC.friends = friendList
-        let navController = UINavigationController(rootViewController: fVC)
-        self.view?.window?.rootViewController? = navController
+        self.stackView.removeFromSuperview()
+        let transition = SKTransition.crossFadeWithDuration(1)
+        let secondScene = FriendListScene()
+        secondScene.friends = friendList
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {

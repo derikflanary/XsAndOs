@@ -14,6 +14,10 @@ class FriendsListViewController: UIViewController, UITableViewDataSource, UITabl
     let tableView = UITableView()
     
     override func viewDidLoad() {
+        
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelPressed")
+        navigationItem.leftBarButtonItem = cancelButton
+        
         tableView.frame = self.view.bounds
         tableView.dataSource = self
         tableView.delegate = self
@@ -22,6 +26,11 @@ class FriendsListViewController: UIViewController, UITableViewDataSource, UITabl
         
         tableView.reloadData()
         print(friends)
+    }
+    
+    func cancelPressed(){
+        let gVC = GameViewController()
+        self.view?.window?.rootViewController? = gVC
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -16,17 +16,16 @@ class FacebookController: NSObject {
         static let sharedInstance = Singleton()
 
             func loginToFacebook(completion: (Bool, [[String:String]]) -> Void){
-             
+
                 PFFacebookUtils.logInInBackgroundWithReadPermissions(["public_profile", "user_friends", "user_birthday"]) {
                     (user: PFUser?, error: NSError?) -> Void in
-                    
                     guard let user = user else{
                         print("Uh oh. The user cancelled the Facebook login. \(error)")
                         completion(false, Array())
                         return
                     }
                     print("User logged in through Facebook!");
-                    
+                    NSNotificationCenter.defaultCenter().postNotificationName("FacebookLoggedIn", object: nil)
                     if user.isNew {
                         self.fetchFacebookDetailsForUser(user, completion: { (success) -> Void in
                         })
@@ -54,6 +53,7 @@ class FacebookController: NSObject {
             }
             
             func fetchFriendsForUser(user : PFUser, completion: (Bool, [[String:String]]) -> Void){
+
                 let request = FBSDKGraphRequest(graphPath:"/me/friends", parameters:["fields": "id, name, email"]);
                 request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
                     
