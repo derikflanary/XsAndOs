@@ -83,10 +83,12 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
             dim = 9
             rows = 5
         }else{
-            let boardCont = BoardSetupController()
-            dim = boardCont.calculateDim(rows!)
+            dim = BoardSetupController().calculateDim(rows!)
         }
         
+        if let receiver = opponent.username{
+        PushNotificationController().pushPrivateMessage(receiver)
+        }
         print(dim)
         print(rows)
     }
@@ -98,6 +100,8 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         self.scene?.view?.presentScene(mainScene, transition: transition)
         stackView.removeFromSuperview()
         self.view?.viewWithTag(20)?.removeFromSuperview()
+        
+        
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
