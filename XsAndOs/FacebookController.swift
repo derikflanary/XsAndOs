@@ -47,6 +47,8 @@ class FacebookController: NSObject {
                         completion(false)
                     }
                     let userName: String = result.valueForKey("name") as! String
+                    let id : String = result.valueForKey("id") as! String
+                    user.setObject(id, forKey: "facebookID")
                     user.setObject(userName, forKey: "name")
                     user.saveInBackground()
                 }
@@ -72,7 +74,19 @@ class FacebookController: NSObject {
             }
             
             
-            
+            func fetchFriendWithFacebookID(id : String, completion: (PFUser) -> Void){
+                let query = PFUser.query()
+                query!.whereKey("facebookID", equalTo: id)
+                query?.getFirstObjectInBackgroundWithBlock({ (user : PFObject?,error : NSError?) -> Void in
+                    
+                    let friendUser = user as! PFUser
+                    if (error == nil){
+                        completion(friendUser)
+                    }
+                    
+                })
+                
+            }
             
         }
 }

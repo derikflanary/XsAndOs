@@ -8,9 +8,9 @@
 
 import Foundation
 import SpriteKit
+import Parse
 
-class FriendListScene: SKScene, UITableViewDataSource, UITableViewDelegate {
-    
+class FriendListScene: SKScene, UITableViewDataSource, UITableViewDelegate {  
     var friends = [[String:String]]()
     var tableView = UITableView()
     var cancelButton = UIButton()
@@ -67,14 +67,31 @@ class FriendListScene: SKScene, UITableViewDataSource, UITableViewDelegate {
         if friends.count > 0{
             let friend = friends[indexPath.row] as Dictionary
             cell.textLabel?.text = friend["name"]
-            print(friend["name"])
         }
         
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 0{
+            let friend = friends[indexPath.row] as Dictionary
+            let id = friend["id"]
+            FacebookController.Singleton.sharedInstance.fetchFriendWithFacebookID(id!, completion: { (user) -> Void in
+                let opponent = user as PFUser
+                self.transitionToSetupScene(opponent)
+            })
+        }
         
+    }
+    
+    func transitionToSetupScene(opponent: PFUser){
+        let nextScene = MultiplayerSetupScene()
+        nextScene.opponent = opponent
+        let transition = SKTransition.crossFadeWithDuration(0.75)
+        nextScene.scaleMode = .AspectFill
+        self.scene?.view?.presentScene(nextScene, transition: transition)
+        tableView.removeFromSuperview()
+        cancelButton.removeFromSuperview()
     }
     
 }

@@ -92,13 +92,15 @@ class GameScene: SKScene, UITextFieldDelegate {
             dim = 9
             rows = 5
         }else{
-            dim = calculateDim(rows!)
+            let boardCont = BoardSetupController()
+            dim = boardCont.calculateDim(rows!)
+//            dim = calculateDim(rows!)
         }
         transitionToBoardScene(dim, rows: rows!)
         stackView.removeFromSuperview()
     }
     
-    private func calculateDim(var rows : Int) -> Int{
+    func calculateDim(var rows : Int) -> Int{
        var dim = 9
         if rows < 5{
             rows = 4
