@@ -23,11 +23,22 @@ class LineShapeNode: SKShapeNode {
     
     init(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String) {
         super.init()
+        setupValues(columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: team)
         
+        
+    }
+    
+    init(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String, path: CGPathRef, color: SKColor) {
+        super.init()
+        setupValues(columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: team)
+        setShapeAspects(path)
+        strokeColor = color
+    }
+    
+    private func setupValues(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String){
         let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
         coordinates.append(coordinate)
         self.team = team
-        
     }
     
     func appendPath(newPath: CGPathRef){
@@ -40,6 +51,12 @@ class LineShapeNode: SKShapeNode {
     func addCoordinate(columnA: Int, rowA: Int, columnB: Int, rowB: Int){
         let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
         coordinates.append(coordinate)
+    }
+    
+    func addCoordinatesFromLine(lineShapeNode: LineShapeNode){
+        for coordinate in lineShapeNode.coordinates{
+            self.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
+        }
     }
     
     func setShapeAspects(newPath: CGPathRef){
