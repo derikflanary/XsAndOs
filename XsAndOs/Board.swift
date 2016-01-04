@@ -29,7 +29,6 @@ class Board: SKScene {
     var movingTouches = Set<UITouch>()
     var touchedLocations = [CGPoint]()
     var turnLabel = SKLabelNode()
-    
     var startPoint = CGPoint()
     var nextPoint = CGPoint()
     var pointsConnected = false
@@ -44,7 +43,6 @@ class Board: SKScene {
         grid = Array2D(columns: dim, rows: dim)
         rows = theRows
         super.init(size: size)
-
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
     }
@@ -60,9 +58,7 @@ class Board: SKScene {
         self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
-        
         xTurn = true
-        
         buildArrayOfNodes()
         drawSquare()
         
@@ -137,11 +133,9 @@ class Board: SKScene {
                 }else{
                     sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
                 }
-                
                 sprite?.anchorPoint = CGPointMake(0.5, 0.5)
                 sprite?.zPosition = 2
                 gameLayer.addChild(sprite!)
-
             }
         }
     }
@@ -288,22 +282,11 @@ class Board: SKScene {
     }
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
-        
-        var (success, column, row) = convertPoint(firstSprite.position)
-        if success {
-            column = round(column)
-            row = round(row)
-        }
-        var (success2, column2, row2) = convertPoint(secondSprite.position)
-        if success2{
-            column2 = round(column2)
-            row2 = round(row2)
-        }
+        let (column, row, column2, row2) = convertSpritesToPoints(firstSprite, secondSprite: secondSprite)
         if column == column2 || column - column2 == -2 || column - column2 == 2{
             if row == row2 && column != column2 || row - row2 == -2 || row - row2 == 2 {
                 var interRow = 0
                 var interCol = 0
-                
                 if column == column2 || row == row2{
                     if column == column2{
                         interCol = Int(column)
@@ -333,7 +316,20 @@ class Board: SKScene {
             }
         }
         return false
-        
+    }
+    
+    func convertSpritesToPoints(firstSprite: SKSpriteNode, secondSprite: SKNode) -> (column: Float, row: Float, column2: Float, row2: Float){
+        var (success, column, row) = convertPoint(firstSprite.position)
+        if success {
+            column = round(column)
+            row = round(row)
+        }
+        var (success2, column2, row2) = convertPoint(secondSprite.position)
+        if success2{
+            column2 = round(column2)
+            row2 = round(row2)
+        }
+        return(column, row, column2, row2)
     }
     
     func drawPotentialLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
@@ -455,7 +451,6 @@ class Board: SKScene {
     
     func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode){
         for coordinate in lineShapeNode.coordinates{
-            
             if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
                 if match{
                     //If the new line connects two existing lines, add the second path to the first one

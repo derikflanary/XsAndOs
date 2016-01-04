@@ -146,6 +146,10 @@ class GameScene: SKScene, UITextFieldDelegate {
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
                 //update the UI here
+                let myinstallation = PFInstallation.currentInstallation()
+                myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
+                myinstallation.saveInBackground()
+                
                 dispatch_async(dispatch_get_main_queue(),{
                     
                     self.friendsList = friendList
