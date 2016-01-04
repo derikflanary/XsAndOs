@@ -85,7 +85,6 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         }else{
             let boardCont = BoardSetupController()
             dim = boardCont.calculateDim(rows!)
-            //            dim = calculateDim(rows!)
         }
         
         print(dim)
@@ -97,7 +96,7 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
-        self.view?.viewWithTag(10)?.removeFromSuperview()
+        stackView.removeFromSuperview()
         self.view?.viewWithTag(20)?.removeFromSuperview()
     }
     

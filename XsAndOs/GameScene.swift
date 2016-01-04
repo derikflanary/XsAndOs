@@ -17,6 +17,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     let label = UILabel()
     var stackView = UIStackView()
     let fbLoginbutton = UIButton()
+    let friendButton = UIButton()
     var friendsList = [[String:String]]()
     var activityIndicator = UIActivityIndicatorView()
     
@@ -48,7 +49,19 @@ class GameScene: SKScene, UITextFieldDelegate {
         fbLoginbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         fbLoginbutton.addTarget(self, action: "fbLoginPressed", forControlEvents: .TouchUpInside)
         
-        stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton])
+        friendButton.frame = CGRectZero
+        friendButton.setTitle("Play with Friends", forState: .Normal)
+        friendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        friendButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        friendButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+        friendButton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
+
+        if PFUser.currentUser() != nil{
+            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton])
+            friendsList = (PFUser.currentUser()?.valueForKey("friends"))! as! [[String : String]]
+        }else{
+            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton])
+        }
         stackView.axis = .Vertical
         stackView.spacing = 20
         stackView.distribution = .FillEqually
@@ -62,6 +75,7 @@ class GameScene: SKScene, UITextFieldDelegate {
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
         stackView.heightAnchor.constraintEqualToConstant(250).active = true
      
+        
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "facebookLoggedIn",
@@ -135,15 +149,9 @@ class GameScene: SKScene, UITextFieldDelegate {
                 dispatch_async(dispatch_get_main_queue(),{
                     
                     self.friendsList = friendList
-                    let friendbutton = UIButton(frame: CGRectZero)
-                    friendbutton.setTitle("Play with Friends", forState: .Normal)
-                    friendbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
-                    friendbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-                    friendbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
-                    friendbutton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
                     self.stackView.removeArrangedSubview(self.fbLoginbutton)
                     self.fbLoginbutton.removeFromSuperview()
-                    self.stackView.addArrangedSubview(friendbutton)
+                    self.stackView.addArrangedSubview(self.friendButton)
                 })
             }else{
                 self.fbLoginbutton.enabled = true
