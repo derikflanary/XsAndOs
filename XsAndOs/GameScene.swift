@@ -119,7 +119,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     
     private func transitionToBoardScene(dim : Int, rows : Int){
         let transition = SKTransition.crossFadeWithDuration(1)
-        let secondScene = Board(size: self.size, theDim: dim, theRows: rows)
+        let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
@@ -160,7 +160,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     }
     
     private func transitionToFriendList(friendList : [[String:String]]){
-        self.stackView.removeFromSuperview()
+        stackView.removeFromSuperview()
         let transition = SKTransition.crossFadeWithDuration(1)
         let secondScene = FriendListScene()
         secondScene.friends = friendList

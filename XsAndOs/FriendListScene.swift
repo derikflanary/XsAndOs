@@ -38,12 +38,12 @@ class FriendListScene: SKScene, UITableViewDataSource, UITableViewDelegate {
     }
     
     func cancelPressed(){
+        cancelButton.removeFromSuperview()
+        tableView.removeFromSuperview()
         let mainScene = GameScene(size: self.size)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
-        cancelButton.removeFromSuperview()
-        tableView.removeFromSuperview()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
