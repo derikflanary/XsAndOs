@@ -162,11 +162,19 @@ class Board: SKScene {
 
     }
     
+    func isXTurn() -> Bool{
+        return xTurn
+    }
+    
+    func isCurrentUserTurn() ->Bool{
+        return true
+    }
+    
 //TOUCHING AND DRAWING FUNCTIONS
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
-        
+        guard isCurrentUserTurn() else{return}
         for touch in touches {
             let location = touch.locationInNode(self.gameLayer)
             let touchedNode = self.nodeAtPoint(location)
@@ -174,19 +182,17 @@ class Board: SKScene {
             if touchedNode.name == "X" || touchedNode.name == "O"{
                 
                 if selectedNode.name == "X" && touchedNode.name == "X"{
-                    guard xTurn else{return}
+                    guard isXTurn() else{return}
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                        xTurn = false
-                        turnLabel.text = "O"
+                        switchTurns()
                     }
                     resetSelectedNode()
                 }else if selectedNode.name == "O" && touchedNode.name == "O"{
-                    guard !xTurn else{return}
+                    guard !isXTurn() else{return}
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                        xTurn = true
-                        turnLabel.text = "X"
+                        switchTurns()
                     }
                     resetSelectedNode()
                 }else{
@@ -207,6 +213,7 @@ class Board: SKScene {
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        guard isCurrentUserTurn() else{return}
         for touch: AnyObject in touches{
             touchedLocations.append(touch.locationInNode(self.gameLayer))
             let location = touch.locationInNode(self.gameLayer)
@@ -233,13 +240,12 @@ class Board: SKScene {
                 }
             }else{
                 return
-                
             }
         }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
+        guard isCurrentUserTurn() else{return}
         potentialShapeNode.removeFromParent()
         pointsConnected = false
         startPoint = CGPointZero
@@ -250,21 +256,19 @@ class Board: SKScene {
             let touchedNode = self.nodeAtPoint(location)
             
             if selectedNode.name == "X" && touchedNode.name == "X"{
-                guard xTurn else{touchedLocations.removeAll(); return}
+                guard isXTurn() else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     xTurn = false
-                    turnLabel.text = "O"
-                    resetSelectedNode()
+                    switchTurns()
                     touchedLocations.removeAll()
                     return
                 }
             }else if selectedNode.name == "O" && touchedNode.name == "O"{
-                guard !xTurn else{touchedLocations.removeAll(); return}
+                guard !isXTurn() else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                    xTurn = true
-                    turnLabel.text = "X"
+                    switchTurns()
                     resetSelectedNode()
                     touchedLocations.removeAll()
                     return
@@ -279,6 +283,16 @@ class Board: SKScene {
     private func resetSelectedNode(){
         selectedNode.setScale(1.0)
         selectedNode = SKSpriteNode()
+    }
+    
+    func switchTurns(){
+        if turnLabel.text == "X"{
+            xTurn = false
+            turnLabel.text = "O"
+        }else{
+            xTurn = true
+            turnLabel.text = "X"
+        }
     }
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{

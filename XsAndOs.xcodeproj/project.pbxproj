@@ -14,6 +14,7 @@
 		EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */; };
 		EE2FB4DA1C3AF28D00C91D68 /* BoardSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */; };
 		EE2FB4DC1C3B3CDA00C91D68 /* PushNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4DB1C3B3CDA00C91D68 /* PushNotificationController.swift */; };
+		EE2FB4DE1C3B472C00C91D68 /* MultiplayerBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */; };
 		EE5E81811BDEC1410004424F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E81801BDEC1410004424F /* AppDelegate.swift */; };
 		EE5E81831BDEC1410004424F /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = EE5E81821BDEC1410004424F /* GameScene.sks */; };
 		EE5E81851BDEC1410004424F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E81841BDEC1410004424F /* GameScene.swift */; };
@@ -71,6 +72,7 @@
 		EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplayerSetupScene.swift; sourceTree = "<group>"; };
 		EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardSetupController.swift; sourceTree = "<group>"; };
 		EE2FB4DB1C3B3CDA00C91D68 /* PushNotificationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationController.swift; sourceTree = "<group>"; };
+		EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplayerBoard.swift; sourceTree = "<group>"; };
 		EE5E817D1BDEC1410004424F /* XsAndOs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XsAndOs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE5E81801BDEC1410004424F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE5E81821BDEC1410004424F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
 				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
 				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
+				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
 				EE2FB4D61C3AED0000C91D68 /* Models */,
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
 				EE65F55C1C31F1D700E51138 /* FacebookController.swift */,
@@ -407,6 +410,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE2FB4DA1C3AF28D00C91D68 /* BoardSetupController.swift in Sources */,
+				EE2FB4DE1C3B472C00C91D68 /* MultiplayerBoard.swift in Sources */,
 				EE5E81851BDEC1410004424F /* GameScene.swift in Sources */,
 				EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */,
 				EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */,

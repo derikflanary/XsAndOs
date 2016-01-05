@@ -85,13 +85,28 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         }else{
             dim = BoardSetupController().calculateDim(rows!)
         }
-        
-        if let receiver = opponent.username{
-        PushNotificationController().pushPrivateMessage(receiver)
-        }
-        print(dim)
-        print(rows)
+//        if let receiver = opponent.username{
+//        PushNotificationController().pushPrivateMessage(receiver)
+//        }
+        transitionToBoardScene(dim, rows: rows!)
+        stackView.removeFromSuperview()
     }
+    
+    private func transitionToBoardScene(dim : Int, rows : Int){
+        let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
+        secondScene.xUser = PFUser.currentUser()!
+        secondScene.oUser = opponent
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        let transition = SKTransition.crossFadeWithDuration(1)
+        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success) -> Void in
+            if success{
+                self.scene!.view?.presentScene(secondScene, transition: transition)
+            }
+        }
+
+    }
+    
+    
     
     func mainPressed(){
         let mainScene = GameScene(size: self.size)
