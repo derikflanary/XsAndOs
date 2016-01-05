@@ -18,8 +18,11 @@ class GameScene: SKScene, UITextFieldDelegate {
     var stackView = UIStackView()
     let fbLoginbutton = UIButton()
     let friendButton = UIButton()
+    let currentGamesButton = UIButton()
     var friendsList = [[String:String]]()
+    var currentGames = [PFObject]()
     var activityIndicator = UIActivityIndicatorView()
+    let transition = SKTransition.crossFadeWithDuration(1)
     
     override func didMoveToView(view: SKView) {
         
@@ -30,9 +33,10 @@ class GameScene: SKScene, UITextFieldDelegate {
         startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
         
-        label.frame = CGRectMake(0, 150, self.view!.frame.size.width, 40)
+        label.frame = CGRectMake(0, 150, self.view!.frame.size.width, 50)
         label.numberOfLines = 0
         label.text = "Choose the number of Rows and Columns (Min:4 | Max:8)"
+        label.font = UIFont.systemFontOfSize(15)
         label.textAlignment = .Center
         
         sizeField.frame = CGRectZero
@@ -42,7 +46,7 @@ class GameScene: SKScene, UITextFieldDelegate {
         sizeField.borderStyle = .RoundedRect
         sizeField.delegate = self
         
-        fbLoginbutton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
+        fbLoginbutton.frame = CGRectZero
         fbLoginbutton.setTitle("Log in with Facebook", forState: .Normal)
         fbLoginbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
         fbLoginbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
@@ -51,20 +55,29 @@ class GameScene: SKScene, UITextFieldDelegate {
         
         friendButton.frame = CGRectZero
         friendButton.setTitle("Play with Friends", forState: .Normal)
-        friendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        friendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
         friendButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         friendButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         friendButton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
-
+        
+        currentGamesButton.frame = CGRectZero
+        currentGamesButton.setTitle("Current Games", forState: .Normal)
+        currentGamesButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
+        currentGamesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        currentGamesButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+        currentGamesButton.addTarget(self, action: "currentGamesPressed", forControlEvents: .TouchUpInside)
+        currentGamesButton.enabled = false
+        
         if PFUser.currentUser() != nil{
-            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton])
+            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton, currentGamesButton])
             friendsList = (PFUser.currentUser()?.valueForKey("friends"))! as! [[String : String]]
+            checkCurrentGames()
         }else{
-            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton])
+            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton, currentGamesButton])
         }
         stackView.axis = .Vertical
-        stackView.spacing = 20
-        stackView.distribution = .FillEqually
+        stackView.spacing = 16
+        stackView.distribution = .EqualSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         self.view?.addSubview(stackView)
         
@@ -73,14 +86,7 @@ class GameScene: SKScene, UITextFieldDelegate {
         stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
         stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
-        stackView.heightAnchor.constraintEqualToConstant(250).active = true
-     
-        
-        NSNotificationCenter.defaultCenter().addObserver(
-            self,
-            selector: "facebookLoggedIn",
-            name: "FacebookLoggedIn",
-            object: nil)
+        stackView.heightAnchor.constraintEqualToConstant(260).active = true
     }
     
     override init(size: CGSize) {
@@ -92,16 +98,9 @@ class GameScene: SKScene, UITextFieldDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    }
-   
-    override func update(currentTime: CFTimeInterval) {
-    }
-    
     func newGamePressed(){
         var dim : Int
         var rows = Int(sizeField.text!)
-
         if rows == nil{
             dim = 9
             rows = 5
@@ -112,34 +111,13 @@ class GameScene: SKScene, UITextFieldDelegate {
         stackView.removeFromSuperview()
     }
     
-    func calculateDim(var rows : Int) -> Int{
-       var dim = 9
-        if rows < 5{
-            rows = 4
-            dim = 3
-        }else if rows == 5{
-            dim = 5
-        }else if rows == 6{
-            dim = 7
-        }else if rows == 7{
-            dim = 9
-        }else if rows >= 8{
-            rows = 8
-            dim = 11
-        }
-        dim = dim + 4
-        return dim
-    }
-    
     private func transitionToBoardScene(dim : Int, rows : Int){
-        let transition = SKTransition.crossFadeWithDuration(1)
         let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
     func fbLoginPressed(){
-
         print("fbLoginPressed")
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
@@ -161,22 +139,42 @@ class GameScene: SKScene, UITextFieldDelegate {
         fbLoginbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.8), forState: .Normal)
     }
     
-    func facebookLoggedIn(){
-
-    }
-    
     func friendPressed(){
         transitionToFriendList(friendsList)
     }
     
+    func checkCurrentGames(){
+        XGameController.Singleton.sharedInstance.fetchGamesForUser(PFUser.currentUser()!) { (success, games) -> Void in
+            guard success else{return}
+            if games.count > 0{
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.currentGames = games
+                    self.currentGamesButton.enabled = true
+                })
+            }
+        }
+    }
+    
+    func currentGamesPressed(){
+        transitionToCurrentGames(currentGames)
+        print(currentGames)
+    }
+    
     private func transitionToFriendList(friendList : [[String:String]]){
         stackView.removeFromSuperview()
-        let transition = SKTransition.crossFadeWithDuration(1)
         let secondScene = FriendListScene()
         secondScene.friends = friendList
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
 
+    }
+    
+    private func transitionToCurrentGames(games : [PFObject]){
+        stackView.removeFromSuperview()
+        let secondScene = CurrentGamesScene()
+        secondScene.games = currentGames
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {

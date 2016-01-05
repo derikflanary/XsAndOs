@@ -30,5 +30,28 @@ class XGameController: NSObject {
                 }
             }
         }
+        
+        func fetchGamesForUser(user: PFUser, completion: (Bool, [PFObject]) -> Void){
+            let query = PFQuery(className: "XGame")
+            query.whereKey("xTeam", equalTo: user)
+            let query2 = PFQuery(className: "XGame")
+            query.whereKey("oTeam", equalTo: user)
+            let orQuery = PFQuery.orQueryWithSubqueries([query, query2])
+            orQuery.findObjectsInBackgroundWithBlock { (results: [PFObject]?, error: NSError?) -> Void in
+                if error == nil {
+                    PFObject.fetchAllInBackground(results, block: { (objects: [AnyObject]?, error :NSError?) -> Void in
+                        if error == nil{
+                            let games = objects as! [PFObject]
+                            completion(true, games)
+                        }else{
+                            completion(false, results!)
+                        }
+                    })
+                }else{
+                    completion(false, results!)
+                }
+            }
+            
+        }
     }
 }
