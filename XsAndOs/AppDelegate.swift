@@ -29,7 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFInstallation.currentInstallation().badge = 0
 
-        // Override point for customization after application launch.
+        if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
+            if let gameId = notificationPayload["gameId"]{
+                    NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: gameId)
+            }
+            
+        }
         return true
     }
     
@@ -51,6 +56,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         print("didReceiveRemoteNotification")
+        if let gameId: String = userInfo["gameId"] as? String {
+            if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
+                // Do something you want when the app is active
+                NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: gameId)
+            } else {
+                // Do something else when your app is in the background
+            }
+        }
         PFPush.handlePush(userInfo)
         
     }

@@ -163,7 +163,6 @@ class GameScene: SKScene, UITextFieldDelegate {
     
     func currentGamesPressed(){
         transitionToCurrentGames(currentGames)
-        print(currentGames)
     }
     
     private func transitionToFriendList(friendList : [[String:String]]){

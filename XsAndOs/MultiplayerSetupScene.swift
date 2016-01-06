@@ -84,9 +84,7 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         }else{
             dim = BoardSetupController().calculateDim(rows!)
         }
-//        if let receiver = opponent.username{
-//        PushNotificationController().pushPrivateMessage(receiver)
-//        }
+
         transitionToBoardScene(dim, rows: rows!)
         stackView.removeFromSuperview()
         backButton.removeFromSuperview()
@@ -99,9 +97,11 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         secondScene.xTurnLoad = true
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         let transition = SKTransition.crossFadeWithDuration(1)
-        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, id) -> Void in
+        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, id, xId, oId) -> Void in
             if success{
                 secondScene.gameID = id
+                secondScene.xObjId = xId
+                secondScene.oObjId = oId
                 self.scene!.view?.presentScene(secondScene, transition: transition)
             }
         }

@@ -16,29 +16,71 @@ class XGameController: NSObject {
         
         static let sharedInstance = Singleton()
 
-        func createNewGame(xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, String) -> Void){
+        func createNewGame(xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, String, String, String) -> Void){
             let newGame = PFObject(className: "XGame")
             newGame["rows"] = rows
             newGame["dim"] = dim
             newGame["xTeam"] = xTeam
             newGame["oTeam"] = oTeam
-            newGame["xLines"] = [LineShapeNode]()
-            newGame["oLines"] = [LineShapeNode]()
             newGame["xTurn"] = true
             newGame["finished"] = false
-            newGame.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                if success{
-                    newGame.fetchInBackgroundWithBlock({ (game: PFObject?, error: NSError?) -> Void in
-                        if error == nil{
-                            completion(true, (game?.objectId)!)
-                        }else{
-                            completion(false, "")
+            createXLines { (xSuccess: Bool, xLines: PFObject) -> Void in
+                if xSuccess{
+                    self.createOLines({ (oSuccess: Bool, oLines: PFObject) -> Void in
+                        if oSuccess{
+                            newGame["xLines"] = xLines
+                            newGame["oLines"] = oLines
+                            newGame.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                                if success{
+                                    newGame.fetchInBackgroundWithBlock({ (game: PFObject?, error: NSError?) -> Void in
+                                        if error == nil{
+                                            completion(true, (game?.objectId)!, xLines.objectId!, oLines.objectId!)
+                                        }else{
+                                            completion(false, "", "", "")
+                                        }
+                                    })
+                                }else{
+                                    completion(false, "", "", "")
+                                }
+                            }
+
                         }
                     })
-                }else{
-                    completion(false, "")
                 }
             }
+        }
+        
+        func createXLines(completion: (Bool, PFObject) -> Void){
+            let xLines = PFObject(className: "XLines")
+            xLines["lines"] = [[[String:Int]]]()
+            xLines.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                xLines.fetchInBackgroundWithBlock({ (lines: PFObject?, error: NSError?) -> Void in
+                    if error != nil{
+                        print(error)
+                        completion(false, xLines)
+                    }else if let lines = lines {
+                        completion(true, lines)
+                    }
+
+                })
+            }
+        }
+        
+        func createOLines(completion: (Bool, PFObject) -> Void){
+            let oLines = PFObject(className: "OLines")
+            oLines["lines"] = [[[String:Int]]]()
+            oLines.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                oLines.fetchInBackgroundWithBlock({ (lines: PFObject?, error: NSError?) -> Void in
+                    if error != nil{
+                        print(error)
+                        completion(false, oLines)
+                    }else if let lines = lines {
+                        completion(true, lines)
+                    }
+                    
+                })
+            }
+
         }
         
         func fetchGamesForUser(user: PFUser, completion: (Bool, [PFObject]) -> Void){
@@ -49,6 +91,8 @@ class XGameController: NSObject {
             let orQuery = PFQuery.orQueryWithSubqueries([query, query2])
             orQuery.includeKey("xTeam")
             orQuery.includeKey("oTeam")
+            orQuery.includeKey("xLines")
+            orQuery.includeKey("oLines")
             orQuery.findObjectsInBackgroundWithBlock { (results: [PFObject]?, error: NSError?) -> Void in
                 if error == nil {
                     PFObject.fetchAllInBackground(results, block: { (objects: [AnyObject]?, error :NSError?) -> Void in
@@ -65,20 +109,75 @@ class XGameController: NSObject {
             }
         }
         
-        func updateGameOnParse(xTurn: Bool, xLines: [[[String: Int]]], oLines: [[[String: Int]]], id: String, completion: (Bool) -> Void){
+        func updateGameOnParse(xTurn: Bool, xLines: [[[String: Int]]], oLines: [[[String: Int]]], gameId: String, xId: String, oId: String, completion: (Bool) -> Void){
             let query = PFQuery(className:"XGame")
-            query.getObjectInBackgroundWithId(id) {(game: PFObject?, error: NSError?) -> Void in
+            query.getObjectInBackgroundWithId(gameId) {(game: PFObject?, error: NSError?) -> Void in
                 if error != nil {
                     print(error)
+                    completion(false)
                 } else if let game = game {
-                    print(game)
-                    game.addUniqueObjectsFromArray(xLines, forKey: "xLines")
-                    game.addUniqueObjectsFromArray(oLines, forKey: "oLines")
                     game["xTurn"] = xTurn
-                    game.saveInBackground()
-                    completion(true)
+                    self.updateXlines(xLines, id: xId, completion: { (success: Bool) -> Void in
+                        if success{
+                            self.updateOlines(oLines, id: oId, completion: { (oSuccess: Bool) -> Void in
+                                if success{
+                                    game.saveInBackground()
+                                    completion(true)
+                                }else{
+                                    completion(false)
+                                }
+                            })
+                        }else{
+                            completion(false)
+                        }
+                    })
                 }
             }
+        }
+        
+        func updateXlines(xLines: [[[String: Int]]], id: String, completion: (Bool) -> Void){
+            let query = PFQuery(className: "XLines")
+            query.getObjectInBackgroundWithId(id) { (lines: PFObject?, error: NSError?) -> Void in
+                if error != nil{
+                    print(error)
+                    completion(false)
+                }else if let lines = lines{
+                    lines["lines"] = [[[String: Int]]]()
+                    lines.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
+                        if success{
+                            lines["lines"] = xLines
+                            lines.saveInBackground()
+                            completion(success)
+                        }else{
+                            completion(false)
+                        }
+                    })
+                }
+            }
+        
+        }
+        
+        func updateOlines(oLines: [[[String: Int]]], id: String, completion: (Bool) -> Void){
+            let query = PFQuery(className: "OLines")
+            query.getObjectInBackgroundWithId(id) { (lines: PFObject?, error: NSError?) -> Void in
+                if error != nil{
+                    print(error)
+                    completion(false)
+                }else if let lines = lines{
+                    lines["lines"] = [[[String: Int]]]()
+                    lines.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
+                        if success{
+                            lines["lines"] = oLines
+                            lines.saveInBackground()
+                            completion(success)
+                        }else{
+                            completion(false)
+                        }
+                    })
+                }
+            }
+
+            
         }
         
         func endGame(id: String){
@@ -90,6 +189,19 @@ class XGameController: NSObject {
                     game["finished"] = true
                     game.saveInBackground()
                 }
+            }
+        }
+        
+        func fetchGameForId(gameId: String, completion: (Bool, PFObject) -> Void){
+            let query = PFQuery(className: "XGame")
+            query.getObjectInBackgroundWithId(gameId) { (game: PFObject?,error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                    completion(false, game!)
+                } else if let game = game {
+                    completion(true, game)
+                }
+
             }
         }
     }

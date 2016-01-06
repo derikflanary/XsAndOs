@@ -15,7 +15,7 @@ class PushNotificationController : NSObject {
         super.init()
     }
     
-    func pushNotificationNewGame(receiver: String){
+    func pushNotificationNewGame(receiver: String, gameID: String){
         
         if let myName = PFUser.currentUser()?.valueForKey("name"){
             let pushQuery = PFInstallation.query(); //query for all devices with the receiver's username
@@ -23,7 +23,7 @@ class PushNotificationController : NSObject {
             let message = "\(myName) invited you to a game" //message to be sent in notification
             let push = PFPush()  //push the notification
             push.setQuery(pushQuery)
-            push.setData(["alert": message, "badge": "Increment"]) //increments the icon badge number by 1
+            push.setData(["alert": message, "badge": "Increment", "gameId": gameID]) //increments the icon badge number by 1
             push.sendPushInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
                 if success{
                     print("Notification Pushed Successfully")
@@ -34,7 +34,7 @@ class PushNotificationController : NSObject {
         }
     }
     
-    func pushNotificationTheirTurn(receiver: String){
+    func pushNotificationTheirTurn(receiver: String, gameID: String){
         
         if let myName = PFUser.currentUser()?.valueForKey("name"){
             let pushQuery = PFInstallation.query(); //query for all devices with the receiver's username
@@ -42,7 +42,7 @@ class PushNotificationController : NSObject {
             let message = "It's your turn with \(myName)" //message to be sent in notification
             let push = PFPush()  //push the notification
             push.setQuery(pushQuery)
-            push.setData(["alert": message, "badge": "Increment"]) //increments the icon badge number by 1
+            push.setData(["alert": message, "badge": "Increment", "gameId": gameID]) //increments the icon badge number by 1
             push.sendPushInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
                 if success{
                     print("Notification Pushed Successfully")

@@ -20,11 +20,12 @@ class MultiplayerBoard: Board {
     var xLinesParse : [[[String:Int]]] = []
     var oLinesParse : [[[String:Int]]] = []
     var gameFinished = Bool()
+    var xObjId = String()
+    var oObjId = String()
 
     override func startGame() {
         super.startGame()
         restartButton.removeFromSuperview()
-        
         let name = xUser["name"] as! String
         nameLabel = SKLabelNode(text: name)
         nameLabel.position = CGPointMake(self.frame.width/2, turnLabel.position.y - 30)
@@ -49,93 +50,36 @@ class MultiplayerBoard: Board {
     func drawLoadedLines(){
         loopThroughParseLines("X")
         loopThroughParseLines("O")
-
-//        for lineArray in xLinesParse{
-//            var firstShapeNode = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-//            for line in lineArray{
-////                let pointA = pointForColumn(line["columnA"]!, row: line["rowA"]!, size: 1)
-////                let pointB = pointForColumn(line["columnB"]!, row: line["rowB"]!, size: 1)
-//                let (pointA, pointB) = pointsFromDictionary(line)
-//                let path = createLineAtPoints(pointA, pointB: pointB)
-//                
-//                if lineArray.count > 1{
-//                    if firstShapeNode.team == "N"{
-//                        let shapeNode = LineShapeNode(columnA: line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!, team: "X", path: path, color: SKColor.redColor())
-//                        firstShapeNode = shapeNode
-//                    }else{
-//                        firstShapeNode.appendPath(path)
-//                        firstShapeNode.addCoordinate(line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!)
-//                    }
-//                }else{
-//                    let shapeNode = LineShapeNode(columnA: line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!, team: "X", path: path, color: SKColor.redColor())
-//                    firstShapeNode = shapeNode
-//                }
-//            }
-//            addChild(firstShapeNode)
-//            appendLineArrays(firstShapeNode)
-//            
-//        }
-//        for lineArray in oLinesParse{
-//            var firstShapeNode = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-//            for line in lineArray{
-//                let (pointA, pointB) = pointsFromDictionary(line)
-////                let pointA = pointForColumn(line["columnA"]!, row: line["rowA"]!, size: 1)
-////                let pointB = pointForColumn(line["columnB"]!, row: line["rowB"]!, size: 1)
-//                let path = createLineAtPoints(pointA, pointB: pointB)
-//                if lineArray.count > 1{
-//                    if firstShapeNode.team == "N"{
-//                        let shapeNode = LineShapeNode(columnA: line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!, team: "O", path: path, color: SKColor.blueColor())
-//                        firstShapeNode = shapeNode
-//                    }else{
-//                        firstShapeNode.appendPath(path)
-//                        firstShapeNode.addCoordinate(line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!)
-//                    }
-//                }else{
-//                    let shapeNode = LineShapeNode(columnA: line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!, team: "O", path: path, color: SKColor.blueColor())
-//                    firstShapeNode = shapeNode
-//                }
-//            }
-//            addChild(firstShapeNode)
-//            appendLineArrays(firstShapeNode)
-//        }
-
     }
     
     func loopThroughParseLines(type: String){
         var parseLines = xLinesParse
-        if type == "O" {parseLines = oLinesParse}
+        var stroke = SKColor.redColor()
+        if type == "O" {parseLines = oLinesParse; stroke = SKColor.blueColor()}
         for lineArray in parseLines{
             var firstShapeNode = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
             for line in lineArray{
-                //                let pointA = pointForColumn(line["columnA"]!, row: line["rowA"]!, size: 1)
-                //                let pointB = pointForColumn(line["columnB"]!, row: line["rowB"]!, size: 1)
                 let (pointA, pointB) = pointsFromDictionary(line)
                 let path = createLineAtPoints(pointA, pointB: pointB)
-                
                 if lineArray.count > 1{
                     if firstShapeNode.team == "N"{
-                        let shapeNode = LineShapeNode(columnA: line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!, team: type, path: path, color: SKColor.redColor())
-                        firstShapeNode = shapeNode
+                        firstShapeNode = LineShapeNode(columnA: line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!, team: type, path: path, color: stroke)
                     }else{
                         firstShapeNode.appendPath(path)
-                        firstShapeNode.addCoordinate(line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!)
+                        firstShapeNode.addCoordinate(line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!)
                     }
                 }else{
-                    let shapeNode = LineShapeNode(columnA: line["columnA"]!, rowA: line["rowA"]!, columnB: line["columnB"]!, rowB: line["rowB"]!, team: type, path: path, color: SKColor.redColor())
-                    firstShapeNode = shapeNode
+                    firstShapeNode = LineShapeNode(columnA: line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!, team: type, path: path, color: stroke)
                 }
             }
             addChild(firstShapeNode)
             appendLineArrays(firstShapeNode)
-            
         }
-
     }
     
-    
     private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
-        let pointA = pointForColumn(line["columnA"]!, row: line["rowA"]!, size: 1)
-        let pointB = pointForColumn(line["columnB"]!, row: line["rowB"]!, size: 1)
+        let pointA = pointForColumn(line["cA"]!, row: line["rA"]!, size: 1)
+        let pointB = pointForColumn(line["cB"]!, row: line["rB"]!, size: 1)
         return (pointA, pointB)
     }
     
@@ -164,7 +108,7 @@ class MultiplayerBoard: Board {
     
     private func saveGame(){
         let (xLineDicts, oLineDicts) = convertLinesToDictionaries()
-        XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, id: gameID) { (success) -> Void in
+        XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId) { (success) -> Void in
             if success{
                 print("game saved")
                 var receiver = self.oUser.username
@@ -172,9 +116,9 @@ class MultiplayerBoard: Board {
                     if self.xTurn{
                         receiver = self.xUser.username
                     }
-                    PushNotificationController().pushNotificationTheirTurn(receiver!)
+                    PushNotificationController().pushNotificationTheirTurn(receiver!, gameID: self.gameID)
                 }else{
-                    PushNotificationController().pushNotificationNewGame(receiver!)
+                    PushNotificationController().pushNotificationNewGame(receiver!, gameID: self.gameID)
                 }
             }
         }
