@@ -10,25 +10,26 @@ import Foundation
 import SpriteKit
 
 struct Coordinate {
-    var columnA : Int?
-    var rowA : Int?
-    var columnB : Int?
-    var rowB : Int?
+    var columnA : Int
+    var rowA : Int
+    var columnB : Int
+    var rowB : Int
 }
 
 class LineShapeNode: SKShapeNode {
     
     var team : String?
     var coordinates = [Coordinate]()
+    var linesForParse : [[String: Int]]
     
     init(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String) {
+        linesForParse = []
         super.init()
         setupValues(columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: team)
-        
-        
     }
     
     init(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String, path: CGPathRef, color: SKColor) {
+        linesForParse = []
         super.init()
         setupValues(columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: team)
         setShapeAspects(path)
@@ -55,7 +56,7 @@ class LineShapeNode: SKShapeNode {
     
     func addCoordinatesFromLine(lineShapeNode: LineShapeNode){
         for coordinate in lineShapeNode.coordinates{
-            self.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
+            self.addCoordinate(coordinate.columnA, rowA: coordinate.rowA, columnB: coordinate.columnB, rowB: coordinate.rowB)
         }
     }
     
@@ -71,4 +72,24 @@ class LineShapeNode: SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func convertLinesForParse(){
+        
+        for coordinate in coordinates{
+            let lineDict = coordinateToDict(coordinate)
+            linesForParse.append(lineDict)
+        }
+    }
+    
+    func coordinateToDict(coordinate: Coordinate) -> [String: Int]{
+        let dict = ["columnA": coordinate.columnA,
+            "rowA": coordinate.rowA,
+            "columnB": coordinate.columnB,
+            "rowB": coordinate.rowB]
+        return dict
+    }
+
+    
 }
+
+
+    

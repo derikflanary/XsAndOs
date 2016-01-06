@@ -48,7 +48,7 @@ class GameScene: SKScene, UITextFieldDelegate {
         
         fbLoginbutton.frame = CGRectZero
         fbLoginbutton.setTitle("Log in with Facebook", forState: .Normal)
-        fbLoginbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        fbLoginbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
         fbLoginbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         fbLoginbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         fbLoginbutton.addTarget(self, action: "fbLoginPressed", forControlEvents: .TouchUpInside)
@@ -66,12 +66,17 @@ class GameScene: SKScene, UITextFieldDelegate {
         currentGamesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         currentGamesButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         currentGamesButton.addTarget(self, action: "currentGamesPressed", forControlEvents: .TouchUpInside)
+        currentGamesButton.highlighted = true
         currentGamesButton.enabled = false
         
         if PFUser.currentUser() != nil{
             stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton, currentGamesButton])
             friendsList = (PFUser.currentUser()?.valueForKey("friends"))! as! [[String : String]]
             checkCurrentGames()
+            let myinstallation = PFInstallation.currentInstallation()
+            myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
+            myinstallation.saveInBackground()
+            print(myinstallation.objectId)
         }else{
             stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton, currentGamesButton])
         }
@@ -150,6 +155,7 @@ class GameScene: SKScene, UITextFieldDelegate {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.currentGames = games
                     self.currentGamesButton.enabled = true
+                    self.currentGamesButton.highlighted = false
                 })
             }
         }

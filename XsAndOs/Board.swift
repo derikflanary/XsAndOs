@@ -33,6 +33,7 @@ class Board: SKScene {
     var nextPoint = CGPoint()
     var pointsConnected = false
     var potentialShapeNode = SKShapeNode()
+    var restartButton = UIButton()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -58,11 +59,9 @@ class Board: SKScene {
         self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
-        xTurn = true
         buildArrayOfNodes()
         drawSquare()
         
-        let restartButton = UIButton()
         restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
         restartButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
@@ -85,6 +84,8 @@ class Board: SKScene {
         turnLabel.fontColor = SKColor.blackColor()
         turnLabel.zPosition = 3
         self.addChild(turnLabel)
+        
+         xTurn = true
         
     }
     
@@ -501,6 +502,10 @@ class Board: SKScene {
         return ref
     }
     
+    func endTurn(){
+        
+    }
+    
 //WINNING FUNCTIONS
     func checkForWinner(line: LineShapeNode){
         //check each coordinate on the newly appended line to see if it touches both ends of the board
@@ -548,7 +553,7 @@ class Board: SKScene {
     func declareWinner(winningTeam: String){
         let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-            self.resetBoard()
+            self.gameover()
         }
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
@@ -556,6 +561,9 @@ class Board: SKScene {
 
 //RESETTING GAME
     
+    func gameover(){
+        resetBoard()
+    }
     func resetBoard(){
         //delete all objects on the board
         self.removeAllChildren()
@@ -631,11 +639,15 @@ class Board: SKScene {
     }
     
     func mainPressed(){
+        transitionToMainScene()
+        self.view?.viewWithTag(10)?.removeFromSuperview()
+        self.view?.viewWithTag(20)?.removeFromSuperview()
+    }
+    
+    func transitionToMainScene(){
         let mainScene = GameScene(size: self.size)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
-        self.view?.viewWithTag(10)?.removeFromSuperview()
-        self.view?.viewWithTag(20)?.removeFromSuperview()
     }
 }

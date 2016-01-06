@@ -19,13 +19,12 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
     let label = UILabel()
     var stackView = UIStackView()
     let oppLabel = UILabel()
-
+    let backButton = UIButton()
     
     override func didMoveToView(view: SKView) {
         
         self.backgroundColor = SKColor.whiteColor()
         
-        let backButton = UIButton()
         backButton.frame = CGRectMake(10, 20, 50, 30)
         backButton.setTitle("Main", forState: .Normal)
         backButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
@@ -90,23 +89,24 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
 //        }
         transitionToBoardScene(dim, rows: rows!)
         stackView.removeFromSuperview()
+        backButton.removeFromSuperview()
     }
     
     private func transitionToBoardScene(dim : Int, rows : Int){
         let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
         secondScene.xUser = PFUser.currentUser()!
         secondScene.oUser = opponent
+        secondScene.xTurnLoad = true
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         let transition = SKTransition.crossFadeWithDuration(1)
-        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success) -> Void in
+        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, id) -> Void in
             if success{
+                secondScene.gameID = id
                 self.scene!.view?.presentScene(secondScene, transition: transition)
             }
         }
 
     }
-    
-    
     
     func mainPressed(){
         let mainScene = GameScene(size: self.size)

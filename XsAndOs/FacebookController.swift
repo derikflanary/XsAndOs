@@ -25,7 +25,6 @@ class FacebookController: NSObject {
                         return
                     }
                     print("User logged in through Facebook!");
-                    NSNotificationCenter.defaultCenter().postNotificationName("FacebookLoggedIn", object: nil)
                     if user.isNew {
                         self.fetchFacebookDetailsForUser(user, completion: { (success) -> Void in
                         })
