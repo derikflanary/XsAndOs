@@ -116,7 +116,11 @@ class MultiplayerBoard: Board {
                     if self.xTurn{
                         receiver = self.xUser.username
                     }
-                    PushNotificationController().pushNotificationTheirTurn(receiver!, gameID: self.gameID)
+                    if self.gameFinished{
+                        PushNotificationController().pushNotificationGameFinished(receiver!, gameID: self.gameID)
+                    }else{
+                        PushNotificationController().pushNotificationTheirTurn(receiver!, gameID: self.gameID)
+                    }
                 }else{
                     PushNotificationController().pushNotificationNewGame(receiver!, gameID: self.gameID)
                 }
@@ -141,6 +145,7 @@ class MultiplayerBoard: Board {
     
     override func gameover() {
         XGameController.Singleton.sharedInstance.endGame(gameID)
+        gameFinished = true
         mainPressed()
     }
     

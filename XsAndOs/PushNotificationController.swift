@@ -52,6 +52,25 @@ class PushNotificationController : NSObject {
             })
         }
     }
+    
+    func pushNotificationGameFinished(receiver: String, gameID: String){
+        if let myName = PFUser.currentUser()?.valueForKey("name"){
+            let pushQuery = PFInstallation.query(); //query for all devices with the receiver's username
+            pushQuery?.whereKey("ownerUsername", equalTo: receiver)
+            let message = "\(myName) just won the game." //message to be sent in notification
+            let push = PFPush()  //push the notification
+            push.setQuery(pushQuery)
+            push.setData(["alert": message, "badge": "Increment", "gameId": gameID]) //increments the icon badge number by 1
+            push.sendPushInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
+                if success{
+                    print("Notification Pushed Successfully")
+                }else{
+                    print(error)
+                }
+            })
+        }
+
+    }
 
     
     func lowerAppBadgeNumber(){
