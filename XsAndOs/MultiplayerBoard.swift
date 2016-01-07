@@ -44,7 +44,7 @@ class MultiplayerBoard: Board {
         if gameFinished{
             finishedGameMessage()
         }
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
     }
     
     func drawLoadedLines(){
@@ -111,21 +111,26 @@ class MultiplayerBoard: Board {
         XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId) { (success) -> Void in
             if success{
                 print("game saved")
-                var receiver = self.oUser.username
+                let receiver = self.receiver()
                 if self.oLines.count > 0{
-                    if self.xTurn{
-                        receiver = self.xUser.username
-                    }
-                    if self.gameFinished{
-                        PushNotificationController().pushNotificationGameFinished(receiver!, gameID: self.gameID)
-                    }else{
-                        PushNotificationController().pushNotificationTheirTurn(receiver!, gameID: self.gameID)
-                    }
+                    PushNotificationController().pushNotificationTheirTurn(receiver, gameID: self.gameID)
                 }else{
-                    PushNotificationController().pushNotificationNewGame(receiver!, gameID: self.gameID)
+                    PushNotificationController().pushNotificationNewGame(receiver, gameID: self.gameID)
                 }
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.gameSavedMessage()
+                })
+                
             }
         }
+    }
+    
+    private func gameSavedMessage(){
+        let alertController = UIAlertController(title: "Move Sent", message: "It is now the other player's turn", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+        }
+        alertController.addAction(cancelAction)
+        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func convertLinesToDictionaries() -> ([[[String: Int]]],[[[String: Int]]] ){
@@ -139,12 +144,21 @@ class MultiplayerBoard: Board {
             line.convertLinesForParse()
             olineDicts.append(line.linesForParse)
         }
-        
         return (xlineDicts, olineDicts)
+    }
+    
+    private func receiver() -> (String){
+        var receiver = self.oUser.username
+        if self.xTurn{
+            receiver = self.xUser.username
+        }
+        return receiver!
     }
     
     override func gameover() {
         XGameController.Singleton.sharedInstance.endGame(gameID)
+        let receiver = self.receiver()
+        PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
         gameFinished = true
         mainPressed()
     }
@@ -157,6 +171,37 @@ class MultiplayerBoard: Board {
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    dynamic func receivedGameNotification(notification: NSNotification){
+        print("notification received")
+        print(notification.userInfo)
+        let game = notification.userInfo!["game"] as! PFObject
+//        transitionToBoardScene(game["dim"] as! Int, rows: game["rows"] as! Int, game: game)
+    }
+    
+    func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
+        var secondScene = MultiplayerBoard(size: self.size, theDim: dim, theRows: rows)
+        secondScene = updateNextSceneWithGame(game, secondScene: secondScene)
+        let transition = SKTransition.crossFadeWithDuration(1)
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+    }
+    
+    func updateNextSceneWithGame(game: PFObject, secondScene: MultiplayerBoard) -> (MultiplayerBoard){
+        secondScene.xUser = game["xTeam"] as! PFUser
+        secondScene.oUser = game["oTeam"] as! PFUser
+        secondScene.gameID = game.objectId!
+        let xLines = game.objectForKey("xLines") as! PFObject
+        let oLines = game.objectForKey("oLines") as! PFObject
+        secondScene.xLinesParse = xLines["lines"] as! [[[String:Int]]]
+        secondScene.oLinesParse = oLines["lines"] as! [[[String:Int]]]
+        secondScene.xTurnLoad = game["xTurn"] as! Bool
+        secondScene.gameFinished = game["finished"] as! Bool
+        secondScene.xObjId = xLines.objectId!
+        secondScene.oObjId = oLines.objectId!
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        return secondScene
+    }
+
     
 }
 

@@ -351,6 +351,11 @@
 					EE5E817C1BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = 92H4P6C5WB;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					EE5E81941BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;

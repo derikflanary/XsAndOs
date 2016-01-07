@@ -13,6 +13,18 @@ import Parse
 class FriendListScene: TableViewScene{
     var friends = [[String:String]]()
     
+    override func didMoveToView(view: SKView) {
+        super.didMoveToView(view)
+        FacebookController.Singleton.sharedInstance.fetchFriendsForUser(PFUser.currentUser()!) { (success: Bool,theFriends: [[String : String]]) -> Void in
+            if success{
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.friends = theFriends
+                    self.tableView.reloadData()
+                })
+            }
+        }
+    }
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return friends.count
     }

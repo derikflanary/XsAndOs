@@ -41,12 +41,18 @@ class CurrentGamesScene: TableViewScene {
         let dim = game["dim"] as? Int
         let rows = game["rows"] as? Int
         transitionToBoardScene(dim!, rows: rows!, game: game)
-    }
-
-    private func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
         tableView.removeFromSuperview()
         cancelButton.removeFromSuperview()
-        let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
+    }
+
+    func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
+        var secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
+        secondScene = updateNextSceneWithGame(game, secondScene: secondScene)
+        let transition = SKTransition.crossFadeWithDuration(1)
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+    }
+    
+    func updateNextSceneWithGame(game: PFObject, secondScene: MultiplayerBoard) -> (MultiplayerBoard){
         secondScene.xUser = game["xTeam"] as! PFUser
         secondScene.oUser = game["oTeam"] as! PFUser
         secondScene.gameID = game.objectId!
@@ -59,9 +65,7 @@ class CurrentGamesScene: TableViewScene {
         secondScene.xObjId = xLines.objectId!
         secondScene.oObjId = oLines.objectId!
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        let transition = SKTransition.crossFadeWithDuration(1)
-        self.scene!.view?.presentScene(secondScene, transition: transition)
-        
+        return secondScene
     }
 
 }

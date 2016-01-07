@@ -56,18 +56,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         print("didReceiveRemoteNotification")
-        if let gameId: String = userInfo["gameId"] as? String {
-            if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
-                // Do something you want when the app is active
-                NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: gameId)
-            } else {
-                // Do something else when your app is in the background
-            }
+       
+        if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
+            // Do something you want when the app is active
+//                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
+        } else {
+            // Do something else when your app is in the background
         }
         PFPush.handlePush(userInfo)
         
     }
-
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+       if let gameId: String = userInfo["gameId"] as? String {
+            XGameController.Singleton.sharedInstance.fetchGameForId(gameId, completion: { (success: Bool, game: PFObject) -> Void in
+                if success{
+                    // Do something you want when the app is active
+                    NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
+                    completionHandler(UIBackgroundFetchResult.NewData)
+                }else{
+                    completionHandler(UIBackgroundFetchResult.NoData)
+                }
+            })
+            
+        }
+        completionHandler(UIBackgroundFetchResult.NoData)
+    }
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -84,6 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         FBSDKAppEvents.activateApp()
+        PFInstallation.currentInstallation().badge = 0
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 

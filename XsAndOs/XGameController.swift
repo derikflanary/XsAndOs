@@ -116,11 +116,11 @@ class XGameController: NSObject {
                     print(error)
                     completion(false)
                 } else if let game = game {
-                    game["xTurn"] = xTurn
                     self.updateXlines(xLines, id: xId, completion: { (success: Bool) -> Void in
                         if success{
                             self.updateOlines(oLines, id: oId, completion: { (oSuccess: Bool) -> Void in
                                 if success{
+                                    game["xTurn"] = xTurn
                                     game.saveInBackground()
                                     completion(true)
                                 }else{
