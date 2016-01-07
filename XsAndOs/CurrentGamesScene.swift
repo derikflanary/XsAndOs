@@ -27,12 +27,21 @@ class CurrentGamesScene: TableViewScene {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        var cell : UITableViewCell! = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        if (cell != nil)
+        {
+            cell = UITableViewCell(style: UITableViewCellStyle.Subtitle,
+                reuseIdentifier: "cell")
+        }
         if games.count > 0{
             let game = games[indexPath.row] as PFObject
-            cell.textLabel?.text = "\(game["rows"])"
+            let xUser = game["xTeam"] as! PFUser
+            let name = xUser["name"]
+            let oUser = game["oTeam"] as! PFUser
+            let oName = oUser["name"]
+            cell.textLabel?.text = "\(name) vs \(oName)"
+            cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"
         }
-        
         return cell
     }
     

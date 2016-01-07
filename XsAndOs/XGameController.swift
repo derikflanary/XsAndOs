@@ -24,6 +24,7 @@ class XGameController: NSObject {
             newGame["oTeam"] = oTeam
             newGame["xTurn"] = true
             newGame["finished"] = false
+            newGame["startDate"] = dayAsString()
             createXLines { (xSuccess: Bool, xLines: PFObject) -> Void in
                 if xSuccess{
                     self.createOLines({ (oSuccess: Bool, oLines: PFObject) -> Void in
@@ -93,6 +94,7 @@ class XGameController: NSObject {
             orQuery.includeKey("oTeam")
             orQuery.includeKey("xLines")
             orQuery.includeKey("oLines")
+            orQuery.orderByDescending("createdAt")
             orQuery.findObjectsInBackgroundWithBlock { (results: [PFObject]?, error: NSError?) -> Void in
                 if error == nil {
                     PFObject.fetchAllInBackground(results, block: { (objects: [AnyObject]?, error :NSError?) -> Void in
@@ -203,6 +205,14 @@ class XGameController: NSObject {
                 }
 
             }
+        }
+        
+        func dayAsString() -> (String){
+            let date = NSDate()
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "MMM d" //format style. Browse online to get a format that fits your needs.
+            let dateString = dateFormatter.stringFromDate(date)
+            return dateString
         }
     }
 }
