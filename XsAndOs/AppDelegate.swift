@@ -16,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         Parse.setApplicationId("c7fI5i2vHGsajpcH7uDWjie8xLdHGhq6X6D21dBm",
@@ -28,15 +27,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerForRemoteNotifications()
         
         PFInstallation.currentInstallation().badge = 0
-
+        
         if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
             if let gameId = notificationPayload["gameId"]{
-                    NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: gameId)
+                XGameController.Singleton.sharedInstance.fetchGameForId(gameId as! String, completion: { (success: Bool, game: PFObject) -> Void in
+                    if success{
+                        // Do something you want when the app is active
+                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
+                    }else{
+                    }
+                })
             }
-            
         }
         return true
     }
+    
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool{
         
@@ -57,30 +62,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
 //        print("didReceiveRemoteNotification")
 //       
-//        if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
-//            // Do something you want when the app is active
-////                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
-//        } else {
-//            // Do something else when your app is in the background
+//        if UIApplication.sharedApplication().applicationState != UIApplicationState.Active {
+//            if let gameId: String = userInfo["gameId"] as? String {
+//                XGameController.Singleton.sharedInstance.fetchGameForId(gameId, completion: { (success: Bool, game: PFObject) -> Void in
+//                    if success{
+//                        // Do something you want when the app is active
+//                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
+//                    }
+//                })
+//            }
 //        }
-//        PFPush.handlePush(userInfo)
 //        
 //    }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-       if let gameId: String = userInfo["gameId"] as? String {
-            XGameController.Singleton.sharedInstance.fetchGameForId(gameId, completion: { (success: Bool, game: PFObject) -> Void in
-                if success{
-                    // Do something you want when the app is active
-                    NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
-                    completionHandler(UIBackgroundFetchResult.NewData)
-                }else{
-                    completionHandler(UIBackgroundFetchResult.NoData)
-                }
-            })
-            
+//        PFPush.handlePush(userInfo)
+        if UIApplication.sharedApplication().applicationState == UIApplicationState.Inactive || UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
+           if let gameId: String = userInfo["gameId"] as? String {
+                XGameController.Singleton.sharedInstance.fetchGameForId(gameId, completion: { (success: Bool, game: PFObject) -> Void in
+                    if success{
+//                        if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
+                            // Do something you want when the app is active
+                            NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
+                            completionHandler(UIBackgroundFetchResult.NewData)
+//                        }else{
+//                        }
+                    }else{
+                        completionHandler(UIBackgroundFetchResult.NoData)
+                    }
+                })
+                
+            }
+            completionHandler(UIBackgroundFetchResult.NoData)
         }
-        completionHandler(UIBackgroundFetchResult.NoData)
         
         
     }
@@ -98,10 +112,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
+    
 
     func applicationDidBecomeActive(application: UIApplication) {
         FBSDKAppEvents.activateApp()
         PFInstallation.currentInstallation().badge = 0
+//        if gameLoaded{
+//            let game = loadedGame[0] as PFObject
+//            NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
+//            loadedGame.removeAll()
+//            gameLoaded = false
+//        }
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 

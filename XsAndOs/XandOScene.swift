@@ -14,6 +14,7 @@ class XandOScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "directGameNotification:", name:"LoadGameDirect", object: nil)
     }
     
     func removeViews(){
@@ -36,6 +37,15 @@ class XandOScene: SKScene {
         alertController.addAction(cancelAction)
         alertController.addAction(okayAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    dynamic func directGameNotification(notification: NSNotification){
+        let game = notification.userInfo!["game"] as! PFObject
+        BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
+            if success{
+                self.transitiontoLoadedBoard(secondScene)
+            }
+        })
     }
     
     func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
