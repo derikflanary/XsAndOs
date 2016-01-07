@@ -69,8 +69,7 @@ class FriendListScene: TableViewScene{
         let transition = SKTransition.crossFadeWithDuration(0.75)
         nextScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(nextScene, transition: transition)
-        tableView.removeFromSuperview()
-        cancelButton.removeFromSuperview()
+        removeViews()
     }
     
 }

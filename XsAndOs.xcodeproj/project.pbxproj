@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE0379051C3F051100312DF4 /* XandOScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0379041C3F051100312DF4 /* XandOScene.swift */; };
 		EE2FB4AB1C389AE500C91D68 /* SwiftSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */; };
 		EE2FB4D11C38A4F300C91D68 /* JTSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */; };
 		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE0379041C3F051100312DF4 /* XandOScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XandOScene.swift; sourceTree = "<group>"; };
 		EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
 		EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTSplashView.swift; sourceTree = "<group>"; };
 		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 			children = (
 				EE5E81801BDEC1410004424F /* AppDelegate.swift */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
+				EE0379041C3F051100312DF4 /* XandOScene.swift */,
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
 				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
 				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
@@ -426,6 +429,7 @@
 				EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */,
 				EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */,
 				EE2FB4E01C3BA7F800C91D68 /* TableViewScene.swift in Sources */,
+				EE0379051C3F051100312DF4 /* XandOScene.swift in Sources */,
 				EE2FB4E21C3BA96000C91D68 /* CurrentGamesScene.swift in Sources */,
 				EE2FB4DC1C3B3CDA00C91D68 /* PushNotificationController.swift in Sources */,
 				EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */,

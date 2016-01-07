@@ -39,7 +39,7 @@ class CurrentGamesScene: TableViewScene {
             let name = xUser["name"]
             let oUser = game["oTeam"] as! PFUser
             let oName = oUser["name"]
-            cell.textLabel?.text = "\(name) vs \(oName)"
+            cell.textLabel?.text = "X:\(name) O:\(oName)"
             cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"
         }
         return cell
@@ -50,8 +50,7 @@ class CurrentGamesScene: TableViewScene {
         let dim = game["dim"] as? Int
         let rows = game["rows"] as? Int
         transitionToBoardScene(dim!, rows: rows!, game: game)
-        tableView.removeFromSuperview()
-        cancelButton.removeFromSuperview()
+        removeViews()
     }
 
     func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){

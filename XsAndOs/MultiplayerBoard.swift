@@ -32,6 +32,7 @@ class MultiplayerBoard: Board {
         nameLabel.fontColor = SKColor.blackColor()
         nameLabel.fontSize = 24
         nameLabel.zPosition = 3
+        
         self.addChild(nameLabel)
         if xLinesParse.count > 0{
             drawLoadedLines()
@@ -44,7 +45,7 @@ class MultiplayerBoard: Board {
         if gameFinished{
             finishedGameMessage()
         }
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
     }
     
     func drawLoadedLines(){
@@ -120,7 +121,6 @@ class MultiplayerBoard: Board {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage()
                 })
-                
             }
         }
     }
@@ -171,38 +171,6 @@ class MultiplayerBoard: Board {
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
-    
-    dynamic func receivedGameNotification(notification: NSNotification){
-        print("notification received")
-        print(notification.userInfo)
-        let game = notification.userInfo!["game"] as! PFObject
-//        transitionToBoardScene(game["dim"] as! Int, rows: game["rows"] as! Int, game: game)
-    }
-    
-    func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
-        var secondScene = MultiplayerBoard(size: self.size, theDim: dim, theRows: rows)
-        secondScene = updateNextSceneWithGame(game, secondScene: secondScene)
-        let transition = SKTransition.crossFadeWithDuration(1)
-        self.scene!.view?.presentScene(secondScene, transition: transition)
-    }
-    
-    func updateNextSceneWithGame(game: PFObject, secondScene: MultiplayerBoard) -> (MultiplayerBoard){
-        secondScene.xUser = game["xTeam"] as! PFUser
-        secondScene.oUser = game["oTeam"] as! PFUser
-        secondScene.gameID = game.objectId!
-        let xLines = game.objectForKey("xLines") as! PFObject
-        let oLines = game.objectForKey("oLines") as! PFObject
-        secondScene.xLinesParse = xLines["lines"] as! [[[String:Int]]]
-        secondScene.oLinesParse = oLines["lines"] as! [[[String:Int]]]
-        secondScene.xTurnLoad = game["xTurn"] as! Bool
-        secondScene.gameFinished = game["finished"] as! Bool
-        secondScene.xObjId = xLines.objectId!
-        secondScene.oObjId = oLines.objectId!
-        secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        return secondScene
-    }
-
-    
 }
 
 

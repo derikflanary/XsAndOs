@@ -5,13 +5,13 @@
 //  Created by Derik Flanary on 11/5/15.
 //  Copyright © 2015 Derik Flanary. All rights reserved.
 //
-
+import Parse 
 import SpriteKit
 
 //var dim = 9
 let bottomPadding : CGFloat = 100
 
-class Board: SKScene {
+class Board: XandOScene {
     
     var rows : Int
     var dim : Int
@@ -50,6 +50,7 @@ class Board: SKScene {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
+        super.didMoveToView(view)
         startGame()
     }
     
@@ -632,6 +633,11 @@ class Board: SKScene {
         /* Called before each frame is rendered */
     }
     
+    override func removeViews(){
+        self.view?.viewWithTag(10)?.removeFromSuperview()
+        self.view?.viewWithTag(20)?.removeFromSuperview()
+    }
+    
 //BUTTON FUNCTIONS
     
     func restartPressed(){
@@ -640,13 +646,12 @@ class Board: SKScene {
     
     func mainPressed(){
         transitionToMainScene()
-        self.view?.viewWithTag(10)?.removeFromSuperview()
-        self.view?.viewWithTag(20)?.removeFromSuperview()
+        removeViews()
     }
     
     func transitionToMainScene(){
         let mainScene = GameScene(size: self.size)
-        let transition = SKTransition.crossFadeWithDuration(0.75)
+        let transition = SKTransition.crossFadeWithDuration(1.0)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
     }

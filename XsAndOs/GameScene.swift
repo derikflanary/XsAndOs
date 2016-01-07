@@ -10,7 +10,7 @@ import SpriteKit
 import Parse
 import ParseFacebookUtilsV4
 
-class GameScene: SKScene, UITextFieldDelegate {
+class GameScene: XandOScene, UITextFieldDelegate {
     
     let startButton = UIButton()
     let sizeField = UITextField()
@@ -25,7 +25,7 @@ class GameScene: SKScene, UITextFieldDelegate {
     let transition = SKTransition.crossFadeWithDuration(1)
     
     override func didMoveToView(view: SKView) {
-        
+        super.didMoveToView(view)
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
         startButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
@@ -182,10 +182,15 @@ class GameScene: SKScene, UITextFieldDelegate {
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
+    override func removeViews(){
+        stackView.removeFromSuperview()
+    }
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else { return true }
-        
         let newLength = text.utf16.count + string.utf16.count - range.length
         return newLength <= 1 // Bool
     }
+    
+
 }

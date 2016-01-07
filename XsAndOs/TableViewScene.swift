@@ -8,14 +8,15 @@
 
 import Foundation
 import SpriteKit
+import Parse 
 
-class TableViewScene: SKScene, UITableViewDataSource, UITableViewDelegate {
+class TableViewScene: XandOScene, UITableViewDataSource, UITableViewDelegate {
     
     var tableView = UITableView()
     var cancelButton = UIButton()
     
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
+        super.didMoveToView(view)
         self.backgroundColor = SKColor.whiteColor()
         
         cancelButton.frame = CGRectMake(0, 20, 100, 30)
@@ -35,8 +36,7 @@ class TableViewScene: SKScene, UITableViewDataSource, UITableViewDelegate {
     }
 
     func cancelPressed(){
-        cancelButton.removeFromSuperview()
-        tableView.removeFromSuperview()
+        removeViews()
         let mainScene = GameScene(size: self.size)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
@@ -60,5 +60,9 @@ class TableViewScene: SKScene, UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
-
+    
+    override func removeViews(){
+        tableView.removeFromSuperview()
+        cancelButton.removeFromSuperview()
+    }
 }

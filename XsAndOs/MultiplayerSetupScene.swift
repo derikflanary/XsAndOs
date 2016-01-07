@@ -11,7 +11,7 @@ import SpriteKit
 import Parse
 
 
-class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
+class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
     
     var opponent = PFUser()
     let startButton = UIButton()
@@ -22,7 +22,7 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
     let backButton = UIButton()
     
     override func didMoveToView(view: SKView) {
-        
+        super.didMoveToView(view)
         self.backgroundColor = SKColor.whiteColor()
         
         backButton.frame = CGRectMake(10, 20, 50, 30)
@@ -113,10 +113,12 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
+        removeViews()
+    }
+    
+    override func removeViews(){
         stackView.removeFromSuperview()
         self.view?.viewWithTag(20)?.removeFromSuperview()
-        
-        
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
@@ -125,5 +127,4 @@ class MultiplayerSetupScene: SKScene, UITextFieldDelegate {
         let newLength = text.utf16.count + string.utf16.count - range.length
         return newLength <= 1 // Bool
     }
-
 }

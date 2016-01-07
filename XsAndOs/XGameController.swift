@@ -196,6 +196,10 @@ class XGameController: NSObject {
         
         func fetchGameForId(gameId: String, completion: (Bool, PFObject) -> Void){
             let query = PFQuery(className: "XGame")
+            query.includeKey("xTeam")
+            query.includeKey("oTeam")
+            query.includeKey("xLines")
+            query.includeKey("oLines")
             query.getObjectInBackgroundWithId(gameId) { (game: PFObject?,error: NSError?) -> Void in
                 if error != nil {
                     print(error)

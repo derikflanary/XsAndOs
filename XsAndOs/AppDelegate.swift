@@ -54,18 +54,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("failed to register for remote notifications:  (error)")
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        print("didReceiveRemoteNotification")
-       
-        if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
-            // Do something you want when the app is active
-//                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
-        } else {
-            // Do something else when your app is in the background
-        }
-        PFPush.handlePush(userInfo)
-        
-    }
+//    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+//        print("didReceiveRemoteNotification")
+//       
+//        if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
+//            // Do something you want when the app is active
+////                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
+//        } else {
+//            // Do something else when your app is in the background
+//        }
+//        PFPush.handlePush(userInfo)
+//        
+//    }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
        if let gameId: String = userInfo["gameId"] as? String {
@@ -81,6 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         completionHandler(UIBackgroundFetchResult.NoData)
+        
+        
     }
     
     func applicationWillResignActive(application: UIApplication) {

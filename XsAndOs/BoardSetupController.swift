@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Parse
+import SpriteKit
 
 class BoardSetupController: NSObject {
     
@@ -29,4 +31,31 @@ class BoardSetupController: NSObject {
         return dim
     }
 
+    func setupGame(game: PFObject, size: CGSize, completion: (Bool, MultiplayerBoard) -> Void){
+        let dim = game["dim"] as! Int
+        let rows = game["rows"] as! Int
+        let xLines = game.objectForKey("xLines") as! PFObject
+        let oLines = game.objectForKey("oLines") as! PFObject
+        xLines.fetchIfNeededInBackgroundWithBlock { (theXlines: PFObject?,error: NSError?) -> Void in
+            oLines.fetchIfNeededInBackgroundWithBlock({ (theOLines: PFObject?,error: NSError?) -> Void in
+                if error != nil{
+                    completion(false, MultiplayerBoard(size: size, theDim: 0, theRows: 0))
+                }else{
+                    let secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows)
+                    secondScene.xUser = game["xTeam"] as! PFUser
+                    secondScene.oUser = game["oTeam"] as! PFUser
+                    secondScene.gameID = game.objectId!
+                    secondScene.xLinesParse = theXlines!["lines"] as! [[[String:Int]]]
+                    secondScene.oLinesParse = theOLines!["lines"] as! [[[String:Int]]]
+                    secondScene.xTurnLoad = game["xTurn"] as! Bool
+                    secondScene.gameFinished = game["finished"] as! Bool
+                    secondScene.xObjId = xLines.objectId!
+                    secondScene.oObjId = oLines.objectId!
+                    secondScene.scaleMode = SKSceneScaleMode.AspectFill
+                    completion(true, secondScene)
+                }
+            })
+        }
+    }
+    
 }
