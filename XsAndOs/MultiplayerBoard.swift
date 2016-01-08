@@ -95,7 +95,7 @@ class MultiplayerBoard: Board {
     }
     
     override func switchTurns() {
-        if turnLabel.text == "X"{
+        if xTurn{
             xTurn = false
             turnLabel.text = "O"
             nameLabel.text = oUser["name"] as? String
@@ -104,7 +104,6 @@ class MultiplayerBoard: Board {
             turnLabel.text = "X"
             nameLabel.text = xUser["name"] as? String
         }
-        guard !gameFinished else{return}
         saveGame()
     }
     
@@ -115,7 +114,14 @@ class MultiplayerBoard: Board {
                 print("game saved")
                 let receiver = self.receiver()
                 if self.oLines.count > 0{
-                    PushNotificationController().pushNotificationTheirTurn(receiver, gameID: self.gameID)
+                    if self.gameFinished{
+                        PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
+                        self.mainPressed()
+                        return
+                    }else{
+                        PushNotificationController().pushNotificationTheirTurn(receiver, gameID: self.gameID)
+                    }
+                    
                 }else{
                     PushNotificationController().pushNotificationNewGame(receiver, gameID: self.gameID)
                 }
@@ -128,10 +134,14 @@ class MultiplayerBoard: Board {
     
     private func gameSavedMessage(){
         let alertController = UIAlertController(title: "Move Sent", message: "It is now the other player's turn", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-        }
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in}
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+        let delay = 2.0 * Double(NSEC_PER_SEC)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue(), {
+            alertController.dismissViewControllerAnimated(true, completion: nil)
+        })
     }
     
     func convertLinesToDictionaries() -> ([[[String: Int]]],[[[String: Int]]] ){
@@ -166,11 +176,10 @@ class MultiplayerBoard: Board {
         let receiver = self.receiver()
         PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
         gameFinished = true
-        mainPressed()
     }
     
     func finishedGameMessage(){
-        let alertController = UIAlertController(title: "Game Finished", message: "This game is already over. Start a new game with your friends!", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Game Finished", message: "This game is over. Start a new game with your friends!", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
             self.mainPressed()
         }

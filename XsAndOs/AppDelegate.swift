@@ -83,19 +83,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        PFPush.handlePush(userInfo)
         if UIApplication.sharedApplication().applicationState == UIApplicationState.Inactive || UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
            if let gameId: String = userInfo["gameId"] as? String {
+            
                 XGameController.Singleton.sharedInstance.fetchGameForId(gameId, completion: { (success: Bool, game: PFObject) -> Void in
                     if success{
-//                        if UIApplication.sharedApplication().applicationState == UIApplicationState.Active {
-                            // Do something you want when the app is active
+                        if let newGame = userInfo["newGame"]{
+                            NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game, "newGame": newGame])
+                        }else{
                             NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
-                            completionHandler(UIBackgroundFetchResult.NewData)
-//                        }else{
-//                        }
+                        }
+                        completionHandler(UIBackgroundFetchResult.NewData)
                     }else{
                         completionHandler(UIBackgroundFetchResult.NoData)
                     }
                 })
-                
             }
             completionHandler(UIBackgroundFetchResult.NoData)
         }

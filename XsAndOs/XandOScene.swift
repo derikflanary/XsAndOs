@@ -24,7 +24,12 @@ class XandOScene: SKScene {
     //Push Notification For Loaded Game//
     dynamic func receivedGameNotification(notification: NSNotification){
         print("notification received")
-        let alertController = UIAlertController(title: "Your Turn", message: "load game?", preferredStyle: .Alert)
+        var title = "Your turn"
+        let newGame = notification.userInfo!["newGame"] as! Bool
+        if newGame == true{
+            title = "You were invited to a new game"
+        }
+        let alertController = UIAlertController(title:title, message: "load game?", preferredStyle: .Alert)
         let okayAction = UIAlertAction(title: "Okay", style: .Default) { (action) in
             let game = notification.userInfo!["game"] as! PFObject
             BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
