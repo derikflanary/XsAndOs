@@ -559,6 +559,7 @@ class Board: XandOScene {
     
     func mainPressed(){
         transitionToMainScene()
+        scene?.removeAllChildren()
         removeViews()
     }
     

@@ -39,8 +39,15 @@ class CurrentGamesScene: TableViewScene {
             let name = xUser["name"]
             let oUser = game["oTeam"] as! PFUser
             let oName = oUser["name"]
-            cell.textLabel?.text = "X:\(name) O:\(oName)"
+            let finishedGame = game["finished"] as! Bool
+            var text = "X:\(name)  |  O:\(oName)"
+            if finishedGame{
+                text = text + " (finished)"
+                cell.textLabel?.textColor = UIColor.redColor()
+            }
+            cell.textLabel?.text = text
             cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"
+
         }
         return cell
     }
