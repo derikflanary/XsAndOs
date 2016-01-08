@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		EE0379051C3F051100312DF4 /* XandOScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0379041C3F051100312DF4 /* XandOScene.swift */; };
+		EE0379091C3F1E1A00312DF4 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE0379071C3F1E1A00312DF4 /* Fabric.framework */; };
+		EE03790A1C3F1E1B00312DF4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */; };
 		EE2FB4AB1C389AE500C91D68 /* SwiftSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */; };
 		EE2FB4D11C38A4F300C91D68 /* JTSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */; };
 		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
@@ -69,6 +71,8 @@
 
 /* Begin PBXFileReference section */
 		EE0379041C3F051100312DF4 /* XandOScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XandOScene.swift; sourceTree = "<group>"; };
+		EE0379071C3F1E1A00312DF4 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		EE2FB4AA1C389AE500C91D68 /* SwiftSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftSpinner.swift; sourceTree = "<group>"; };
 		EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTSplashView.swift; sourceTree = "<group>"; };
 		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
@@ -133,11 +137,13 @@
 				EE65F1F31C31CA0D00E51138 /* AudioToolbox.framework in Frameworks */,
 				EE65F1F11C31C9E200E51138 /* ParseUI.framework in Frameworks */,
 				EE65F1ED1C31C9E200E51138 /* Parse.framework in Frameworks */,
+				EE03790A1C3F1E1B00312DF4 /* Crashlytics.framework in Frameworks */,
 				EE65F5591C31DF7900E51138 /* FBSDKCoreKit.framework in Frameworks */,
 				EE65F1EC1C31C9E200E51138 /* Bolts.framework in Frameworks */,
 				EE65F1EF1C31C9E200E51138 /* ParseFacebookUtilsV4.framework in Frameworks */,
 				EE65F1EE1C31C9E200E51138 /* ParseFacebookUtils.framework in Frameworks */,
 				EE65F55B1C31DF9000E51138 /* FBSDKLoginKit.framework in Frameworks */,
+				EE0379091C3F1E1A00312DF4 /* Fabric.framework in Frameworks */,
 				EE65F1F01C31C9E200E51138 /* ParseTwitterUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +277,8 @@
 		EE65F2031C31CC3300E51138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE0379071C3F1E1A00312DF4 /* Fabric.framework */,
+				EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */,
 				EE65F55A1C31DF9000E51138 /* FBSDKLoginKit.framework */,
 				EE65F5581C31DF7900E51138 /* FBSDKCoreKit.framework */,
 				EE65F2001C31CA5700E51138 /* libsqlite3.tbd */,
@@ -295,6 +303,7 @@
 				EE5E81791BDEC1410004424F /* Sources */,
 				EE5E817A1BDEC1410004424F /* Frameworks */,
 				EE5E817B1BDEC1410004424F /* Resources */,
+				EE0379061C3F1DCC00312DF4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -417,6 +426,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EE0379061C3F1DCC00312DF4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run c9541433c5e713982968e55e36e018d8a5a9e7a8 cd626cccc3c7f65515208d4e7c39df59501edd5a3e9f961b6e2269fe87d98721";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EE5E81791BDEC1410004424F /* Sources */ = {
@@ -590,6 +615,7 @@
 					"$(PROJECT_DIR)/parse-library-1.11.0",
 					"$(PROJECT_DIR)/FacebookSDK/",
 					"$(PROJECT_DIR)/FacebookSDK/FacebookSDKs-iOS-20151111",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = XsAndOs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -613,6 +639,7 @@
 					"$(PROJECT_DIR)/parse-library-1.11.0",
 					"$(PROJECT_DIR)/FacebookSDK/",
 					"$(PROJECT_DIR)/FacebookSDK/FacebookSDKs-iOS-20151111",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = XsAndOs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

@@ -105,7 +105,6 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
                 self.scene!.view?.presentScene(secondScene, transition: transition)
             }
         }
-
     }
     
     func mainPressed(){

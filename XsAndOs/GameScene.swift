@@ -12,16 +12,16 @@ import ParseFacebookUtilsV4
 
 class GameScene: XandOScene, UITextFieldDelegate {
     
-    let startButton = UIButton()
-    let sizeField = UITextField()
-    let label = UILabel()
-    var stackView = UIStackView()
-    let fbLoginbutton = UIButton()
-    let friendButton = UIButton()
-    let currentGamesButton = UIButton()
+    private let startButton = UIButton()
+    private let sizeField = UITextField()
+    private let label = UILabel()
+    private var stackView = UIStackView()
+    private let fbLoginbutton = UIButton()
+    private let friendButton = UIButton()
+    private let currentGamesButton = UIButton()
     var friendsList = [[String:String]]()
     var currentGames = [PFObject]()
-    var activityIndicator = UIActivityIndicatorView()
+    private var activityIndicator = UIActivityIndicatorView()
     let transition = SKTransition.crossFadeWithDuration(1)
     
     override func didMoveToView(view: SKView) {

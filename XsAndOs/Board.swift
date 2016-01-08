@@ -261,7 +261,6 @@ class Board: XandOScene {
                 guard isXTurn() else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                    xTurn = false
                     switchTurns()
                     touchedLocations.removeAll()
                     return
@@ -349,18 +348,15 @@ class Board: XandOScene {
     }
     
     func drawPotentialLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
-        
         potentialShapeNode.removeFromParent()
         let path = createLineAtPoints(pointA, pointB: pointB)
         potentialShapeNode = SKShapeNode(path: path)
         potentialShapeNode.strokeColor = UIColor(white: 0.4, alpha: 0.6)
         potentialShapeNode.lineWidth = 3
         addChild(potentialShapeNode)
-        
     }
     
     func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
-        
         let (columnA, rowA, columnB, rowB) = calculateColumnsAndRows(pointA, pointB: pointB)
         var match = false
         var matchedLine = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
@@ -374,34 +370,6 @@ class Board: XandOScene {
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line
             for lineShapeNode in lineArray{
                 (match, matchedLine) = loopThroughCoordinates(lineShapeNode, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
-//                for coordinate in lineShapeNode.coordinates{
-//                    
-//                    if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
-//                        if match{
-//                            //If the new line connects two existing lines, add the second path to the first one
-//                            matchedLine.appendPath(lineShapeNode.path!)
-//                            for coordinate in lineShapeNode.coordinates{
-//                                matchedLine.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
-//                            }
-//                        
-//                            if checkForWinner(matchedLine){
-//                                self.declareWinner(matchedLine.team!)
-//                                print("\(type) wins")
-//                            }
-//                            break
-//                        }else{
-//                            //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
-//                            match = true
-//                            matchedLine = lineShapeNode
-//                            lineShapeNode.appendPath(path)
-//                            lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
-//                            if checkForWinner(lineShapeNode){
-//                                self.declareWinner(lineShapeNode.team!)
-//                                print("\(type) wins")
-//                            }
-//                        }
-//                    }
-//                }
             }
             //If new line doesn't touch an existing line, make a new line
             if !match{
@@ -409,60 +377,6 @@ class Board: XandOScene {
                 addChild(shapeNode)
                 appendLineArrays(shapeNode)
             }
-            
-        //Repeat for O's
-//        }else if type == "O"{
-//            
-//            for lineShapeNode in oLines{
-//                
-//                for coordinate in lineShapeNode.coordinates{
-//                    
-//                    if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
-//           
-//                        if match{
-//                            matchedLine.appendPath(lineShapeNode.path!)
-//                            for coordinate in lineShapeNode.coordinates{
-//                                matchedLine.addCoordinate(coordinate.columnA!, rowA: coordinate.rowA!, columnB: coordinate.columnB!, rowB: coordinate.rowB!)
-//                            }
-////                            if matchedLine.team != "N"{
-////                                if let index = oLines.indexOf(matchedLine){
-////                                    oLines.removeAtIndex(index)
-////                                }
-////                                
-////                            }
-//                            if checkForWinner(matchedLine){
-//                                print("O Wins")
-//                                self.declareWinner(matchedLine.team!)
-//                            }
-//                            
-//                            break
-//                            
-//                        }else{
-//                            match = true
-//                            matchedLine = lineShapeNode
-//                            lineShapeNode.appendPath(path)
-//                            lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
-//                        
-//                            if checkForWinner(lineShapeNode){
-//                                print("O Wins")
-//                                self.declareWinner(lineShapeNode.team!)
-//                            }
-//                            
-//                        }
-//                    }
-//                }
-//            }
-//            
-//            if !match{
-//                let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type)
-//                shapeNode.setShapeAspects(path)
-//                shapeNode.strokeColor = UIColor.blueColor()
-//                addChild(shapeNode)
-//                oLines.append(shapeNode)
-//            }else{
-//                
-//            }
-//        }
     }
     
     func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode){
@@ -485,7 +399,6 @@ class Board: XandOScene {
             }
         }
         return (match, matchedLine)
-
     }
     
     func appendLineArrays(shapeNode : LineShapeNode){

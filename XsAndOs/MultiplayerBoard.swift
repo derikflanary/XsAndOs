@@ -104,6 +104,7 @@ class MultiplayerBoard: Board {
             turnLabel.text = "X"
             nameLabel.text = xUser["name"] as? String
         }
+        guard !gameFinished else{return}
         saveGame()
     }
     
@@ -155,6 +156,11 @@ class MultiplayerBoard: Board {
         return receiver!
     }
     
+    override func declareWinner(winningTeam: String) {
+        gameFinished = true
+        super.declareWinner(winningTeam)
+    }
+    
     override func gameover() {
         XGameController.Singleton.sharedInstance.endGame(gameID)
         let receiver = self.receiver()
@@ -170,6 +176,24 @@ class MultiplayerBoard: Board {
         }
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    override dynamic func receivedGameNotification(notification: NSNotification) {
+        let theGame = notification.userInfo!["game"] as! PFObject
+        if theGame.objectId == gameID{
+            BoardSetupController().setupGame(theGame, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
+                if success{
+                    self.transitiontoLoadedBoard(secondScene)
+                }
+            })
+        }else{
+            super.receivedGameNotification(notification)
+        }
+    }
+    
+    override func removeViews() {
+        super.removeViews()
+//        scene?.removeAllChildren()
     }
 }
 

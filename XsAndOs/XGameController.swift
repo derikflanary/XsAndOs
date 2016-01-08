@@ -86,9 +86,9 @@ class XGameController: NSObject {
         
         func fetchGamesForUser(user: PFUser, completion: (Bool, [PFObject]) -> Void){
             let query = PFQuery(className: "XGame")
-            query.whereKey("xTeam", equalTo: user)
+            query.whereKey("xTeam", equalTo: PFUser.currentUser()!)
             let query2 = PFQuery(className: "XGame")
-            query.whereKey("oTeam", equalTo: user)
+            query2.whereKey("oTeam", equalTo: PFUser.currentUser()!)
             let orQuery = PFQuery.orQueryWithSubqueries([query, query2])
             orQuery.includeKey("xTeam")
             orQuery.includeKey("oTeam")
@@ -97,7 +97,7 @@ class XGameController: NSObject {
             orQuery.orderByDescending("createdAt")
             orQuery.findObjectsInBackgroundWithBlock { (results: [PFObject]?, error: NSError?) -> Void in
                 if error == nil {
-                    PFObject.fetchAllInBackground(results, block: { (objects: [AnyObject]?, error :NSError?) -> Void in
+                    PFObject.fetchAllIfNeededInBackground(results, block: { (objects: [AnyObject]?, error :NSError?) -> Void in
                         if error == nil{
                             let games = objects as! [PFObject]
                             completion(true, games)
@@ -178,8 +178,6 @@ class XGameController: NSObject {
                     })
                 }
             }
-
-            
         }
         
         func endGame(id: String){

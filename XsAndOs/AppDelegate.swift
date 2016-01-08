@@ -10,6 +10,9 @@ import UIKit
 import Parse
 import Bolts
 import ParseFacebookUtilsV4
+import Fabric
+import Crashlytics
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,24 +24,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("c7fI5i2vHGsajpcH7uDWjie8xLdHGhq6X6D21dBm",
             clientKey: "loGrncuqMAb1KTz99b3l1YIvw7cGwqzYjaAoHdZs")
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-        
+        Fabric.with([Crashlytics.self])
+
         let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
         
         PFInstallation.currentInstallation().badge = 0
         
-        if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-            if let gameId = notificationPayload["gameId"]{
-                XGameController.Singleton.sharedInstance.fetchGameForId(gameId as! String, completion: { (success: Bool, game: PFObject) -> Void in
-                    if success{
-                        // Do something you want when the app is active
-                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
-                    }else{
-                    }
-                })
-            }
-        }
+//        if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
+//            if let gameId = notificationPayload["gameId"]{
+//                XGameController.Singleton.sharedInstance.fetchGameForId(gameId as! String, completion: { (success: Bool, game: PFObject) -> Void in
+//                    if success{
+//                        // Do something you want when the app is active
+//                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
+//                    }else{
+//                    }
+//                })
+//            }
+//        }
         return true
     }
     
@@ -117,12 +121,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         FBSDKAppEvents.activateApp()
         PFInstallation.currentInstallation().badge = 0
-//        if gameLoaded{
-//            let game = loadedGame[0] as PFObject
-//            NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
-//            loadedGame.removeAll()
-//            gameLoaded = false
-//        }
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
