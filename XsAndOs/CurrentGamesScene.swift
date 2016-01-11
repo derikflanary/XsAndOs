@@ -13,17 +13,40 @@ import Parse
 class CurrentGamesScene: TableViewScene {
     
     var games = [PFObject]()
+    var finishedGames = [PFObject]()
+    var currentGames = [PFObject]()
+    
+    override func didMoveToView(view: SKView) {
+        PFInstallation.currentInstallation().badge = 0
+        for game in games{
+            let finishedGame = game["finished"] as! Bool
+            if finishedGame{
+                finishedGames.append(game)
+            }else{
+                currentGames.append(game)
+            }
+        }
+        super.didMoveToView(view)
+    }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games.count
+        if section == 0{
+            return currentGames.count
+        }else{
+            return finishedGames.count
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Current Games"
+        if section == 0{
+            return "Current Games"
+        }else{
+            return "Finished Games"
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -33,8 +56,13 @@ class CurrentGamesScene: TableViewScene {
             cell = UITableViewCell(style: UITableViewCellStyle.Subtitle,
                 reuseIdentifier: "cell")
         }
+        var game = games[indexPath.row]
         if games.count > 0{
-            let game = games[indexPath.row] as PFObject
+            if indexPath.section == 0{
+                game = currentGames[indexPath.row] as PFObject
+            }else{
+                game = finishedGames[indexPath.row] as PFObject
+            }
             let xUser = game["xTeam"] as! PFUser
             let name = xUser["name"]
             let oUser = game["oTeam"] as! PFUser
@@ -53,7 +81,12 @@ class CurrentGamesScene: TableViewScene {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let game = games[indexPath.row] as PFObject
+        var game = games[indexPath.row] as PFObject
+        if indexPath.section == 0{
+            game = currentGames[indexPath.row] as PFObject
+        }else{
+            game = finishedGames[indexPath.row] as PFObject
+        }
         let dim = game["dim"] as? Int
         let rows = game["rows"] as? Int
         transitionToBoardScene(dim!, rows: rows!, game: game)

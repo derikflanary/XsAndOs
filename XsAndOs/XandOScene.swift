@@ -49,6 +49,7 @@ class XandOScene: SKScene {
         BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
             if success{
                 self.transitiontoLoadedBoard(secondScene)
+                PFInstallation.currentInstallation().badge = 0
             }
         })
     }

@@ -11,6 +11,16 @@ import SpriteKit
 //var dim = 9
 let bottomPadding : CGFloat = 100
 
+enum LastMove {
+    case SingleLine
+    case AppendedLine
+}
+
+struct LastIntersectionLocation {
+    var row : Int
+    var col : Int
+}
+
 class Board: XandOScene {
     
     var rows : Int
@@ -34,6 +44,8 @@ class Board: XandOScene {
     var pointsConnected = false
     var potentialShapeNode = SKShapeNode()
     var restartButton = UIButton()
+    var lastMove = LastMove.SingleLine
+    var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -79,6 +91,16 @@ class Board: XandOScene {
         backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
         backButton.tag = 20
         self.view?.addSubview(backButton)
+        
+        let undoButton = UIButton()
+        undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 30)
+        undoButton.setTitle("Undo", forState: .Normal)
+        undoButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
+        undoButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
+        undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
+        backButton.tag = 30
+        self.view?.addSubview(undoButton)
+        
         
         turnLabel = SKLabelNode(text: "X")
         turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
@@ -261,23 +283,27 @@ class Board: XandOScene {
                 guard isXTurn() else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                    switchTurns()
-                    touchedLocations.removeAll()
+                    cleanUpMove()
                     return
                 }
             }else if selectedNode.name == "O" && touchedNode.name == "O"{
                 guard !isXTurn() else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                    switchTurns()
-                    resetSelectedNode()
-                    touchedLocations.removeAll()
+                    cleanUpMove()
                     return
                 }
             }else{
                 touchedLocations.removeAll()
             }
         }
+        touchedLocations.removeAll()
+//        resetSelectedNode()
+    }
+    
+    private func cleanUpMove(){
+        switchTurns()
+        resetSelectedNode()
         touchedLocations.removeAll()
     }
     
@@ -325,6 +351,7 @@ class Board: XandOScene {
                     let intersection = gridItemAtColumn(interCol, row: interRow)
                     if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
                         intersection?.nodePos.ptWho = type
+                        lastIntersection = LastIntersectionLocation(row: interRow, col: interCol)
                         return true
                     }
                 }
@@ -368,15 +395,15 @@ class Board: XandOScene {
             strokeColor = .blueColor()
         }
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line
-            for lineShapeNode in lineArray{
-                (match, matchedLine) = loopThroughCoordinates(lineShapeNode, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
-            }
-            //If new line doesn't touch an existing line, make a new line
-            if !match{
-                let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
-                addChild(shapeNode)
-                appendLineArrays(shapeNode)
-            }
+        for lineShapeNode in lineArray{
+            (match, matchedLine) = loopThroughCoordinates(lineShapeNode, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
+        }
+        //If new line doesn't touch an existing line, make a new line
+        if !match{
+            let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
+            addChild(shapeNode)
+            appendLineArrays(shapeNode)
+        }
     }
     
     func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode){
@@ -419,6 +446,7 @@ class Board: XandOScene {
     func endTurn(){
         
     }
+    
     
 //WINNING FUNCTIONS
     func checkForWinner(line: LineShapeNode){
@@ -471,6 +499,41 @@ class Board: XandOScene {
         }
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+    }
+//UNDO MOVE//
+    func undoLastMove(){
+        switch lastMove{
+        case .SingleLine:
+            undoSingleLine()
+            break
+        case .AppendedLine:
+            undoAppendedLine()
+            break
+        }
+        
+    }
+    
+    func undoSingleLine(){
+        var lineArray = xLines
+        if xTurn{
+            lineArray = oLines
+        }
+        guard lineArray.count > 0 else{return}
+        let lastLine = lineArray.last
+        lastLine?.removeFromParent()
+        lineArray.removeLast()
+        if xTurn{
+            oLines.removeLast()
+        }else{
+            xLines.removeLast()
+        }
+        let intersection = gridItemAtColumn(lastIntersection.col, row: lastIntersection.row)
+        intersection?.nodePos.ptWho = ""
+        switchTurns()
+    }
+    
+    func undoAppendedLine(){
+        
     }
 
 //RESETTING GAME
@@ -565,7 +628,7 @@ class Board: XandOScene {
     
     func transitionToMainScene(){
         let mainScene = GameScene(size: self.size)
-        let transition = SKTransition.crossFadeWithDuration(1.0)
+        let transition = SKTransition.crossFadeWithDuration(2.0)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
     }

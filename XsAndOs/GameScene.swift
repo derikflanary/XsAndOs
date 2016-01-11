@@ -130,6 +130,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
                 let myinstallation = PFInstallation.currentInstallation()
                 myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
                 myinstallation.saveInBackground()
+                
                 dispatch_async(dispatch_get_main_queue(),{
                     self.friendsList = friendList
                     self.stackView.removeArrangedSubview(self.fbLoginbutton)
