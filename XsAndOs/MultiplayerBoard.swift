@@ -114,7 +114,6 @@ class MultiplayerBoard: Board {
             turnLabel.text = "X"
             nameLabel.text = xUser["name"] as? String
         }
-        moveMade = true
         if gameFinished{
             saveGame()
         }else{
@@ -123,6 +122,8 @@ class MultiplayerBoard: Board {
     }
     
     private func saveGame(){
+        backButton.userInteractionEnabled = false
+        backButton.alpha = 0.5
         let (xLineDicts, oLineDicts) = convertLinesToDictionaries()
         XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId) { (success) -> Void in
             if success{
@@ -143,8 +144,13 @@ class MultiplayerBoard: Board {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage()
                     self.moveMade = false
+                    self.undoButton.hidden = true
                     self.submitButton.removeFromSuperview()
                 })
+            }else{
+                self.backButton.userInteractionEnabled = true
+                self.backButton.alpha = 1
+                self.showFailToSaveAlert()
             }
         }
     }
@@ -159,12 +165,23 @@ class MultiplayerBoard: Board {
         alert.setScale(0.1)
         alert.runAction(SKAction.scaleTo(1.0, duration: 1)) { () -> Void in
             alert.runAction(SKAction.scaleTo(0.0, duration: 1))
+            self.backButton.userInteractionEnabled = true
+            self.backButton.alpha = 1
         }
         let delay = 2.0 * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue(), {
 //            alertController.dismissViewControllerAnimated(true, completion: nil)
         })
+    }
+    
+    private func showFailToSaveAlert(){
+        let alertController = UIAlertController(title: "Move Not Sent", message: "Check your network connection and try again", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+            self.undoLastMove()
+        }
+        alertController.addAction(cancelAction)
+        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func convertLinesToDictionaries() -> ([[[String: Int]]],[[[String: Int]]] ){
@@ -187,6 +204,11 @@ class MultiplayerBoard: Board {
             receiver = self.xUser.username
         }
         return receiver!
+    }
+    
+    override func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String) {
+        super.drawLineBetweenPoints(pointA, pointB: pointB, type: type)
+        moveMade = true
     }
     
     override func declareWinner(winningTeam: String) {
@@ -226,7 +248,7 @@ class MultiplayerBoard: Board {
     override func removeViews() {
         super.removeViews()
         submitButton.removeFromSuperview()
-//        scene?.removeAllChildren()
+        backButton.removeFromSuperview()
     }
     
     func submitPressed(){
@@ -237,6 +259,7 @@ class MultiplayerBoard: Board {
     
     override func undoLastMove() {
         moveMade = false
+        submitButton.removeFromSuperview()
         super.undoLastMove()
     }
 }

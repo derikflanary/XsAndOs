@@ -53,6 +53,7 @@ class Board: XandOScene {
     var restartButton = UIButton()
     var lastMove = LastMove.SingleLine
     let undoButton = UIButton()
+    let backButton = UIButton()
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
     
@@ -92,7 +93,6 @@ class Board: XandOScene {
         restartButton.tag = 10
         self.view?.addSubview(restartButton)
         
-        let backButton = UIButton()
         backButton.frame = CGRectMake(10, 20, 50, 30)
         backButton.setTitle("Main", forState: .Normal)
         backButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
