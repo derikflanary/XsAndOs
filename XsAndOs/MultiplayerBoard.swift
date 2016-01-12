@@ -22,10 +22,12 @@ class MultiplayerBoard: Board {
     var gameFinished = Bool()
     var xObjId = String()
     var oObjId = String()
+    var submitButton = UIButton()
+    var moveMade = Bool()
 
     override func startGame() {
         super.startGame()
-        view!.viewWithTag(30)?.removeFromSuperview()
+//        view!.viewWithTag(30)?.removeFromSuperview()
         restartButton.removeFromSuperview()
         let name = xUser["name"] as! String
         nameLabel = SKLabelNode(text: name)
@@ -34,6 +36,13 @@ class MultiplayerBoard: Board {
         nameLabel.fontSize = 24
         nameLabel.zPosition = 3
         
+        submitButton.frame = CGRectMake(0, (self.view?.frame.size.height)! - 40, (self.view?.frame.size.width)!, 30)
+        submitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(40)
+        submitButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        submitButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
+        submitButton.setTitle("Submit Move", forState: UIControlState.Normal)
+        submitButton.addTarget(self, action: "submitPressed", forControlEvents: .TouchUpInside)
+
         self.addChild(nameLabel)
         if xLinesParse.count > 0{
             drawLoadedLines()
@@ -105,7 +114,12 @@ class MultiplayerBoard: Board {
             turnLabel.text = "X"
             nameLabel.text = xUser["name"] as? String
         }
-        saveGame()
+        moveMade = true
+        if gameFinished{
+            saveGame()
+        }else{
+            self.view?.addSubview(submitButton)
+        }
     }
     
     private func saveGame(){
@@ -128,20 +142,28 @@ class MultiplayerBoard: Board {
                 }
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage()
+                    self.moveMade = false
+                    self.submitButton.removeFromSuperview()
                 })
             }
         }
     }
     
     private func gameSavedMessage(){
-        let alertController = UIAlertController(title: "Move Sent", message: "It is now the other player's turn", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in}
-        alertController.addAction(cancelAction)
-        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+        let alert = SKLabelNode(text: "Move Sent")
+        alert.position = CGPointMake(turnLabel.position.x, turnLabel.position.y + 50)
+        alert.fontColor = SKColor.redColor()
+        alert.fontSize = 30
+        alert.zPosition = 3
+        addChild(alert)
+        alert.setScale(0.1)
+        alert.runAction(SKAction.scaleTo(1.0, duration: 1)) { () -> Void in
+            alert.runAction(SKAction.scaleTo(0.0, duration: 1))
+        }
         let delay = 2.0 * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue(), {
-            alertController.dismissViewControllerAnimated(true, completion: nil)
+//            alertController.dismissViewControllerAnimated(true, completion: nil)
         })
     }
     
@@ -203,7 +225,19 @@ class MultiplayerBoard: Board {
     
     override func removeViews() {
         super.removeViews()
+        submitButton.removeFromSuperview()
 //        scene?.removeAllChildren()
+    }
+    
+    func submitPressed(){
+        print("submit pressed")
+        guard moveMade else {return}
+        saveGame()
+    }
+    
+    override func undoLastMove() {
+        moveMade = false
+        super.undoLastMove()
     }
 }
 

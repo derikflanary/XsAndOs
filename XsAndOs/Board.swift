@@ -52,6 +52,7 @@ class Board: XandOScene {
     var potentialShapeNode = SKShapeNode()
     var restartButton = UIButton()
     var lastMove = LastMove.SingleLine
+    let undoButton = UIButton()
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
     
@@ -100,7 +101,6 @@ class Board: XandOScene {
         backButton.tag = 20
         self.view?.addSubview(backButton)
         
-        let undoButton = UIButton()
         undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 30)
         undoButton.setTitle("Undo", forState: .Normal)
         undoButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
@@ -108,7 +108,7 @@ class Board: XandOScene {
         undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
         undoButton.tag = 30
         self.view?.addSubview(undoButton)
-        
+        undoButton.hidden = true
         
         turnLabel = SKLabelNode(text: "X")
         turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
@@ -306,7 +306,6 @@ class Board: XandOScene {
             }
         }
         touchedLocations.removeAll()
-//        resetSelectedNode()
     }
     
     private func cleanUpMove(){
@@ -416,6 +415,7 @@ class Board: XandOScene {
             appendLineArrays(shapeNode)
             lastMove = .SingleLine
         }
+        undoButton.hidden = false
     }
     
     func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode){
@@ -522,6 +522,7 @@ class Board: XandOScene {
     
 //UNDO MOVE//
     func undoLastMove(){
+        undoButton.hidden = true
         switch lastMove{
         case .SingleLine:
             undoSingleLine()
@@ -589,6 +590,7 @@ class Board: XandOScene {
     func gameover(){
         resetBoard()
     }
+    
     func resetBoard(){
         //delete all objects on the board
         self.removeAllChildren()
@@ -600,9 +602,8 @@ class Board: XandOScene {
         grid.removeArray()
         self.view?.viewWithTag(10)?.removeFromSuperview()
         self.view?.viewWithTag(20)?.removeFromSuperview()
-        
+        undoButton.removeFromSuperview()
         tranistionToNewBoard()
-
     }
     
     func tranistionToNewBoard(){

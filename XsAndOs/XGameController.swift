@@ -106,7 +106,7 @@ class XGameController: NSObject {
                         }
                     })
                 }else{
-                    completion(false, results!)
+                    completion(false, [])
                 }
             }
         }

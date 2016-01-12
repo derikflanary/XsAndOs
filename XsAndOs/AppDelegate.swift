@@ -34,24 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         PFInstallation.currentInstallation().badge = 0
-        
-//        if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-//            if let gameId = notificationPayload["gameId"]{
-//                XGameController.Singleton.sharedInstance.fetchGameForId(gameId as! String, completion: { (success: Bool, game: PFObject) -> Void in
-//                    if success{
-//                        // Do something you want when the app is active
-//                        NSNotificationCenter.defaultCenter().postNotificationName("LoadGameDirect", object: nil, userInfo: ["game": game])
-//                    }else{
-//                    }
-//                })
-//            }
-//        }
         return true
     }
     
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool{
-        
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
     
@@ -102,8 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             completionHandler(UIBackgroundFetchResult.NoData)
         }
-        
-        
     }
     
     func applicationWillResignActive(application: UIApplication) {
