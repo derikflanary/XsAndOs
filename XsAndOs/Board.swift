@@ -54,6 +54,7 @@ class Board: XandOScene {
     var lastMove = LastMove.SingleLine
     let undoButton = UIButton()
     let backButton = UIButton()
+    var nodeAction = SKAction()
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
     
@@ -81,6 +82,7 @@ class Board: XandOScene {
     func startGame(){
         self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
+        setUpMainAnimation()
         addChild(gameLayer)
         buildArrayOfNodes()
         drawSquare()
@@ -117,7 +119,14 @@ class Board: XandOScene {
         self.addChild(turnLabel)
         
          xTurn = true
-        
+    }
+    
+    func setUpMainAnimation(){
+        let fadeOut = SKAction.scaleTo(0.9, duration: 0.5)
+        let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
+        let pulse = SKAction.sequence([fadeOut, fadeIn])
+        let pulseForever = SKAction.repeatActionForever(pulse)
+        nodeAction = pulseForever
     }
     
 //DRAWING THE BOARD
@@ -170,6 +179,7 @@ class Board: XandOScene {
                 gameLayer.addChild(sprite!)
             }
         }
+        startActionForNodeType("X")
     }
     
     func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
@@ -191,6 +201,23 @@ class Board: XandOScene {
         square.zPosition = 0
         square.strokeColor = SKColor.lightGrayColor()
         self.addChild(square)
+
+    }
+    
+    func startActionForNodeType(type: String){
+        gameLayer.enumerateChildNodesWithName(type, usingBlock: {
+            node, stop in
+            node.runAction(self.nodeAction)
+            // do something with node or stop
+        })
+    }
+    
+    func stopActionsOnGameLayer(type: String){
+        gameLayer.enumerateChildNodesWithName(type, usingBlock: {
+            node, stop in
+            node.removeAllActions()
+            // do something with node or stop
+        })
 
     }
     
@@ -320,12 +347,17 @@ class Board: XandOScene {
     }
     
     func switchTurns(){
+
         if turnLabel.text == "X"{
             xTurn = false
             turnLabel.text = "O"
+            stopActionsOnGameLayer("X")
+            startActionForNodeType("O")
         }else{
             xTurn = true
             turnLabel.text = "X"
+            stopActionsOnGameLayer("O")
+            startActionForNodeType("X")
         }
     }
     
@@ -661,6 +693,7 @@ class Board: XandOScene {
     override func removeViews(){
         self.view?.viewWithTag(10)?.removeFromSuperview()
         self.view?.viewWithTag(20)?.removeFromSuperview()
+        undoButton.removeFromSuperview()
     }
     
 //BUTTON FUNCTIONS
