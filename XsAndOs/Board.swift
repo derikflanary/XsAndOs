@@ -118,7 +118,7 @@ class Board: XandOScene {
         turnLabel.zPosition = 3
         self.addChild(turnLabel)
         
-         xTurn = true
+        isXTurn()
     }
     
     func setUpMainAnimation(){
@@ -179,6 +179,10 @@ class Board: XandOScene {
                 gameLayer.addChild(sprite!)
             }
         }
+        animateNodes()
+    }
+    
+    func animateNodes(){
         startActionForNodeType("X")
     }
     
@@ -221,8 +225,8 @@ class Board: XandOScene {
 
     }
     
-    func isXTurn() -> Bool{
-        return xTurn
+    func isXTurn(){
+        xTurn = true
     }
     
     func isCurrentUserTurn() ->Bool{
@@ -241,14 +245,14 @@ class Board: XandOScene {
             if touchedNode.name == "X" || touchedNode.name == "O"{
                 
                 if selectedNode.name == "X" && touchedNode.name == "X"{
-                    guard isXTurn() else{return}
+                    guard xTurn else{return}
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         switchTurns()
                     }
                     resetSelectedNode()
                 }else if selectedNode.name == "O" && touchedNode.name == "O"{
-                    guard !isXTurn() else{return}
+                    guard !xTurn else{return}
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         switchTurns()
@@ -315,14 +319,14 @@ class Board: XandOScene {
             let touchedNode = self.nodeAtPoint(location)
             
             if selectedNode.name == "X" && touchedNode.name == "X"{
-                guard isXTurn() else{touchedLocations.removeAll(); return}
+                guard xTurn else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     cleanUpMove()
                     return
                 }
             }else if selectedNode.name == "O" && touchedNode.name == "O"{
-                guard !isXTurn() else{touchedLocations.removeAll(); return}
+                guard !xTurn else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     cleanUpMove()
@@ -332,7 +336,9 @@ class Board: XandOScene {
                 touchedLocations.removeAll()
             }
         }
+        resetSelectedNode()
         touchedLocations.removeAll()
+
     }
     
     private func cleanUpMove(){
