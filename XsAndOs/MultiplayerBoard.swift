@@ -25,6 +25,7 @@ class MultiplayerBoard: Board {
 
     override func startGame() {
         super.startGame()
+        view!.viewWithTag(30)?.removeFromSuperview()
         restartButton.removeFromSuperview()
         let name = xUser["name"] as! String
         nameLabel = SKLabelNode(text: name)

@@ -16,6 +16,13 @@ enum LastMove {
     case AppendedLine
 }
 
+struct PreviousMoveDetails {
+    var oldLines = [LineShapeNode]()
+    var previousIntersection : LastIntersectionLocation
+    var moveUnDid = false
+    var newAppendedLine : LineShapeNode
+}
+
 struct LastIntersectionLocation {
     var row : Int
     var col : Int
@@ -46,6 +53,7 @@ class Board: XandOScene {
     var restartButton = UIButton()
     var lastMove = LastMove.SingleLine
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
+    var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -98,7 +106,7 @@ class Board: XandOScene {
         undoButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
         undoButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
         undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
-        backButton.tag = 30
+        undoButton.tag = 30
         self.view?.addSubview(undoButton)
         
         
@@ -352,6 +360,9 @@ class Board: XandOScene {
                     if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
                         intersection?.nodePos.ptWho = type
                         lastIntersection = LastIntersectionLocation(row: interRow, col: interCol)
+                        previousMoveDetails.previousIntersection = lastIntersection
+                        previousMoveDetails.oldLines.removeAll()
+                        previousMoveDetails.moveUnDid = false
                         return true
                     }
                 }
@@ -403,6 +414,7 @@ class Board: XandOScene {
             let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
             addChild(shapeNode)
             appendLineArrays(shapeNode)
+            lastMove = .SingleLine
         }
     }
     
@@ -413,14 +425,26 @@ class Board: XandOScene {
                     //If the new line connects two existing lines, add the second path to the first one
                     matchedLine.appendPath(lineShapeNode.path!)
                     matchedLine.addCoordinatesFromLine(lineShapeNode)
+                    previousMoveDetails.oldLines.append(lineShapeNode)
+                    previousMoveDetails.newAppendedLine = matchedLine
                     checkForWinner(matchedLine)
                     break
                 }else{
                     //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
                     match = true
+
+                    let line = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+                    line.team = lineShapeNode.team
+                    line.coordinates = lineShapeNode.coordinates
+                    line.setShapeAspects(lineShapeNode.path!)
+                    line.strokeColor = lineShapeNode.strokeColor
+                    previousMoveDetails.oldLines.append(line)
+                    
+                    lastMove = .AppendedLine
                     matchedLine = lineShapeNode
-                    lineShapeNode.appendPath(path)
-                    lineShapeNode.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+                    matchedLine.appendPath(path)
+                    matchedLine.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+                    previousMoveDetails.newAppendedLine = matchedLine
                     checkForWinner(lineShapeNode)
                 }
             }
@@ -500,6 +524,7 @@ class Board: XandOScene {
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
+    
 //UNDO MOVE//
     func undoLastMove(){
         switch lastMove{
@@ -522,17 +547,49 @@ class Board: XandOScene {
         let lastLine = lineArray.last
         lastLine?.removeFromParent()
         lineArray.removeLast()
+        removeLastLineFromArray()
+        resetIntersection()
+        switchTurns()
+    }
+    
+    private func removeLastLineFromArray(){
         if xTurn{
             oLines.removeLast()
         }else{
             xLines.removeLast()
         }
+    }
+    
+    private func resetIntersection(){
         let intersection = gridItemAtColumn(lastIntersection.col, row: lastIntersection.row)
         intersection?.nodePos.ptWho = ""
-        switchTurns()
     }
     
     func undoAppendedLine(){
+        guard !previousMoveDetails.moveUnDid else{return}
+        var lineArray = xLines
+        if xTurn{
+            lineArray = oLines
+        }
+//        if previousMoveDetails.doubleAppendage{
+        let index = lineArray.indexOf(previousMoveDetails.newAppendedLine)
+        let lineToRemove = lineArray[index!]
+        lineToRemove.removeFromParent()
+        lineArray.removeAtIndex(index!)
+        let lineToAdd = previousMoveDetails.oldLines[0]
+        lineArray.append(lineToAdd)
+        
+        addChild(lineToAdd)
+        if xTurn{
+            oLines = lineArray
+        }else{
+            xLines = lineArray
+        }
+        resetIntersection()
+        previousMoveDetails.moveUnDid = true
+        switchTurns()
+        
+//        }
         
     }
 
