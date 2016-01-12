@@ -36,6 +36,13 @@ class LineShapeNode: SKShapeNode {
         strokeColor = color
     }
     
+    func copyLineValues(lineShapeNode: LineShapeNode){
+        team = lineShapeNode.team
+        coordinates = lineShapeNode.coordinates
+        setShapeAspects(lineShapeNode.path!)
+        strokeColor = lineShapeNode.strokeColor
+    }
+    
     private func setupValues(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String){
         let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
         coordinates.append(coordinate)

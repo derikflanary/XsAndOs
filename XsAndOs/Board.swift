@@ -432,14 +432,7 @@ class Board: XandOScene {
                 }else{
                     //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
                     match = true
-
-                    let line = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-                    line.team = lineShapeNode.team
-                    line.coordinates = lineShapeNode.coordinates
-                    line.setShapeAspects(lineShapeNode.path!)
-                    line.strokeColor = lineShapeNode.strokeColor
-                    previousMoveDetails.oldLines.append(line)
-                    
+                    createLineCopy(lineShapeNode)
                     lastMove = .AppendedLine
                     matchedLine = lineShapeNode
                     matchedLine.appendPath(path)
@@ -467,8 +460,10 @@ class Board: XandOScene {
         return ref
     }
     
-    func endTurn(){
-        
+    func createLineCopy(lineShapeNode: LineShapeNode){
+        let line = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+        line.copyLineValues(lineShapeNode)
+        previousMoveDetails.oldLines.append(line)
     }
     
     
@@ -535,14 +530,10 @@ class Board: XandOScene {
             undoAppendedLine()
             break
         }
-        
     }
     
     func undoSingleLine(){
-        var lineArray = xLines
-        if xTurn{
-            lineArray = oLines
-        }
+        var lineArray = lineArrayForLastMove()
         guard lineArray.count > 0 else{return}
         let lastLine = lineArray.last
         lastLine?.removeFromParent()
@@ -567,18 +558,13 @@ class Board: XandOScene {
     
     func undoAppendedLine(){
         guard !previousMoveDetails.moveUnDid else{return}
-        var lineArray = xLines
-        if xTurn{
-            lineArray = oLines
-        }
-//        if previousMoveDetails.doubleAppendage{
+        var lineArray = lineArrayForLastMove()
         let index = lineArray.indexOf(previousMoveDetails.newAppendedLine)
         let lineToRemove = lineArray[index!]
         lineToRemove.removeFromParent()
         lineArray.removeAtIndex(index!)
         let lineToAdd = previousMoveDetails.oldLines[0]
         lineArray.append(lineToAdd)
-        
         addChild(lineToAdd)
         if xTurn{
             oLines = lineArray
@@ -588,9 +574,14 @@ class Board: XandOScene {
         resetIntersection()
         previousMoveDetails.moveUnDid = true
         switchTurns()
-        
-//        }
-        
+    }
+    
+    private func lineArrayForLastMove() -> ([LineShapeNode]){
+        if xTurn{
+            return oLines
+        }else{
+            return xLines
+        }
     }
 
 //RESETTING GAME
