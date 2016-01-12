@@ -26,8 +26,9 @@ class MultiplayerBoard: Board {
     var moveMade = Bool()
 
     override func startGame() {
+        xTurn = xTurnLoad
         super.startGame()
-//        view!.viewWithTag(30)?.removeFromSuperview()
+        undoButton.removeFromSuperview()
         restartButton.removeFromSuperview()
         let name = xUser["name"] as! String
         nameLabel = SKLabelNode(text: name)
@@ -47,7 +48,6 @@ class MultiplayerBoard: Board {
         if xLinesParse.count > 0{
             drawLoadedLines()
         }
-        xTurn = xTurnLoad
         if !xTurn{
             turnLabel.text = "O"
             nameLabel.text = oUser["name"] as? String
@@ -56,6 +56,17 @@ class MultiplayerBoard: Board {
             finishedGameMessage()
         }
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
+    }
+    
+    override func isXTurn() {
+    }
+    
+    override func animateNodes() {
+        var type = "X"
+        if !xTurn{
+            type = "O"
+        }
+        startActionForNodeType(type)
     }
     
     func drawLoadedLines(){
@@ -94,6 +105,11 @@ class MultiplayerBoard: Board {
         return (pointA, pointB)
     }
     
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        guard !gameFinished else {return}
+        super.touchesBegan(touches, withEvent: event)
+    }
+    
     override func isCurrentUserTurn() -> Bool {
         if xTurn && xUser.username == PFUser.currentUser()?.username{
             return true
@@ -104,21 +120,27 @@ class MultiplayerBoard: Board {
         }
     }
     
+    
     override func switchTurns() {
         if xTurn{
             xTurn = false
             turnLabel.text = "O"
             nameLabel.text = oUser["name"] as? String
+            stopActionsOnGameLayer("X")
+            startActionForNodeType("O")
         }else{
             xTurn = true
             turnLabel.text = "X"
             nameLabel.text = xUser["name"] as? String
+            stopActionsOnGameLayer("O")
+            startActionForNodeType("X")
         }
-        if gameFinished{
-            saveGame()
-        }else{
-            self.view?.addSubview(submitButton)
-        }
+        saveGame()
+//        if gameFinished{
+//            saveGame()
+//        }else{
+////            self.view?.addSubview(submitButton)
+//        }
     }
     
     private func saveGame(){
@@ -145,12 +167,13 @@ class MultiplayerBoard: Board {
                     self.gameSavedMessage()
                     self.moveMade = false
                     self.undoButton.hidden = true
-                    self.submitButton.removeFromSuperview()
+//                    self.submitButton.removeFromSuperview()
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
                 self.backButton.alpha = 1
                 self.showFailToSaveAlert()
+                
             }
         }
     }
@@ -247,7 +270,7 @@ class MultiplayerBoard: Board {
     
     override func removeViews() {
         super.removeViews()
-        submitButton.removeFromSuperview()
+//        submitButton.removeFromSuperview()
         backButton.removeFromSuperview()
     }
     
@@ -259,7 +282,7 @@ class MultiplayerBoard: Board {
     
     override func undoLastMove() {
         moveMade = false
-        submitButton.removeFromSuperview()
+//        submitButton.removeFromSuperview()
         super.undoLastMove()
     }
 }
