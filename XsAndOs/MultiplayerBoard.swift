@@ -45,9 +45,14 @@ class MultiplayerBoard: Board {
         submitButton.addTarget(self, action: "submitPressed", forControlEvents: .TouchUpInside)
 
         self.addChild(nameLabel)
-        if xLinesParse.count > 0{
-            drawLoadedLines()
+        
+        if xLines.count > 0{
+            drawLines()
         }
+//        if xLinesParse.count > 0{
+//            drawLoadedLines()
+//        }
+        turnLabel.runAction(nodeAction)
         if !xTurn{
             turnLabel.text = "O"
             nameLabel.text = oUser["name"] as? String
@@ -55,10 +60,10 @@ class MultiplayerBoard: Board {
         if gameFinished{
             finishedGameMessage()
         }
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
     }
     
     override func isXTurn() {
+        return
     }
     
     override func animateNodes() {
@@ -69,40 +74,17 @@ class MultiplayerBoard: Board {
         startActionForNodeType(type)
     }
     
-    func drawLoadedLines(){
-        loopThroughParseLines("X")
-        loopThroughParseLines("O")
+    func drawLines(){
+        loopThroughLines("X")
+        loopThroughLines("O")
     }
     
-    func loopThroughParseLines(type: String){
-        var parseLines = xLinesParse
-        var stroke = SKColor.redColor()
-        if type == "O" {parseLines = oLinesParse; stroke = SKColor.blueColor()}
-        for lineArray in parseLines{
-            var firstShapeNode = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-            for line in lineArray{
-                let (pointA, pointB) = pointsFromDictionary(line)
-                let path = createLineAtPoints(pointA, pointB: pointB)
-                if lineArray.count > 1{
-                    if firstShapeNode.team == "N"{
-                        firstShapeNode = LineShapeNode(columnA: line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!, team: type, path: path, color: stroke)
-                    }else{
-                        firstShapeNode.appendPath(path)
-                        firstShapeNode.addCoordinate(line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!)
-                    }
-                }else{
-                    firstShapeNode = LineShapeNode(columnA: line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!, team: type, path: path, color: stroke)
-                }
-            }
-            addChild(firstShapeNode)
-            appendLineArrays(firstShapeNode)
+    func loopThroughLines(type: String){
+        var linesArray = xLines
+        if type == "O" {linesArray = oLines}
+        for line in linesArray{
+            addChild(line)
         }
-    }
-    
-    private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
-        let pointA = pointForColumn(line["cA"]!, row: line["rA"]!, size: 1)
-        let pointB = pointForColumn(line["cB"]!, row: line["rB"]!, size: 1)
-        return (pointA, pointB)
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -136,11 +118,6 @@ class MultiplayerBoard: Board {
             startActionForNodeType("X")
         }
         saveGame()
-//        if gameFinished{
-//            saveGame()
-//        }else{
-////            self.view?.addSubview(submitButton)
-//        }
     }
     
     private func saveGame(){
@@ -261,6 +238,7 @@ class MultiplayerBoard: Board {
             BoardSetupController().setupGame(theGame, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
                 if success{
                     self.transitiontoLoadedBoard(secondScene)
+                    PFInstallation.currentInstallation().badge = 0
                 }
             })
         }else{
@@ -270,6 +248,8 @@ class MultiplayerBoard: Board {
     
     override func removeViews() {
         super.removeViews()
+        turnLabel.removeFromParent()
+        nameLabel.removeFromParent()
 //        submitButton.removeFromSuperview()
         backButton.removeFromSuperview()
     }

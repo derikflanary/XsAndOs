@@ -76,7 +76,6 @@ class GameScene: XandOScene, UITextFieldDelegate {
             let myinstallation = PFInstallation.currentInstallation()
             myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
             myinstallation.saveInBackground()
-            print(myinstallation.objectId)
         }else{
             stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton, currentGamesButton])
         }

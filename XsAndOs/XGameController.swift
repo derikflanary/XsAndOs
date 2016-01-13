@@ -148,8 +148,14 @@ class XGameController: NSObject {
                     lines.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
                         if success{
                             lines["lines"] = xLines
-                            lines.saveInBackground()
-                            completion(success)
+                            lines.saveInBackgroundWithBlock({ (success, error) -> Void in
+                                if success{
+                                  completion(success)
+                                }else{
+                                    print(error)
+                                    completion(success)
+                                }
+                            })
                         }else{
                             completion(false)
                         }
@@ -170,7 +176,15 @@ class XGameController: NSObject {
                     lines.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
                         if success{
                             lines["lines"] = oLines
-                            lines.saveInBackground()
+                            lines.saveInBackgroundWithBlock({ (success, error) -> Void in
+                                if success{
+                                    completion(success)
+                                }else{
+                                    print(error)
+                                    completion(success)
+                                }
+
+                            })
                             completion(success)
                         }else{
                             completion(false)

@@ -11,7 +11,7 @@ import Foundation
 import SpriteKit
 
 enum NodeType: Int {
-    case Unknown = 0, Empty, Intersection, X, O
+    case Unknown = 0, Empty, Intersection, X, O, Dot
 }
 
 struct Point

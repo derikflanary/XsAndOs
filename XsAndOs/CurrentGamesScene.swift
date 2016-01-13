@@ -95,7 +95,8 @@ class CurrentGamesScene: TableViewScene {
 
     func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
         var secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
-        secondScene = updateNextSceneWithGame(game, secondScene: secondScene)
+        secondScene = BoardSetupController().updateNextSceneWithGame(game, secondScene: secondScene)
+//        secondScene = updateNextSceneWithGame(game, secondScene: secondScene)
         let transition = SKTransition.crossFadeWithDuration(1)
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }

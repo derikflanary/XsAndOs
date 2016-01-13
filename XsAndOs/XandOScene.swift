@@ -35,6 +35,7 @@ class XandOScene: SKScene {
             BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
                 if success{
                     self.transitiontoLoadedBoard(secondScene)
+                    PFInstallation.currentInstallation().badge = 0
                 }
             })
         }
@@ -48,8 +49,10 @@ class XandOScene: SKScene {
         let game = notification.userInfo!["game"] as! PFObject
         BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
             if success{
-                self.transitiontoLoadedBoard(secondScene)
-                PFInstallation.currentInstallation().badge = 0
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.transitiontoLoadedBoard(secondScene)
+                    PFInstallation.currentInstallation().badge = 0
+                })
             }
         })
     }
@@ -57,9 +60,7 @@ class XandOScene: SKScene {
     func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
         removeViews()
         let transition = SKTransition.crossFadeWithDuration(1.5)
-        dispatch_async(dispatch_get_main_queue(),{
-            self.scene?.view?.presentScene(secondScene, transition: transition)
-        })
+        self.scene?.view?.presentScene(secondScene, transition: transition)
     }
 
 }

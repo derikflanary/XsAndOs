@@ -12,6 +12,7 @@ import SpriteKit
 class GameViewController: UIViewController {
 
     var scene : GameScene!
+//    var scene : DotsScene!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class GameViewController: UIViewController {
             
             /* Set the scale mode to scale to fit the window */
             scene = GameScene(size: skView.bounds.size)
+//            scene = DotsScene(theDim: 10, size: skView.bounds.size)
             scene.scaleMode = .AspectFill
             
             skView.presentScene(scene)

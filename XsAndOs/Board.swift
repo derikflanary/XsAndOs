@@ -82,8 +82,8 @@ class Board: XandOScene {
     func startGame(){
         self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
-        setUpMainAnimation()
         addChild(gameLayer)
+        setUpMainAnimation()
         buildArrayOfNodes()
         drawSquare()
         
@@ -122,7 +122,7 @@ class Board: XandOScene {
     }
     
     func setUpMainAnimation(){
-        let fadeOut = SKAction.scaleTo(0.9, duration: 0.5)
+        let fadeOut = SKAction.scaleTo(1.15, duration: 0.5)
         let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
         let pulse = SKAction.sequence([fadeOut, fadeIn])
         let pulseForever = SKAction.repeatActionForever(pulse)
