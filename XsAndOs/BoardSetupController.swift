@@ -12,6 +12,10 @@ import SpriteKit
 
 class BoardSetupController: NSObject {
     
+    let columnAKey = "c"
+    let rowAKey = "r"
+    let columnBKey = "k"
+    let rowBKey = "w"
     var xLinesParse : [[[String:Int]]] = []
     var oLinesParse : [[[String:Int]]] = []
     var xLines = [LineShapeNode]()
@@ -38,25 +42,33 @@ class BoardSetupController: NSObject {
     }
 //Load Board from Current Games//
     func updateNextSceneWithGame(game: PFObject, var secondScene: MultiplayerBoard) -> (MultiplayerBoard){
-        secondScene.xUser = game["xTeam"] as! PFUser
-        secondScene.oUser = game["oTeam"] as! PFUser
-        secondScene.gameID = game.objectId!
         let xLines = game.objectForKey("xLines") as! PFObject
         let oLines = game.objectForKey("oLines") as! PFObject
-        secondScene.xLinesParse = xLines["lines"] as! [[[String:Int]]]
-        secondScene.oLinesParse = oLines["lines"] as! [[[String:Int]]]
-        secondScene.xTurnLoad = game["xTurn"] as! Bool
-        secondScene.gameFinished = game["finished"] as! Bool
-        secondScene.xObjId = xLines.objectId!
-        secondScene.oObjId = oLines.objectId!
-        secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        
-        self.xLinesParse = xLines["lines"] as! [[[String:Int]]]
-        self.oLinesParse = oLines["lines"] as! [[[String:Int]]]
-        xIsopin = secondScene.size.width/CGFloat(secondScene.dim)
+        secondScene = passGameDataToScene(game, secondScene: secondScene)
+        secondScene = unLoadParseLines(xLines, theOLines: oLines, secondScene: secondScene)
+        return secondScene
+    }
+    
+    func unLoadParseLines(theXLines: PFObject, theOLines: PFObject, var secondScene: MultiplayerBoard) -> (MultiplayerBoard){
+        xLinesParse = theXLines["lines"] as! [[[String:Int]]]
+        oLinesParse = theOLines["lines"] as! [[[String:Int]]]
+        secondScene.xObjId = theXLines.objectId!
+        secondScene.oObjId = theXLines.objectId!
         secondScene = drawLoadedLines(secondScene)
         return secondScene
     }
+    
+    func passGameDataToScene(game: PFObject, secondScene: MultiplayerBoard) -> (MultiplayerBoard){
+        secondScene.xUser = game["xTeam"] as! PFUser
+        secondScene.oUser = game["oTeam"] as! PFUser
+        secondScene.gameID = game.objectId!
+        secondScene.xTurnLoad = game["xTurn"] as! Bool
+        secondScene.gameFinished = game["finished"] as! Bool
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        xIsopin = secondScene.size.width/CGFloat(secondScene.dim)
+        
+        return secondScene
+        }
 
 //Load Board From Notification//
     func setupGame(game: PFObject, size: CGSize, completion: (Bool, MultiplayerBoard) -> Void){
@@ -69,35 +81,19 @@ class BoardSetupController: NSObject {
                 if error != nil{
                     completion(false, MultiplayerBoard(size: size, theDim: 0, theRows: 0))
                 }else{
-                    self.xIsopin = size.width/CGFloat(dim)
                     var secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows)
-                    secondScene.xUser = game["xTeam"] as! PFUser
-                    secondScene.oUser = game["oTeam"] as! PFUser
-                    secondScene.gameID = game.objectId!
-                    secondScene.xLinesParse = theXlines!["lines"] as! [[[String:Int]]]
-                    secondScene.oLinesParse = theOLines!["lines"] as! [[[String:Int]]]
-                    secondScene.xTurnLoad = game["xTurn"] as! Bool
-                    secondScene.gameFinished = game["finished"] as! Bool
-                    secondScene.xObjId = xLines.objectId!
-                    secondScene.oObjId = oLines.objectId!
-                    secondScene.scaleMode = SKSceneScaleMode.AspectFill
                     
-                    self.xLinesParse = theXlines!["lines"] as! [[[String:Int]]]
-                    self.oLinesParse = theOLines!["lines"] as! [[[String:Int]]]
-
-                    secondScene = self.drawLoadedLines(secondScene)
-                    
+                    secondScene = self.passGameDataToScene(game, secondScene: secondScene)
+                    secondScene = self.unLoadParseLines(theXlines!, theOLines: theOLines!, secondScene: secondScene)
                     completion(true, secondScene)
                 }
             })
         }
     }
     
-    
     func drawLoadedLines(multiBoard: MultiplayerBoard) -> (MultiplayerBoard){
         loopThroughParseLines("X")
         loopThroughParseLines("O")
-        
         multiBoard.xLines = xLines
         multiBoard.oLines = oLines
         return multiBoard
@@ -114,13 +110,13 @@ class BoardSetupController: NSObject {
                 let path = createPathAtPoints(pointA, pointB: pointB)
                 if lineArray.count > 1{
                     if firstShapeNode.team == "N"{
-                        firstShapeNode = LineShapeNode(columnA: line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!, team: type, path: path, color: stroke)
+                        firstShapeNode = LineShapeNode(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
                     }else{
                         firstShapeNode.appendPath(path)
-                        firstShapeNode.addCoordinate(line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!)
+                        firstShapeNode.addCoordinate(line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!)
                     }
                 }else{
-                    firstShapeNode = LineShapeNode(columnA: line["cA"]!, rowA: line["rA"]!, columnB: line["cB"]!, rowB: line["rB"]!, team: type, path: path, color: stroke)
+                    firstShapeNode = LineShapeNode(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
                 }
             }
             appendLineArrays(firstShapeNode)
@@ -128,8 +124,8 @@ class BoardSetupController: NSObject {
     }
     
     private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
-        let pointA = pointForColumn(line["cA"]!, row: line["rA"]!, size: 1)
-        let pointB = pointForColumn(line["cB"]!, row: line["rB"]!, size: 1)
+        let pointA = pointForColumn(line[columnAKey]!, row: line[rowAKey]!, size: 1)
+        let pointB = pointForColumn(line[columnBKey]!, row: line[rowBKey]!, size: 1)
         return (pointA, pointB)
     }
     

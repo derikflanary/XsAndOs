@@ -118,21 +118,27 @@ class XGameController: NSObject {
                     print(error)
                     completion(false)
                 } else if let game = game {
-                    self.updateXlines(xLines, id: xId, completion: { (success: Bool) -> Void in
-                        if success{
-                            self.updateOlines(oLines, id: oId, completion: { (oSuccess: Bool) -> Void in
-                                if success{
-                                    game["xTurn"] = xTurn
-                                    game.saveInBackground()
-                                    completion(true)
-                                }else{
-                                    completion(false)
-                                }
-                            })
-                        }else{
-                            completion(false)
-                        }
-                    })
+                    if !xTurn{
+                        self.updateXlines(xLines, id: xId, completion: { (success: Bool) -> Void in
+                            if success{
+                                game["xTurn"] = xTurn
+                                game.saveInBackground()
+                                completion(true)
+                            }else{
+                                completion(false)
+                            }
+                        })
+                    }else{
+                        self.updateOlines(oLines, id: oId, completion: { (success: Bool) -> Void in
+                            if success{
+                                game["xTurn"] = xTurn
+                                game.saveInBackground()
+                                completion(true)
+                            }else{
+                                completion(false)
+                            }
+                        })
+                    }
                 }
             }
         }
@@ -185,7 +191,6 @@ class XGameController: NSObject {
                                 }
 
                             })
-                            completion(success)
                         }else{
                             completion(false)
                         }

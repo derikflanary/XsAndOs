@@ -96,25 +96,7 @@ class CurrentGamesScene: TableViewScene {
     func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
         var secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
         secondScene = BoardSetupController().updateNextSceneWithGame(game, secondScene: secondScene)
-//        secondScene = updateNextSceneWithGame(game, secondScene: secondScene)
         let transition = SKTransition.crossFadeWithDuration(1)
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
-    
-    func updateNextSceneWithGame(game: PFObject, secondScene: MultiplayerBoard) -> (MultiplayerBoard){
-        secondScene.xUser = game["xTeam"] as! PFUser
-        secondScene.oUser = game["oTeam"] as! PFUser
-        secondScene.gameID = game.objectId!
-        let xLines = game.objectForKey("xLines") as! PFObject
-        let oLines = game.objectForKey("oLines") as! PFObject
-        secondScene.xLinesParse = xLines["lines"] as! [[[String:Int]]]
-        secondScene.oLinesParse = oLines["lines"] as! [[[String:Int]]]
-        secondScene.xTurnLoad = game["xTurn"] as! Bool
-        secondScene.gameFinished = game["finished"] as! Bool
-        secondScene.xObjId = xLines.objectId!
-        secondScene.oObjId = oLines.objectId!
-        secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        return secondScene
-    }
-
 }

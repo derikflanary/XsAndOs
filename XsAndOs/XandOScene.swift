@@ -59,7 +59,7 @@ class XandOScene: SKScene {
     
     func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
         removeViews()
-        let transition = SKTransition.crossFadeWithDuration(1.5)
+        let transition = SKTransition.crossFadeWithDuration(1.0)
         self.scene?.view?.presentScene(secondScene, transition: transition)
     }
 

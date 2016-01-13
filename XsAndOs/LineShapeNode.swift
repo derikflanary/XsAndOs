@@ -88,10 +88,10 @@ class LineShapeNode: SKShapeNode {
     }
     
     func coordinateToDict(coordinate: Coordinate) -> [String: Int]{
-        let dict = ["cA": coordinate.columnA,
-            "rA": coordinate.rowA,
-            "cB": coordinate.columnB,
-            "rB": coordinate.rowB]
+        let dict = ["c": coordinate.columnA,
+            "r": coordinate.rowA,
+            "k": coordinate.columnB,
+            "w": coordinate.rowB]
         return dict
     }
 

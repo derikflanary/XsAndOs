@@ -17,8 +17,6 @@ class MultiplayerBoard: Board {
     var xUser = PFUser()
     var oUser = PFUser()
     var nameLabel = SKLabelNode()
-    var xLinesParse : [[[String:Int]]] = []
-    var oLinesParse : [[[String:Int]]] = []
     var gameFinished = Bool()
     var xObjId = String()
     var oObjId = String()
@@ -46,12 +44,10 @@ class MultiplayerBoard: Board {
 
         self.addChild(nameLabel)
         
-        if xLines.count > 0{
+        if xLines.count > 0 || xLines.count > 0{
             drawLines()
         }
-//        if xLinesParse.count > 0{
-//            drawLoadedLines()
-//        }
+
         turnLabel.runAction(nodeAction)
         if !xTurn{
             turnLabel.text = "O"
@@ -102,7 +98,6 @@ class MultiplayerBoard: Board {
         }
     }
     
-    
     override func switchTurns() {
         if xTurn{
             xTurn = false
@@ -123,6 +118,8 @@ class MultiplayerBoard: Board {
     private func saveGame(){
         backButton.userInteractionEnabled = false
         backButton.alpha = 0.5
+        print(xLines.count)
+        print(oLines.count)
         let (xLineDicts, oLineDicts) = convertLinesToDictionaries()
         XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId) { (success) -> Void in
             if success{
@@ -130,27 +127,26 @@ class MultiplayerBoard: Board {
                 let receiver = self.receiver()
                 if self.oLines.count > 0{
                     if self.gameFinished{
-                        PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
-                        self.mainPressed()
+//                        PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
+//                        self.mainPressed()
+                        self.backButton.userInteractionEnabled = true
+                        self.backButton.alpha = 1
                         return
                     }else{
                         PushNotificationController().pushNotificationTheirTurn(receiver, gameID: self.gameID)
                     }
-                    
                 }else{
                     PushNotificationController().pushNotificationNewGame(receiver, gameID: self.gameID)
                 }
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage()
                     self.moveMade = false
-                    self.undoButton.hidden = true
-//                    self.submitButton.removeFromSuperview()
+//                    self.undoButton.hidden = true
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
                 self.backButton.alpha = 1
                 self.showFailToSaveAlert()
-                
             }
         }
     }
@@ -168,11 +164,11 @@ class MultiplayerBoard: Board {
             self.backButton.userInteractionEnabled = true
             self.backButton.alpha = 1
         }
-        let delay = 2.0 * Double(NSEC_PER_SEC)
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-        dispatch_after(time, dispatch_get_main_queue(), {
-//            alertController.dismissViewControllerAnimated(true, completion: nil)
-        })
+//        let delay = 2.0 * Double(NSEC_PER_SEC)
+//        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+//        dispatch_after(time, dispatch_get_main_queue(), {
+////            alertController.dismissViewControllerAnimated(true, completion: nil)
+//        })
     }
     
     private func showFailToSaveAlert(){
@@ -237,8 +233,10 @@ class MultiplayerBoard: Board {
         if theGame.objectId == gameID{
             BoardSetupController().setupGame(theGame, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
                 if success{
-                    self.transitiontoLoadedBoard(secondScene)
-                    PFInstallation.currentInstallation().badge = 0
+                    dispatch_async(dispatch_get_main_queue(),{
+                        self.transitiontoLoadedBoard(secondScene)
+                        PFInstallation.currentInstallation().badge = 0
+                    })
                 }
             })
         }else{
@@ -248,6 +246,7 @@ class MultiplayerBoard: Board {
     
     override func removeViews() {
         super.removeViews()
+        stopActionsOnGameLayer(turnString())
         turnLabel.removeFromParent()
         nameLabel.removeFromParent()
 //        submitButton.removeFromSuperview()

@@ -182,10 +182,6 @@ class Board: XandOScene {
         animateNodes()
     }
     
-    func animateNodes(){
-        startActionForNodeType("X")
-    }
-    
     func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
         return CGPoint(
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
@@ -208,6 +204,10 @@ class Board: XandOScene {
 
     }
     
+    func animateNodes(){
+        startActionForNodeType("X")
+    }
+    
     func startActionForNodeType(type: String){
         gameLayer.enumerateChildNodesWithName(type, usingBlock: {
             node, stop in
@@ -220,13 +220,21 @@ class Board: XandOScene {
         gameLayer.enumerateChildNodesWithName(type, usingBlock: {
             node, stop in
             node.removeAllActions()
+            node.runAction(SKAction.scaleTo(1.0, duration: 0.5))
             // do something with node or stop
         })
-
     }
     
     func isXTurn(){
         xTurn = true
+    }
+    
+    func turnString() -> (String){
+        if xTurn{
+            return "X"
+        }else{
+            return "O"
+        }
     }
     
     func isCurrentUserTurn() ->Bool{
@@ -317,7 +325,6 @@ class Board: XandOScene {
         }
         for location: CGPoint in touchedLocations {
             let touchedNode = self.nodeAtPoint(location)
-            
             if selectedNode.name == "X" && touchedNode.name == "X"{
                 guard xTurn else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
@@ -338,7 +345,6 @@ class Board: XandOScene {
         }
         resetSelectedNode()
         touchedLocations.removeAll()
-
     }
     
     private func cleanUpMove(){
@@ -442,10 +448,12 @@ class Board: XandOScene {
             lineArray = oLines
             strokeColor = .blueColor()
         }
+        var lineToDelete = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line
         for lineShapeNode in lineArray{
-            (match, matchedLine) = loopThroughCoordinates(lineShapeNode, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
+            (match, matchedLine, lineToDelete) = loopThroughCoordinates(lineShapeNode, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
         }
+        deleteLineFromArrays(lineToDelete)
         //If new line doesn't touch an existing line, make a new line
         if !match{
             let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
@@ -456,13 +464,16 @@ class Board: XandOScene {
         undoButton.hidden = false
     }
     
-    func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode){
+    func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode, lineDelete: LineShapeNode){
+        var lineToDelete = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+        
         for coordinate in lineShapeNode.coordinates{
             if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
                 if match{
                     //If the new line connects two existing lines, add the second path to the first one
                     matchedLine.appendPath(lineShapeNode.path!)
                     matchedLine.addCoordinatesFromLine(lineShapeNode)
+                    lineToDelete = lineShapeNode
                     previousMoveDetails.oldLines.append(lineShapeNode)
                     previousMoveDetails.newAppendedLine = matchedLine
                     checkForWinner(matchedLine)
@@ -477,10 +488,11 @@ class Board: XandOScene {
                     matchedLine.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                     previousMoveDetails.newAppendedLine = matchedLine
                     checkForWinner(lineShapeNode)
+                    break
                 }
             }
         }
-        return (match, matchedLine)
+        return (match, matchedLine, lineToDelete)
     }
     
     func appendLineArrays(shapeNode : LineShapeNode){
@@ -488,6 +500,18 @@ class Board: XandOScene {
             xLines.append(shapeNode)
         }else{
             oLines.append(shapeNode)
+        }
+    }
+    
+    func deleteLineFromArrays(lineToDelete: LineShapeNode){
+        if lineToDelete.team == "X"{
+            if let index = xLines.indexOf(lineToDelete){
+                xLines.removeAtIndex(index)
+            }
+        }else if lineToDelete.team == "O"{
+            if let index = oLines.indexOf(lineToDelete){
+                oLines.removeAtIndex(index)
+            }
         }
     }
     
@@ -716,7 +740,7 @@ class Board: XandOScene {
     
     func transitionToMainScene(){
         let mainScene = GameScene(size: self.size)
-        let transition = SKTransition.crossFadeWithDuration(2.0)
+        let transition = SKTransition.fadeWithDuration(2.0)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
     }
