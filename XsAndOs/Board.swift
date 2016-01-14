@@ -17,10 +17,10 @@ enum LastMove {
 }
 
 struct PreviousMoveDetails {
-    var oldLines = [LineShapeNode]()
+    var oldLines = [LineShapeLayer]()
     var previousIntersection : LastIntersectionLocation
     var moveUnDid = false
-    var newAppendedLine : LineShapeNode
+    var newAppendedLine : LineShapeLayer
 }
 
 struct LastIntersectionLocation {
@@ -41,8 +41,8 @@ class Board: XandOScene {
     var selectedNode = SKSpriteNode()
     var secondSelectedNode = SKSpriteNode()
     var xTurn : Bool = true
-    var xLines = [LineShapeNode]()
-    var oLines = [LineShapeNode]()
+    var xLines = [LineShapeLayer]()
+    var oLines = [LineShapeLayer]()
     var movingTouches = Set<UITouch>()
     var touchedLocations = [CGPoint]()
     var turnLabel = SKLabelNode()
@@ -56,7 +56,7 @@ class Board: XandOScene {
     let backButton = UIButton()
     var nodeAction = SKAction()
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
-    var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
+    var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -436,57 +436,64 @@ class Board: XandOScene {
         addChild(potentialShapeNode)
     }
     
-    func drawLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
+    func drawLineBetweenPoints(var pointA: CGPoint,var pointB: CGPoint, type: String){
         let (columnA, rowA, columnB, rowB) = calculateColumnsAndRows(pointA, pointB: pointB)
         var match = false
-        var matchedLine = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-        let path = createLineAtPoints(pointA, pointB: pointB)
+        var matchedLine = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+        pointA = convertPointToView(pointA)
+        pointB = convertPointToView(pointB)
+        let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
+        
         var lineArray = xLines
-        var strokeColor = UIColor.redColor()
+        var strokeColor = UIColor.redColor().CGColor
         if type == "O"{
             lineArray = oLines
-            strokeColor = .blueColor()
+            strokeColor = UIColor.blueColor().CGColor
         }
-        var lineToDelete = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+        var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line
-        for lineShapeNode in lineArray{
-            (match, matchedLine, lineToDelete) = loopThroughCoordinates(lineShapeNode, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
+        for lineShapeLayer in lineArray{
+            (match, matchedLine, lineToDelete) = loopThroughCoordinates(lineShapeLayer, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
         }
+        
         deleteLineFromArrays(lineToDelete)
         //If new line doesn't touch an existing line, make a new line
         if !match{
-            let shapeNode = LineShapeNode(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
-            addChild(shapeNode)
+            let shapeNode = LineShapeLayer(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
+            shapeNode.strokeEnd = 0.0
+            view?.layer.addSublayer(shapeNode)
+            animatePath(shapeNode)
             appendLineArrays(shapeNode)
             lastMove = .SingleLine
         }
         undoButton.hidden = false
     }
     
-    func loopThroughCoordinates(lineShapeNode: LineShapeNode, var matchedLine: LineShapeNode, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeNode, lineDelete: LineShapeNode){
-        var lineToDelete = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+    func loopThroughCoordinates(lineShapeLayer: LineShapeLayer, var matchedLine: LineShapeLayer, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeLayer, lineDelete: LineShapeLayer){
+        var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         
-        for coordinate in lineShapeNode.coordinates{
+        for coordinate in lineShapeLayer.coordinates{
             if coordinate.columnA == columnA && coordinate.rowA == rowA || coordinate.columnA == columnB && coordinate.rowA == rowB || coordinate.columnB == columnA && coordinate.rowB == rowA || coordinate.columnB == columnB && coordinate.rowB == rowB {
                 if match{
                     //If the new line connects two existing lines, add the second path to the first one
-                    matchedLine.appendPath(lineShapeNode.path!)
-                    matchedLine.addCoordinatesFromLine(lineShapeNode)
-                    lineToDelete = lineShapeNode
-                    previousMoveDetails.oldLines.append(lineShapeNode)
+                    matchedLine.appendPath(lineShapeLayer.path!)
+                    matchedLine.addCoordinatesFromLine(lineShapeLayer)
+                    lineToDelete = lineShapeLayer
+                    previousMoveDetails.oldLines.append(lineShapeLayer)
                     previousMoveDetails.newAppendedLine = matchedLine
                     checkForWinner(matchedLine)
                     break
                 }else{
                     //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
                     match = true
-                    createLineCopy(lineShapeNode)
+                    createLineCopy(lineShapeLayer)
                     lastMove = .AppendedLine
-                    matchedLine = lineShapeNode
+                    matchedLine = lineShapeLayer
+//                    animateLineWithPath(path, line: matchedLine)
                     matchedLine.appendPath(path)
                     matchedLine.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                     previousMoveDetails.newAppendedLine = matchedLine
-                    checkForWinner(lineShapeNode)
+                    checkForWinner(lineShapeLayer)
                     break
                 }
             }
@@ -494,7 +501,7 @@ class Board: XandOScene {
         return (match, matchedLine, lineToDelete)
     }
     
-    func appendLineArrays(shapeNode : LineShapeNode){
+    func appendLineArrays(shapeNode : LineShapeLayer){
         if shapeNode.team == "X"{
             xLines.append(shapeNode)
         }else{
@@ -502,7 +509,7 @@ class Board: XandOScene {
         }
     }
     
-    func deleteLineFromArrays(lineToDelete: LineShapeNode){
+    func deleteLineFromArrays(lineToDelete: LineShapeLayer){
         if lineToDelete.team == "X"{
             if let index = xLines.indexOf(lineToDelete){
                 xLines.removeAtIndex(index)
@@ -521,15 +528,39 @@ class Board: XandOScene {
         return ref
     }
     
-    func createLineCopy(lineShapeNode: LineShapeNode){
-        let line = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-        line.copyLineValues(lineShapeNode)
+    func createLineCopy(lineShapeLayer: LineShapeLayer) -> LineShapeLayer{
+        let line = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+        line.copyLineValues(lineShapeLayer)
         previousMoveDetails.oldLines.append(line)
+        return line
+    }
+    
+    func animatePath(line: LineShapeLayer){
+        let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        pathAnimation.duration = 0.25
+        pathAnimation.fromValue = 0.0
+        pathAnimation.toValue = 1.0
+        pathAnimation.fillMode = kCAFillModeBoth // keep to value after finishing
+        pathAnimation.removedOnCompletion = false
+        line.addAnimation(pathAnimation, forKey: "strokeEndAnimation")
+    }
+    
+    func animateLineWithPath(path: CGPathRef, line: LineShapeLayer){
+        let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        pathAnimation.duration = 0.25
+        let bez = UIBezierPath(CGPath: path)
+        pathAnimation.fromValue = UIBezierPath(CGPath: line.path!)
+        pathAnimation.toValue = bez
+        pathAnimation.fillMode = kCAFillModeBoth // keep to value after finishing
+        pathAnimation.removedOnCompletion = false
+        line.addAnimation(pathAnimation, forKey: "strokeEndAnimation")
     }
     
     
+    
+    
 //WINNING FUNCTIONS
-    func checkForWinner(line: LineShapeNode){
+    func checkForWinner(line: LineShapeLayer){
         //check each coordinate on the newly appended line to see if it touches both ends of the board
         if line.team == "X"{
             loopCoordinatesForXWinner(line)
@@ -538,7 +569,7 @@ class Board: XandOScene {
         }
     }
     
-    func loopCoordinatesForXWinner(line: LineShapeNode){
+    func loopCoordinatesForXWinner(line: LineShapeLayer){
         var edgeOne = false
         var edgeTwo = false
         for coordinate in line.coordinates{
@@ -555,7 +586,7 @@ class Board: XandOScene {
         }
     }
     
-    func loopCoordinatesForOWinner(line: LineShapeNode){
+    func loopCoordinatesForOWinner(line: LineShapeLayer){
         var edgeOne = false
         var edgeTwo = false
         for coordinate in line.coordinates{
@@ -598,7 +629,7 @@ class Board: XandOScene {
         var lineArray = lineArrayForLastMove()
         guard lineArray.count > 0 else{return}
         let lastLine = lineArray.last
-        lastLine?.removeFromParent()
+        lastLine?.removeFromSuperlayer()
         lineArray.removeLast()
         removeLastLineFromArray()
         resetIntersection()
@@ -623,11 +654,11 @@ class Board: XandOScene {
         var lineArray = lineArrayForLastMove()
         let index = lineArray.indexOf(previousMoveDetails.newAppendedLine)
         let lineToRemove = lineArray[index!]
-        lineToRemove.removeFromParent()
+        lineToRemove.removeFromSuperlayer()
         lineArray.removeAtIndex(index!)
         let lineToAdd = previousMoveDetails.oldLines[0]
         lineArray.append(lineToAdd)
-        addChild(lineToAdd)
+        view?.layer.addSublayer(lineToAdd)
         if xTurn{
             oLines = lineArray
         }else{
@@ -638,7 +669,7 @@ class Board: XandOScene {
         switchTurns()
     }
     
-    private func lineArrayForLastMove() -> [LineShapeNode]{
+    private func lineArrayForLastMove() -> [LineShapeLayer]{
         if xTurn{
             return oLines
         }else{
@@ -654,16 +685,7 @@ class Board: XandOScene {
     
     func resetBoard(){
         //delete all objects on the board
-        self.removeAllChildren()
-        self.removeAllActions()
-        nodeX.removeAll()
-        nodeO.removeAll()
-        xLines.removeAll()
-        oLines.removeAll()
-        grid.removeArray()
-        self.view?.viewWithTag(10)?.removeFromSuperview()
-        self.view?.viewWithTag(20)?.removeFromSuperview()
-        undoButton.removeFromSuperview()
+        removeViews()
         tranistionToNewBoard()
     }
     
@@ -720,8 +742,21 @@ class Board: XandOScene {
     }
     
     override func removeViews(){
-        self.view?.viewWithTag(10)?.removeFromSuperview()
-        self.view?.viewWithTag(20)?.removeFromSuperview()
+        self.removeAllChildren()
+        self.removeAllActions()
+        for shape in xLines{
+            shape.removeFromSuperlayer()
+        }
+        for shape in oLines{
+            shape.removeFromSuperlayer()
+        }
+        nodeX.removeAll()
+        nodeO.removeAll()
+        xLines.removeAll()
+        oLines.removeAll()
+        grid.removeArray()
+        restartButton.removeFromSuperview()
+        backButton.removeFromSuperview()
         undoButton.removeFromSuperview()
     }
     
@@ -732,9 +767,8 @@ class Board: XandOScene {
     }
     
     func mainPressed(){
-        transitionToMainScene()
-        scene?.removeAllChildren()
         removeViews()
+        transitionToMainScene()
     }
     
     func transitionToMainScene(){

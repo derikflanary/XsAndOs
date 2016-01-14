@@ -10,6 +10,11 @@ import Foundation
 import Parse
 import SpriteKit
 
+let columnAKey = "c"
+let rowAKey = "r"
+let columnBKey = "k"
+let rowBKey = "w"
+
 class MultiplayerBoard: Board {
     
     var xTurnLoad = Bool()
@@ -22,7 +27,10 @@ class MultiplayerBoard: Board {
     var oObjId = String()
     var submitButton = UIButton()
     var moveMade = Bool()
-
+    
+    var xLinesParse : [[[String:Int]]] = []
+    var oLinesParse : [[[String:Int]]] = []
+    
     override func startGame() {
         xTurn = xTurnLoad
         super.startGame()
@@ -44,10 +52,13 @@ class MultiplayerBoard: Board {
 
         self.addChild(nameLabel)
         
+        if xLinesParse.count > 0 || oLinesParse.count > 0{
+            drawLoadedLines()
+        }
+        
         if xLines.count > 0 || xLines.count > 0{
             drawLines()
         }
-
         turnLabel.runAction(nodeAction)
         if !xTurn{
             turnLabel.text = "O"
@@ -73,13 +84,15 @@ class MultiplayerBoard: Board {
     func drawLines(){
         loopThroughLines("X")
         loopThroughLines("O")
+        markIntersections("X")
+        markIntersections("O")
     }
     
     func loopThroughLines(type: String){
         var linesArray = xLines
         if type == "O" {linesArray = oLines}
         for line in linesArray{
-            addChild(line)
+            view?.layer.addSublayer(line)
         }
     }
     
@@ -264,6 +277,66 @@ class MultiplayerBoard: Board {
 //        submitButton.removeFromSuperview()
         super.undoLastMove()
     }
+    
+    
+    func drawLoadedLines(){
+        print(xLinesParse)
+        print(oLinesParse)
+        loopThroughParseLines("X")
+        loopThroughParseLines("O")
+    }
+    
+    func loopThroughParseLines(type: String){
+        var parseLines = xLinesParse
+        var stroke = UIColor.redColor().CGColor
+        if type == "O" {parseLines = oLinesParse; stroke = UIColor.blueColor().CGColor}
+        for lineArray in parseLines{
+            var firstShapeNode = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+            for line in lineArray{
+                var (pointA, pointB) = pointsFromDictionary(line)
+                pointA = convertPointToView(pointA)
+                pointB = convertPointToView(pointB)
+                let path = firstShapeNode.createPath(pointA: pointA, pointB: pointB)
+                if lineArray.count > 1{
+                    if firstShapeNode.team == "N"{
+                        firstShapeNode = LineShapeLayer(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
+                    }else{
+                        firstShapeNode.appendPath(path)
+                        firstShapeNode.addCoordinate(line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!)
+                    }
+                }else{
+                    firstShapeNode = LineShapeLayer(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
+                }
+            }
+            appendLineArrays(firstShapeNode)
+//            view?.layer.addSublayer(firstShapeNode)
+        }
+    }
+    
+    private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
+        let pointA = pointForColumn(line[columnAKey]!, row: line[rowAKey]!, size: 1)
+        let pointB = pointForColumn(line[columnBKey]!, row: line[rowBKey]!, size: 1)
+        return (pointA, pointB)
+    }
+    
+    func markIntersections(type: String){
+        var lineArray = xLines
+        if type == "O"{
+            lineArray = oLines
+        }
+        for line in lineArray{
+            for coordinate in line.coordinates{
+                let interCol = (coordinate.columnA + coordinate.columnB) / 2
+                let interRow = (coordinate.rowA + coordinate.rowB) / 2
+                let intersection = gridItemAtColumn(interCol, row: interRow)
+                if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
+                    intersection?.nodePos.ptWho = type
+                }
+                
+            }
+        }
+    }
+
 }
 
 

@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct Coord {
+struct Coordinate {
     var columnA : Int
     var rowA : Int
     var columnB : Int
@@ -47,18 +47,38 @@ class LineShapeLayer : CAShapeLayer {
         coordinates.append(coordinate)
     }
     
-    func addCoordinatesFromLine(lineShapeNode: LineShapeNode){
-        for coordinate in lineShapeNode.coordinates{
+    func addCoordinatesFromLine(lineShapeLayer: LineShapeLayer){
+        for coordinate in lineShapeLayer.coordinates{
             self.addCoordinate(coordinate.columnA, rowA: coordinate.rowA, columnB: coordinate.columnB, rowB: coordinate.rowB)
         }
     }
     
     func setShapeAspects(newPath: CGPathRef){
         path = newPath
+        lineJoin = kCALineJoinRound
+        lineCap = kCALineCapRound
         name = "line"
+        fillColor = nil
+        strokeEnd = 1.0
         lineWidth = 4
         zPosition = 0
 //        userInteractionEnabled = false
+    }
+    
+    func createPath(pointA pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
+        let newPath = UIBezierPath()
+        newPath.moveToPoint(pointA)
+        newPath.addLineToPoint(pointB)
+        return newPath.CGPath
+    }
+    
+    func appendPath(newPath: CGPathRef){
+        if path != nil{
+            let bez = UIBezierPath(CGPath: path!)
+            let bez2 = UIBezierPath(CGPath: newPath)
+            bez.appendPath(bez2)
+            path = bez.CGPath
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -81,14 +101,12 @@ class LineShapeLayer : CAShapeLayer {
         return dict
     }
     
-    func createPath(pointA pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
-        let newPath = UIBezierPath()
-        newPath.moveToPoint(pointA)
-        newPath.addLineToPoint(pointB)
-        return newPath.CGPath
+    func copyLineValues(lineShapeLayer: LineShapeLayer){
+        team = lineShapeLayer.team
+        coordinates = lineShapeLayer.coordinates
+        setShapeAspects(lineShapeLayer.path!)
+        strokeColor = lineShapeLayer.strokeColor
     }
     
-
-
 
 }

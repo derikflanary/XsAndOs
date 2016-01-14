@@ -9,13 +9,6 @@
 import Foundation
 import SpriteKit
 
-struct Coordinate {
-    var columnA : Int
-    var rowA : Int
-    var columnB : Int
-    var rowB : Int
-}
-
 class LineShapeNode: SKShapeNode {
     
     var team : String?
@@ -72,6 +65,7 @@ class LineShapeNode: SKShapeNode {
         name = "line"
         lineWidth = 4
         zPosition = 0
+        
         userInteractionEnabled = false
     }
 

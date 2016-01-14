@@ -16,7 +16,7 @@ class XGameController: NSObject {
         
         static let sharedInstance = Singleton()
 
-        func createNewGame(xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, String, String, String) -> Void){
+        func createNewGame(xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, PFObject?, String, String, String) -> Void){
             let newGame = PFObject(className: "XGame")
             newGame["rows"] = rows
             newGame["dim"] = dim
@@ -35,13 +35,13 @@ class XGameController: NSObject {
                                 if success{
                                     newGame.fetchInBackgroundWithBlock({ (game: PFObject?, error: NSError?) -> Void in
                                         if error == nil{
-                                            completion(true, (game?.objectId)!, xLines.objectId!, oLines.objectId!)
+                                            completion(true,game, (game?.objectId)!, xLines.objectId!, oLines.objectId!)
                                         }else{
-                                            completion(false, "", "", "")
+                                            completion(false, nil, "", "", "")
                                         }
                                     })
                                 }else{
-                                    completion(false, "", "", "")
+                                    completion(false, nil, "", "", "")
                                 }
                             }
 

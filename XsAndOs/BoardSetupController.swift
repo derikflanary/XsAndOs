@@ -12,16 +12,6 @@ import SpriteKit
 
 class BoardSetupController: NSObject {
     
-    let columnAKey = "c"
-    let rowAKey = "r"
-    let columnBKey = "k"
-    let rowBKey = "w"
-    var xLinesParse : [[[String:Int]]] = []
-    var oLinesParse : [[[String:Int]]] = []
-    var xLines = [LineShapeNode]()
-    var oLines = [LineShapeNode]()
-    var xIsopin : CGFloat?
-    
     func calculateDim(var rows : Int) -> Int{
         var dim = 9
         if rows < 5{
@@ -42,19 +32,18 @@ class BoardSetupController: NSObject {
     }
 //Load Board from Current Games//
     func updateNextSceneWithGame(game: PFObject, var secondScene: MultiplayerBoard) -> MultiplayerBoard{
-        let xLines = game.objectForKey("xLines") as! PFObject
-        let oLines = game.objectForKey("oLines") as! PFObject
         secondScene = passGameDataToScene(game, secondScene: secondScene)
-        secondScene = unLoadParseLines(xLines, theOLines: oLines, secondScene: secondScene)
+        secondScene = unLoadParseLines(game, secondScene: secondScene)
         return secondScene
     }
     
-    func unLoadParseLines(theXLines: PFObject, theOLines: PFObject, var secondScene: MultiplayerBoard) -> MultiplayerBoard{
-        xLinesParse = theXLines["lines"] as! [[[String:Int]]]
-        oLinesParse = theOLines["lines"] as! [[[String:Int]]]
-        secondScene.xObjId = theXLines.objectId!
-        secondScene.oObjId = theXLines.objectId!
-        secondScene = drawLoadedLines(secondScene)
+    func unLoadParseLines(game: PFObject, secondScene: MultiplayerBoard) -> MultiplayerBoard{
+        let xLines = game.objectForKey("xLines") as! PFObject
+        let oLines = game.objectForKey("oLines") as! PFObject
+        secondScene.xLinesParse = xLines["lines"] as! [[[String:Int]]]
+        secondScene.oLinesParse = oLines["lines"] as! [[[String:Int]]]
+        secondScene.xObjId = xLines.objectId!
+        secondScene.oObjId = oLines.objectId!
         return secondScene
     }
     
@@ -65,8 +54,6 @@ class BoardSetupController: NSObject {
         secondScene.xTurnLoad = game["xTurn"] as! Bool
         secondScene.gameFinished = game["finished"] as! Bool
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        xIsopin = secondScene.size.width/CGFloat(secondScene.dim)
-        
         return secondScene
         }
 
@@ -84,70 +71,76 @@ class BoardSetupController: NSObject {
                     var secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows)
                     
                     secondScene = self.passGameDataToScene(game, secondScene: secondScene)
-                    secondScene = self.unLoadParseLines(theXlines!, theOLines: theOLines!, secondScene: secondScene)
+                    secondScene.xLinesParse = theXlines!["lines"] as! [[[String:Int]]]
+                    secondScene.oLinesParse = theOLines!["lines"] as! [[[String:Int]]]
+                    secondScene.xObjId = xLines.objectId!
+                    secondScene.oObjId = oLines.objectId!
                     completion(true, secondScene)
                 }
             })
         }
     }
     
-    func drawLoadedLines(multiBoard: MultiplayerBoard) -> MultiplayerBoard{
-        loopThroughParseLines("X")
-        loopThroughParseLines("O")
-        multiBoard.xLines = xLines
-        multiBoard.oLines = oLines
-        return multiBoard
-    }
-    
-    func loopThroughParseLines(type: String){
-        var parseLines = xLinesParse
-        var stroke = SKColor.redColor()
-        if type == "O" {parseLines = oLinesParse; stroke = SKColor.blueColor()}
-        for lineArray in parseLines{
-            var firstShapeNode = LineShapeNode(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-            for line in lineArray{
-                let (pointA, pointB) = pointsFromDictionary(line)
-                let path = createPathAtPoints(pointA, pointB: pointB)
-                if lineArray.count > 1{
-                    if firstShapeNode.team == "N"{
-                        firstShapeNode = LineShapeNode(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
-                    }else{
-                        firstShapeNode.appendPath(path)
-                        firstShapeNode.addCoordinate(line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!)
-                    }
-                }else{
-                    firstShapeNode = LineShapeNode(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
-                }
-            }
-            appendLineArrays(firstShapeNode)
-        }
-    }
-    
-    private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
-        let pointA = pointForColumn(line[columnAKey]!, row: line[rowAKey]!, size: 1)
-        let pointB = pointForColumn(line[columnBKey]!, row: line[rowBKey]!, size: 1)
-        return (pointA, pointB)
-    }
-    
-    func appendLineArrays(shapeNode : LineShapeNode){
-        if shapeNode.team == "X"{
-            xLines.append(shapeNode)
-        }else{
-            oLines.append(shapeNode)
-        }
-    }
-    
-    func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
-        return CGPoint(
-            x: CGFloat(column) * xIsopin! + xIsopin!/2,
-            y: CGFloat(row) * xIsopin! + bottomPadding)
-    }
-
-    func createPathAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
-        let ref = CGPathCreateMutable()
-        CGPathMoveToPoint(ref, nil, pointA.x, pointA.y)
-        CGPathAddLineToPoint(ref, nil, pointB.x, pointB.y)
-        return ref
-    }
-    
+//    func drawLoadedLines(multiBoard: MultiplayerBoard) -> MultiplayerBoard{
+//        xIsopin = multiBoard.xIsopin
+//        loopThroughParseLines("X", scene: multiBoard)
+//        loopThroughParseLines("O", scene: multiBoard)
+//        multiBoard.xLines = xLines
+//        multiBoard.oLines = oLines
+//        return multiBoard
+//    }
+//    
+//    func loopThroughParseLines(type: String, scene: MultiplayerBoard){
+//        var parseLines = xLinesParse
+//        var stroke = UIColor.redColor().CGColor
+//        if type == "O" {parseLines = oLinesParse; stroke = UIColor.blueColor().CGColor}
+//        for lineArray in parseLines{
+//            var firstShapeNode = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+//            for line in lineArray{
+//                var (pointA, pointB) = pointsFromDictionary(line)
+//                pointA = scene.convertPointToView(pointA)
+//                pointB = scene.convertPointToView(pointB)
+//                let path = createPathAtPoints(pointA, pointB: pointB)
+//                if lineArray.count > 1{
+//                    if firstShapeNode.team == "N"{
+//                        firstShapeNode = LineShapeLayer(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
+//                    }else{
+//                        firstShapeNode.appendPath(path)
+//                        firstShapeNode.addCoordinate(line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!)
+//                    }
+//                }else{
+//                    firstShapeNode = LineShapeLayer(columnA: line[columnAKey]!, rowA: line[rowAKey]!, columnB: line[columnBKey]!, rowB: line[rowBKey]!, team: type, path: path, color: stroke)
+//                }
+//            }
+//            appendLineArrays(firstShapeNode)
+//        }
+//    }
+//    
+//    private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
+//        let pointA = pointForColumn(line[columnAKey]!, row: line[rowAKey]!, size: 1)
+//        let pointB = pointForColumn(line[columnBKey]!, row: line[rowBKey]!, size: 1)
+//        return (pointA, pointB)
+//    }
+//    
+//    func appendLineArrays(shapeNode : LineShapeLayer){
+//        if shapeNode.team == "X"{
+//            xLines.append(shapeNode)
+//        }else{
+//            oLines.append(shapeNode)
+//        }
+//    }
+//    
+//    func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
+//        return CGPoint(
+//            x: CGFloat(column) * xIsopin! + xIsopin!/2,
+//            y: CGFloat(row) * xIsopin! + bottomPadding)
+//    }
+//
+//    func createPathAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
+//        let ref = CGPathCreateMutable()
+//        CGPathMoveToPoint(ref, nil, pointA.x, pointA.y)
+//        CGPathAddLineToPoint(ref, nil, pointB.x, pointB.y)
+//        return ref
+//    }
+//    
 }

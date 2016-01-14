@@ -90,14 +90,15 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
     }
     
     private func transitionToBoardScene(dim : Int, rows : Int){
-        let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
-        secondScene.xUser = PFUser.currentUser()!
-        secondScene.oUser = opponent
-        secondScene.xTurnLoad = true
-        secondScene.scaleMode = SKSceneScaleMode.AspectFill
-        let transition = SKTransition.crossFadeWithDuration(1)
-        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, id, xId, oId) -> Void in
+        
+        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, game, id, xId, oId) -> Void in
             if success{
+                let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows)
+                secondScene.xUser = PFUser.currentUser()!
+                secondScene.oUser = self.opponent
+                secondScene.xTurnLoad = true
+                secondScene.scaleMode = SKSceneScaleMode.AspectFill
+                let transition = SKTransition.crossFadeWithDuration(1)
                 secondScene.gameID = id
                 secondScene.xObjId = xId
                 secondScene.oObjId = oId
