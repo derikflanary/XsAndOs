@@ -80,6 +80,14 @@ class LineShapeLayer : CAShapeLayer {
             "w": coordinate.rowB]
         return dict
     }
+    
+    func createPath(pointA pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
+        let newPath = UIBezierPath()
+        newPath.moveToPoint(pointA)
+        newPath.addLineToPoint(pointB)
+        return newPath.CGPath
+    }
+    
 
 
 

@@ -200,6 +200,14 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
+		EE534B801C481B8F0085E806 /* Dot Game */ = {
+			isa = PBXGroup;
+			children = (
+				EE534B7C1C45C64F0085E806 /* DotsScene.swift */,
+			);
+			name = "Dot Game";
+			sourceTree = "<group>";
+		};
 		EE5E81741BDEC1410004424F = {
 			isa = PBXGroup;
 			children = (
@@ -234,7 +242,7 @@
 				EE2FB4E11C3BA96000C91D68 /* CurrentGamesScene.swift */,
 				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
 				EE2FB4DF1C3BA7F800C91D68 /* TableViewScene.swift */,
-				EE534B7C1C45C64F0085E806 /* DotsScene.swift */,
+				EE534B801C481B8F0085E806 /* Dot Game */,
 				EE2FB4D61C3AED0000C91D68 /* Models */,
 				EE534B7B1C45C6290085E806 /* Controllers */,
 				EE2FB4D01C38A4F300C91D68 /* JTSplashView.swift */,
