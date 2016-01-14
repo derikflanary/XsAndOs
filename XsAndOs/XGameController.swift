@@ -228,7 +228,7 @@ class XGameController: NSObject {
             }
         }
         
-        func dayAsString() -> (String){
+        func dayAsString() -> String{
             let date = NSDate()
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MMM d" //format style. Browse online to get a format that fits your needs.

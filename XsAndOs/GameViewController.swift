@@ -11,26 +11,27 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
-    var scene : GameScene!
-//    var scene : DotsScene!
+//    var scene : GameScene!
+    var scene : DotsScene!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-            // Configure the view.
-            let skView = self.view as! SKView
-            skView.showsFPS = true
-            skView.showsNodeCount = true
-            
-            /* Sprite Kit applies additional optimizations to improve rendering performance */
-            skView.ignoresSiblingOrder = true
-            
-            /* Set the scale mode to scale to fit the window */
-            scene = GameScene(size: skView.bounds.size)
-//            scene = DotsScene(theDim: 10, size: skView.bounds.size)
-            scene.scaleMode = .AspectFill
-            
-            skView.presentScene(scene)
+        // Configure the view.
+        let skView = self.view as! SKView
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        
+        /* Sprite Kit applies additional optimizations to improve rendering performance */
+        skView.ignoresSiblingOrder = true
+        
+        /* Set the scale mode to scale to fit the window */
+//            scene = GameScene(size: skView.bounds.size)
+        scene = DotsScene(theDim: 19, size: skView.bounds.size)
+        scene.scaleMode = .AspectFill
+        
+        skView.presentScene(scene)
+        
         
     }
 

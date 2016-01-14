@@ -17,12 +17,12 @@ class DotsScene: XandOScene {
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
     var grid : Array2D<Nodes>
+    var touchedNode = SKNode()
     
     init(theDim: Int, size: CGSize) {
         dim = theDim
         grid = Array2D(columns: dim, rows: dim)
         super.init(size: size)
-        
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -32,27 +32,31 @@ class DotsScene: XandOScene {
         super.didMoveToView(view)
         self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
+        gameLayer.name = "gameLayer"
         addChild(gameLayer)
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
         buildArrayOfNodes()
-
     }
     
     //DRAWING THE BOARD
     func buildArrayOfNodes(){
         var set = Set<Nodes>()
         
-        for var theRow = 0; theRow < dim; ++theRow{
-            for var column = 0; column < dim; ++column{
+        for  theRow in 0...dim - 1{
+            for column in 0...dim - 1 {
                 let node = Nodes(column: column, row: theRow, theNodeType: NodeType.Empty)
+                if theRow % 2 != 0 || column % 2 != 0{
+                    node.nodeType = .Intersection
+                    node.sprite?.name = "Intersection"
+                }else{
+                    node.nodeType = NodeType.Dot
+                    node.sprite = SKSpriteNode(imageNamed: "Oval")
+                    node.sprite?.name = "Dot"
+                }
                 
-                node.nodeType = NodeType.Dot
-                node.sprite = SKSpriteNode(imageNamed: "o")
-                node.sprite?.name = "Dot"
                 grid[column, theRow] = node
                 set.insert(node)
-                
             }
         }
         paintDots(set)
@@ -69,7 +73,7 @@ class DotsScene: XandOScene {
                 if dim > 11{
                     sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
                 }else{
-                    sprite?.size = CGSizeMake(xIsopin!/1.5, yIsopin!/1.5)
+                    sprite?.size = CGSizeMake(xIsopin!/2.5, yIsopin!/2.5)
                 }
                 sprite?.anchorPoint = CGPointMake(0.5, 0.5)
                 sprite?.zPosition = 2
@@ -97,6 +101,25 @@ class DotsScene: XandOScene {
         assert(column >= 0 && column <= dim)
         assert(row >= 0 && row <= dim)
         return grid[column, row]
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            let location = touch.locationInNode(self.gameLayer)
+            touchedNode = nodeAtPoint(location)
+            if touchedNode.name != "gameLayer"{
+                touchedNode.setScale(1.5)
+            }
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            let location = touch.locationInNode(self.gameLayer)
+//            let touchedNode = nodeAtPoint(location)
+
+        }
+        touchedNode.setScale(1.0)
     }
     
 }

@@ -30,7 +30,6 @@ class Nodes: Hashable  {
     var sprite :SKSpriteNode?
     
     init(column: Int, row: Int, theNodeType: NodeType) {
-        
         self.nodePos.column = column
         self.nodePos.row = row
         self.nodeType = theNodeType

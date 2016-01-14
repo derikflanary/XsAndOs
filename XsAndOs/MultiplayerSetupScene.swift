@@ -77,7 +77,6 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
         print("new game pressed")
         var dim : Int
         var rows = Int(sizeField.text!)
-        
         if rows == nil{
             dim = 9
             rows = 5

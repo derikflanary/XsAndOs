@@ -194,7 +194,7 @@ class MultiplayerBoard: Board {
         return (xlineDicts, olineDicts)
     }
     
-    private func receiver() -> (String){
+    private func receiver() -> String{
         var receiver = self.oUser.username
         if self.xTurn{
             receiver = self.xUser.username

@@ -133,10 +133,9 @@ class Board: XandOScene {
     func buildArrayOfNodes(){
         var set = Set<Nodes>()
         
-        for  var theRow = 0; theRow < dim; ++theRow{
-            for var column = 0; column < dim; ++column{
+        for  theRow in 0...dim - 1{
+            for column in 0...dim - 1 {
                 let node = Nodes(column: column, row: theRow, theNodeType: NodeType.Empty)
-               
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
                     node.nodeType = NodeType.O
                     node.sprite = SKSpriteNode(imageNamed: "o")
@@ -229,7 +228,7 @@ class Board: XandOScene {
         xTurn = true
     }
     
-    func turnString() -> (String){
+    func turnString() -> String{
         if xTurn{
             return "X"
         }else{
@@ -639,7 +638,7 @@ class Board: XandOScene {
         switchTurns()
     }
     
-    private func lineArrayForLastMove() -> ([LineShapeNode]){
+    private func lineArrayForLastMove() -> [LineShapeNode]{
         if xTurn{
             return oLines
         }else{

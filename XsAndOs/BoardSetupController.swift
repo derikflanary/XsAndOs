@@ -41,7 +41,7 @@ class BoardSetupController: NSObject {
         return dim
     }
 //Load Board from Current Games//
-    func updateNextSceneWithGame(game: PFObject, var secondScene: MultiplayerBoard) -> (MultiplayerBoard){
+    func updateNextSceneWithGame(game: PFObject, var secondScene: MultiplayerBoard) -> MultiplayerBoard{
         let xLines = game.objectForKey("xLines") as! PFObject
         let oLines = game.objectForKey("oLines") as! PFObject
         secondScene = passGameDataToScene(game, secondScene: secondScene)
@@ -49,7 +49,7 @@ class BoardSetupController: NSObject {
         return secondScene
     }
     
-    func unLoadParseLines(theXLines: PFObject, theOLines: PFObject, var secondScene: MultiplayerBoard) -> (MultiplayerBoard){
+    func unLoadParseLines(theXLines: PFObject, theOLines: PFObject, var secondScene: MultiplayerBoard) -> MultiplayerBoard{
         xLinesParse = theXLines["lines"] as! [[[String:Int]]]
         oLinesParse = theOLines["lines"] as! [[[String:Int]]]
         secondScene.xObjId = theXLines.objectId!
@@ -58,7 +58,7 @@ class BoardSetupController: NSObject {
         return secondScene
     }
     
-    func passGameDataToScene(game: PFObject, secondScene: MultiplayerBoard) -> (MultiplayerBoard){
+    func passGameDataToScene(game: PFObject, secondScene: MultiplayerBoard) -> MultiplayerBoard{
         secondScene.xUser = game["xTeam"] as! PFUser
         secondScene.oUser = game["oTeam"] as! PFUser
         secondScene.gameID = game.objectId!
@@ -91,7 +91,7 @@ class BoardSetupController: NSObject {
         }
     }
     
-    func drawLoadedLines(multiBoard: MultiplayerBoard) -> (MultiplayerBoard){
+    func drawLoadedLines(multiBoard: MultiplayerBoard) -> MultiplayerBoard{
         loopThroughParseLines("X")
         loopThroughParseLines("O")
         multiBoard.xLines = xLines
