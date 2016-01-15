@@ -77,7 +77,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 XGameController.Singleton.sharedInstance.fetchGameForId(gameId, completion: { (success: Bool, game: PFObject) -> Void in
                     if success{
                         if let newGame = userInfo["newGame"]{
-                            NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game, "newGame": newGame])
+                            if newGame as! String == "Y"{
+                                NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game, "newGame": newGame])
+                            }else{
+                                NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
+                            }
                         }else{
                             NSNotificationCenter.defaultCenter().postNotificationName("LoadGame", object: nil, userInfo: ["game": game])
                         }

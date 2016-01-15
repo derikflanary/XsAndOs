@@ -28,6 +28,13 @@ struct LastIntersectionLocation {
     var col : Int
 }
 
+struct RecentCoordinates {
+    var columnA : Int
+    var rowA : Int
+    var columnB : Int
+    var rowB : Int
+}
+
 class Board: XandOScene {
     
     var rows : Int
@@ -55,6 +62,7 @@ class Board: XandOScene {
     let undoButton = UIButton()
     let backButton = UIButton()
     var nodeAction = SKAction()
+    var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
     
@@ -122,7 +130,7 @@ class Board: XandOScene {
     }
     
     func setUpMainAnimation(){
-        let fadeOut = SKAction.scaleTo(1.15, duration: 0.5)
+        let fadeOut = SKAction.scaleTo(1.10, duration: 0.5)
         let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
         let pulse = SKAction.sequence([fadeOut, fadeIn])
         let pulseForever = SKAction.repeatActionForever(pulse)
@@ -446,6 +454,7 @@ class Board: XandOScene {
     
     func drawLineBetweenPoints(var pointA: CGPoint,var pointB: CGPoint, type: String){
         let (columnA, rowA, columnB, rowB) = calculateColumnsAndRows(pointA, pointB: pointB)
+        recentCoordinates = RecentCoordinates(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
         var match = false
         var matchedLine = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         pointA = convertPointToView(pointA)
@@ -555,7 +564,7 @@ class Board: XandOScene {
     
     func animateWidth(line: LineShapeLayer){
         let animation = CABasicAnimation(keyPath: "lineWidth")
-        animation.toValue = 8
+        animation.toValue = 6
         animation.duration = 0.25
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
         animation.autoreverses = true
@@ -566,7 +575,7 @@ class Board: XandOScene {
     
     func animateWidthThenDelete(line: LineShapeLayer){
         let animation = CABasicAnimation(keyPath: "lineWidth")
-        animation.toValue = 8
+        animation.toValue = 6
         animation.duration = 0.25
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
         animation.autoreverses = true

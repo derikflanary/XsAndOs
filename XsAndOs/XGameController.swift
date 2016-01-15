@@ -25,6 +25,7 @@ class XGameController: NSObject {
             newGame["xTurn"] = true
             newGame["finished"] = false
             newGame["startDate"] = dayAsString()
+            newGame["lastMove"] = []
             createXLines { (xSuccess: Bool, xLines: PFObject) -> Void in
                 if xSuccess{
                     self.createOLines({ (oSuccess: Bool, oLines: PFObject) -> Void in
@@ -111,7 +112,7 @@ class XGameController: NSObject {
             }
         }
         
-        func updateGameOnParse(xTurn: Bool, xLines: [[[String: Int]]], oLines: [[[String: Int]]], gameId: String, xId: String, oId: String, completion: (Bool) -> Void){
+        func updateGameOnParse(xTurn: Bool, xLines: [[[String: Int]]], oLines: [[[String: Int]]], gameId: String, xId: String, oId: String, lastMove:[[String:Int]], completion: (Bool) -> Void){
             let query = PFQuery(className:"XGame")
             query.getObjectInBackgroundWithId(gameId) {(game: PFObject?, error: NSError?) -> Void in
                 if error != nil {
@@ -122,6 +123,7 @@ class XGameController: NSObject {
                         self.updateXlines(xLines, id: xId, completion: { (success: Bool) -> Void in
                             if success{
                                 game["xTurn"] = xTurn
+                                game["lastMove"] = lastMove
                                 game.saveInBackground()
                                 completion(true)
                             }else{
@@ -132,6 +134,7 @@ class XGameController: NSObject {
                         self.updateOlines(oLines, id: oId, completion: { (success: Bool) -> Void in
                             if success{
                                 game["xTurn"] = xTurn
+                                game["lastMove"] = lastMove
                                 game.saveInBackground()
                                 completion(true)
                             }else{

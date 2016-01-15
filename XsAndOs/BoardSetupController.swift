@@ -53,6 +53,7 @@ class BoardSetupController: NSObject {
         secondScene.gameID = game.objectId!
         secondScene.xTurnLoad = game["xTurn"] as! Bool
         secondScene.gameFinished = game["finished"] as! Bool
+        secondScene.recentMove = game["lastMove"] as! [[String : Int]]
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         return secondScene
         }

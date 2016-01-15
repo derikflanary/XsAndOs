@@ -27,9 +27,10 @@ class MultiplayerBoard: Board {
     var oObjId = String()
     var submitButton = UIButton()
     var moveMade = Bool()
-    
+    var recentMove = [[String:Int]]()
     var xLinesParse : [[[String:Int]]] = []
     var oLinesParse : [[[String:Int]]] = []
+    var layersToDelete = [LineShapeLayer]()
     
     override func startGame() {
         xTurn = xTurnLoad
@@ -134,7 +135,10 @@ class MultiplayerBoard: Board {
         print(xLines.count)
         print(oLines.count)
         let (xLineDicts, oLineDicts) = convertLinesToDictionaries()
-        XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId) { (success) -> Void in
+        let coordinateDict = recentCoordinateToDict(recentCoordinates!)
+        recentMove.removeAll()
+        recentMove.append(coordinateDict)
+        XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId, lastMove: recentMove) { (success) -> Void in
             if success{
                 print("game saved")
                 let receiver = self.receiver()
@@ -239,19 +243,21 @@ class MultiplayerBoard: Board {
     }
     
     override dynamic func receivedGameNotification(notification: NSNotification) {
-        let theGame = notification.userInfo!["game"] as! PFObject
-        if theGame.objectId == gameID{
-            BoardSetupController().setupGame(theGame, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
-                if success{
-                    dispatch_async(dispatch_get_main_queue(),{
-                        self.transitiontoLoadedBoard(secondScene)
-                        PFInstallation.currentInstallation().badge = 0
-                    })
-                }
-            })
-        }else{
-            super.receivedGameNotification(notification)
+        if let theGame = notification.userInfo!["game"] as? PFObject{
+            if theGame.objectId == gameID{
+                BoardSetupController().setupGame(theGame, size: self.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
+                    if success{
+                        dispatch_async(dispatch_get_main_queue(),{
+                            self.transitiontoLoadedBoard(secondScene)
+                            PFInstallation.currentInstallation().badge = 0
+                        })
+                    }
+                })
+            }else{
+                super.receivedGameNotification(notification)
+            }
         }
+        
     }
     
     override func removeViews() {
@@ -260,6 +266,9 @@ class MultiplayerBoard: Board {
         turnLabel.removeFromParent()
         nameLabel.removeFromParent()
         backButton.removeFromSuperview()
+        for layer in layersToDelete{
+            layer.removeFromSuperlayer()
+        }
     }
     
     func submitPressed(){
@@ -279,6 +288,10 @@ class MultiplayerBoard: Board {
         print(oLinesParse)
         loopThroughParseLines("X")
         loopThroughParseLines("O")
+        if recentMove.count > 0{
+            let pointsDict = recentMove[0]
+            createPathFromDictionary(pointsDict)
+        }
     }
     
     func loopThroughParseLines(type: String){
@@ -329,7 +342,48 @@ class MultiplayerBoard: Board {
             }
         }
     }
+    
+    func recentCoordinateToDict(coordinate: RecentCoordinates) -> [String: Int]{
+        let dict = [columnAKey: coordinate.columnA,
+            rowAKey: coordinate.rowA,
+            columnBKey: coordinate.columnB,
+            rowBKey: coordinate.rowB]
+        return dict
+    }
+    
+    func createPathFromDictionary(line: [String:Int]){
+        var (pointA, pointB) = pointsFromDictionary(line)
+        pointA = convertPointToView(pointA)
+        pointB = convertPointToView(pointB)
+        let newPath = UIBezierPath()
+        newPath.moveToPoint(pointA)
+        newPath.addLineToPoint(pointB)
+        var stroke = UIColor.redColor().CGColor
+        if xTurn{
+            stroke = UIColor.blueColor().CGColor
+        }
+        let shape = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: newPath.CGPath, color: stroke)
+        shape.path = newPath.CGPath
+        view?.layer.addSublayer(shape)
+        layersToDelete.append(shape)
+        animateLastMove(shape)
 
+    }
+    
+    func animateLastMove(shapeLayer: LineShapeLayer){
+
+        let animation = CABasicAnimation(keyPath: "lineWidth")
+        animation.toValue = 8
+        animation.duration = 0.5
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.autoreverses = true
+        animation.repeatCount = 3
+        animation.delegate = self
+        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.removedOnCompletion = false // don't remove after finishing
+        shapeLayer.addAnimation(animation, forKey: animation.keyPath)
+
+    }
 }
 
 

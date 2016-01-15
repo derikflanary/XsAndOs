@@ -25,10 +25,12 @@ class XandOScene: SKScene {
     dynamic func receivedGameNotification(notification: NSNotification){
         print("notification received")
         var title = "Your turn"
-        let newGame = notification.userInfo!["newGame"] as! Bool
-        if newGame == true{
-            title = "You were invited to a new game"
+        if let newGame = notification.userInfo!["newGame"]{
+            if newGame as! Bool == true{
+                title = "You were invited to a new game"
+            }
         }
+        
         let alertController = UIAlertController(title:title, message: "load game?", preferredStyle: .Alert)
         let okayAction = UIAlertAction(title: "Okay", style: .Default) { (action) in
             let game = notification.userInfo!["game"] as! PFObject
@@ -59,7 +61,7 @@ class XandOScene: SKScene {
     
     func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
         removeViews()
-        let transition = SKTransition.crossFadeWithDuration(1.0)
+        let transition = SKTransition.crossFadeWithDuration(2.0)
         self.scene?.view?.presentScene(secondScene, transition: transition)
     }
 

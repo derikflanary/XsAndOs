@@ -18,7 +18,7 @@ class PushNotificationController : NSObject {
     func pushNotificationNewGame(receiver: String, gameID: String){
         if let myName = PFUser.currentUser()?.valueForKey("name"){
             let message = "\(myName) invited you to a game" //message to be sent in notification
-            pushNotificationWithMessage(message, receiver: receiver, gameId: gameID, newGame: true)
+            pushNotificationWithMessage(message, receiver: receiver, gameId: gameID, newGame: "Y")
         }
     }
     
@@ -37,10 +37,10 @@ class PushNotificationController : NSObject {
     }
     
     private func pushNotificationWithMessage(message: String, receiver: String, gameId: String){
-        pushNotificationWithMessage(message, receiver: receiver, gameId: gameId, newGame: false)
+        pushNotificationWithMessage(message, receiver: receiver, gameId: gameId, newGame: "N")
     }
     
-    private func pushNotificationWithMessage(message: String, receiver: String, gameId: String, newGame: Bool){
+    private func pushNotificationWithMessage(message: String, receiver: String, gameId: String, newGame: String){
         let pushQuery = PFInstallation.query(); //query for all devices with the receiver's username
         pushQuery?.whereKey("ownerUsername", equalTo: receiver)
         let push = PFPush()  //push the notification

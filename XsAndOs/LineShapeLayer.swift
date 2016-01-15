@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct Coordinate {
     var columnA : Int
     var rowA : Int
