@@ -49,7 +49,7 @@ class Board: XandOScene {
     var startPoint = CGPoint()
     var nextPoint = CGPoint()
     var pointsConnected = false
-    var potentialShapeNode = SKShapeNode()
+    var potentialShapeNode = CAShapeLayer()
     var restartButton = UIButton()
     var lastMove = LastMove.SingleLine
     let undoButton = UIButton()
@@ -296,6 +296,8 @@ class Board: XandOScene {
                         drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "X")
                         pointsConnected = true
                         return
+                    }else{
+                        drawPotentialLineBetweenPoints(startPoint, pointB: location, type: "N")
                     }
                 }else if touchedNode.name == "O" && !xTurn{
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
@@ -303,6 +305,8 @@ class Board: XandOScene {
                         drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "O")
                         pointsConnected = true
                         return
+                    }else{
+                        drawPotentialLineBetweenPoints(startPoint, pointB: location, type: "N")
                     }
                 }else{
                     nextPoint = location
@@ -316,7 +320,7 @@ class Board: XandOScene {
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         guard isCurrentUserTurn() else{return}
-        potentialShapeNode.removeFromParent()
+        potentialShapeNode.removeFromSuperlayer()
         pointsConnected = false
         startPoint = CGPointZero
         for theTouch: AnyObject in touches{
@@ -427,13 +431,20 @@ class Board: XandOScene {
         return(column, row, column2, row2)
     }
     
-    func drawPotentialLineBetweenPoints(pointA: CGPoint, pointB: CGPoint, type: String){
-        potentialShapeNode.removeFromParent()
-        let path = createLineAtPoints(pointA, pointB: pointB)
-        potentialShapeNode = SKShapeNode(path: path)
-        potentialShapeNode.strokeColor = UIColor(white: 0.4, alpha: 0.6)
+    func drawPotentialLineBetweenPoints(var pointA: CGPoint, var pointB: CGPoint, type: String){
+        potentialShapeNode.removeFromSuperlayer()
+        pointA = convertPointToView(pointA)
+        pointB = convertPointToView(pointB)
+        let newPath = UIBezierPath()
+        newPath.moveToPoint(pointA)
+        newPath.addLineToPoint(pointB)
+//        let path = createLineAtPoints(pointA, pointB: pointB)
+        potentialShapeNode.path = newPath.CGPath
+//        potentialShapeNode = SKShapeNode(path: path)
+        potentialShapeNode.strokeColor = UIColor(white: 0.4, alpha: 0.6).CGColor
         potentialShapeNode.lineWidth = 3
-        addChild(potentialShapeNode)
+        view?.layer.addSublayer(potentialShapeNode)
+//        addChild(potentialShapeNode)
     }
     
     func drawLineBetweenPoints(var pointA: CGPoint,var pointB: CGPoint, type: String){

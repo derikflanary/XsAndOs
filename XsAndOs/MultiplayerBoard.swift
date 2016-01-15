@@ -140,8 +140,6 @@ class MultiplayerBoard: Board {
                 let receiver = self.receiver()
                 if self.oLines.count > 0{
                     if self.gameFinished{
-//                        PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
-//                        self.mainPressed()
                         self.backButton.userInteractionEnabled = true
                         self.backButton.alpha = 1
                         return
@@ -154,7 +152,6 @@ class MultiplayerBoard: Board {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage()
                     self.moveMade = false
-//                    self.undoButton.hidden = true
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
@@ -262,7 +259,6 @@ class MultiplayerBoard: Board {
         stopActionsOnGameLayer(turnString())
         turnLabel.removeFromParent()
         nameLabel.removeFromParent()
-//        submitButton.removeFromSuperview()
         backButton.removeFromSuperview()
     }
     
@@ -274,11 +270,10 @@ class MultiplayerBoard: Board {
     
     override func undoLastMove() {
         moveMade = false
-//        submitButton.removeFromSuperview()
         super.undoLastMove()
     }
     
-    
+//LOADING THE BOARD//
     func drawLoadedLines(){
         print(xLinesParse)
         print(oLinesParse)
@@ -309,7 +304,6 @@ class MultiplayerBoard: Board {
                 }
             }
             appendLineArrays(firstShapeNode)
-//            view?.layer.addSublayer(firstShapeNode)
         }
     }
     
@@ -332,7 +326,6 @@ class MultiplayerBoard: Board {
                 if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
                     intersection?.nodePos.ptWho = type
                 }
-                
             }
         }
     }
