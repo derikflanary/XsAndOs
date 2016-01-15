@@ -438,13 +438,10 @@ class Board: XandOScene {
         let newPath = UIBezierPath()
         newPath.moveToPoint(pointA)
         newPath.addLineToPoint(pointB)
-//        let path = createLineAtPoints(pointA, pointB: pointB)
         potentialShapeNode.path = newPath.CGPath
-//        potentialShapeNode = SKShapeNode(path: path)
         potentialShapeNode.strokeColor = UIColor(white: 0.4, alpha: 0.6).CGColor
         potentialShapeNode.lineWidth = 3
         view?.layer.addSublayer(potentialShapeNode)
-//        addChild(potentialShapeNode)
     }
     
     func drawLineBetweenPoints(var pointA: CGPoint,var pointB: CGPoint, type: String){
@@ -454,7 +451,6 @@ class Board: XandOScene {
         pointA = convertPointToView(pointA)
         pointB = convertPointToView(pointB)
         let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
-        
         var lineArray = xLines
         var strokeColor = UIColor.redColor().CGColor
         if type == "O"{
@@ -466,14 +462,12 @@ class Board: XandOScene {
         for lineShapeLayer in lineArray{
             (match, matchedLine, lineToDelete) = loopThroughCoordinates(lineShapeLayer, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
         }
-        
         deleteLineFromArrays(lineToDelete)
         //If new line doesn't touch an existing line, make a new line
         if !match{
             let shapeNode = LineShapeLayer(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
-            shapeNode.strokeEnd = 0.0
             view?.layer.addSublayer(shapeNode)
-            animatePath(shapeNode)
+            animateWidth(shapeNode)
             appendLineArrays(shapeNode)
             lastMove = .SingleLine
         }
@@ -500,7 +494,9 @@ class Board: XandOScene {
                     createLineCopy(lineShapeLayer)
                     lastMove = .AppendedLine
                     matchedLine = lineShapeLayer
-//                    animateLineWithPath(path, line: matchedLine)
+                    let tempLine = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: path, color: matchedLine.strokeColor!)
+                    view?.layer.addSublayer(tempLine)
+                    animateWidthThenDelete(tempLine)
                     matchedLine.appendPath(path)
                     matchedLine.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                     previousMoveDetails.newAppendedLine = matchedLine
@@ -530,6 +526,7 @@ class Board: XandOScene {
                 oLines.removeAtIndex(index)
             }
         }
+        lineToDelete.removeFromSuperlayer()
     }
     
     func createLineAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
@@ -546,7 +543,7 @@ class Board: XandOScene {
         return line
     }
     
-    func animatePath(line: LineShapeLayer){
+    func animateLine(line: LineShapeLayer){
         let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
         pathAnimation.duration = 0.25
         pathAnimation.fromValue = 0.0
@@ -556,16 +553,29 @@ class Board: XandOScene {
         line.addAnimation(pathAnimation, forKey: "strokeEndAnimation")
     }
     
-    func animateLineWithPath(path: CGPathRef, line: LineShapeLayer){
-        let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        pathAnimation.duration = 0.25
-        let bez = UIBezierPath(CGPath: path)
-        pathAnimation.fromValue = UIBezierPath(CGPath: line.path!)
-        pathAnimation.toValue = bez
-        pathAnimation.fillMode = kCAFillModeBoth // keep to value after finishing
-        pathAnimation.removedOnCompletion = false
-        line.addAnimation(pathAnimation, forKey: "strokeEndAnimation")
+    func animateWidth(line: LineShapeLayer){
+        let animation = CABasicAnimation(keyPath: "lineWidth")
+        animation.toValue = 8
+        animation.duration = 0.25
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.autoreverses = true
+        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.removedOnCompletion = false // don't remove after finishing
+        line.addAnimation(animation, forKey: animation.keyPath)
     }
+    
+    func animateWidthThenDelete(line: LineShapeLayer){
+        let animation = CABasicAnimation(keyPath: "lineWidth")
+        animation.toValue = 8
+        animation.duration = 0.25
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.autoreverses = true
+        animation.delegate = line
+        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.removedOnCompletion = false // don't remove after finishing
+        line.addAnimation(animation, forKey: animation.keyPath)
+    }
+
     
     
     

@@ -109,4 +109,9 @@ class LineShapeLayer : CAShapeLayer {
     }
     
 
+    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        if flag{
+            self.removeFromSuperlayer()
+        }
+    }
 }
