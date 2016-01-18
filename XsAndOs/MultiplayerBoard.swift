@@ -31,6 +31,7 @@ class MultiplayerBoard: Board {
     var xLinesParse : [[[String:Int]]] = []
     var oLinesParse : [[[String:Int]]] = []
     var layersToDelete = [LineShapeLayer]()
+    var activityIndicator = DGActivityIndicatorView()
     
     override func startGame() {
         xTurn = xTurnLoad
@@ -44,26 +45,21 @@ class MultiplayerBoard: Board {
         nameLabel.fontSize = 24
         nameLabel.zPosition = 3
         
-        submitButton.frame = CGRectMake(0, (self.view?.frame.size.height)! - 40, (self.view?.frame.size.width)!, 30)
-        submitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(40)
-        submitButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-        submitButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
-        submitButton.setTitle("Submit Move", forState: UIControlState.Normal)
-        submitButton.addTarget(self, action: "submitPressed", forControlEvents: .TouchUpInside)
-
         self.addChild(nameLabel)
-        
-        if xLinesParse.count > 0 || oLinesParse.count > 0{
-            drawLoadedLines()
-        }
-        
-        if xLines.count > 0 || xLines.count > 0{
-            drawLines()
-        }
-        turnLabel.runAction(nodeAction)
         if !xTurn{
             turnLabel.text = "O"
             nameLabel.text = oUser["name"] as? String
+        }
+        turnLabel.runAction(nodeAction)
+        setupBoard()
+    }
+    
+    func setupBoard(){
+        if xLinesParse.count > 0 || oLinesParse.count > 0{
+            drawLoadedLines()
+        }
+        if xLines.count > 0 || xLines.count > 0{
+            drawLines()
         }
         if gameFinished{
             finishedGameMessage()
@@ -126,14 +122,15 @@ class MultiplayerBoard: Board {
             stopActionsOnGameLayer("O")
             startActionForNodeType("X")
         }
+        guard moveMade else {return}
         saveGame()
     }
     
     private func saveGame(){
+        let dimView = UIView(frame: (view?.frame)!)
+        dimBackground(dimView)
         backButton.userInteractionEnabled = false
         backButton.alpha = 0.5
-        print(xLines.count)
-        print(oLines.count)
         let (xLineDicts, oLineDicts) = convertLinesToDictionaries()
         let coordinateDict = recentCoordinateToDict(recentCoordinates!)
         recentMove.removeAll()
@@ -146,6 +143,7 @@ class MultiplayerBoard: Board {
                     if self.gameFinished{
                         self.backButton.userInteractionEnabled = true
                         self.backButton.alpha = 1
+                        self.gameSavedMessage(dimView)
                         return
                     }else{
                         PushNotificationController().pushNotificationTheirTurn(receiver, gameID: self.gameID)
@@ -154,18 +152,19 @@ class MultiplayerBoard: Board {
                     PushNotificationController().pushNotificationNewGame(receiver, gameID: self.gameID)
                 }
                 dispatch_async(dispatch_get_main_queue(),{
-                    self.gameSavedMessage()
+                    self.gameSavedMessage(dimView)
                     self.moveMade = false
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
                 self.backButton.alpha = 1
                 self.showFailToSaveAlert()
+                self.unDimBackground(dimView)
             }
         }
     }
     
-    private func gameSavedMessage(){
+    private func gameSavedMessage(dimView: UIView){
         let alert = SKLabelNode(text: "Move Sent")
         alert.position = CGPointMake(turnLabel.position.x, turnLabel.position.y + 50)
         alert.fontColor = SKColor.redColor()
@@ -177,18 +176,38 @@ class MultiplayerBoard: Board {
             alert.runAction(SKAction.scaleTo(0.0, duration: 1))
             self.backButton.userInteractionEnabled = true
             self.backButton.alpha = 1
+            self.unDimBackground(dimView)
         }
-//        let delay = 2.0 * Double(NSEC_PER_SEC)
-//        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-//        dispatch_after(time, dispatch_get_main_queue(), {
-////            alertController.dismissViewControllerAnimated(true, completion: nil)
-//        })
+    }
+    
+    func dimBackground(dimView: UIView){
+        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: UIColor.redColor(), size: 200)
+        activityIndicator.frame = CGRectMake((view?.frame.size.width)!/2 - 25, (view?.frame.size.height)!/2, 50.0, 50.0);
+        dimView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        dimView.backgroundColor = UIColor.darkGrayColor()
+        dimView.alpha = 0
+        view?.addSubview(dimView)
+        UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: { () -> Void in
+            dimView.alpha = 0.6
+            }) { (done) -> Void in
+        }
+    }
+    
+    func unDimBackground(dimView: UIView){
+        UIView.animateWithDuration(1.0, delay: 0.0, options: .CurveEaseOut, animations: { () -> Void in
+            dimView.alpha = 0.0
+            self.activityIndicator.alpha = 0.0
+            }) { (done) -> Void in
+                dimView.removeFromSuperview()
+        }
     }
     
     private func showFailToSaveAlert(){
         let alertController = UIAlertController(title: "Move Not Sent", message: "Check your network connection and try again", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
             self.undoLastMove()
+            
         }
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
@@ -231,6 +250,7 @@ class MultiplayerBoard: Board {
         let receiver = self.receiver()
         PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
         gameFinished = true
+        mainPressed()
     }
     
     func finishedGameMessage(){
@@ -248,7 +268,8 @@ class MultiplayerBoard: Board {
                 BoardSetupController().setupGame(theGame, size: self.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
                     if success{
                         dispatch_async(dispatch_get_main_queue(),{
-                            self.transitiontoLoadedBoard(secondScene)
+//                            self.transitiontoLoadedBoard(secondScene)
+                            self.loadMove(secondScene)
                             PFInstallation.currentInstallation().badge = 0
                         })
                     }
@@ -257,7 +278,41 @@ class MultiplayerBoard: Board {
                 super.receivedGameNotification(notification)
             }
         }
-        
+    }
+    
+    func loadMove(loadedScene: MultiplayerBoard){
+        xLinesParse = loadedScene.xLinesParse
+        oLinesParse = loadedScene.oLinesParse
+        recentMove = loadedScene.recentMove
+        xTurn = loadedScene.xTurnLoad
+        removeLines()
+        drawLoadedLines()
+        drawLines()
+        updateTurnLabel()
+        gameFinished = loadedScene.gameFinished
+        if gameFinished{
+            finishedGameMessage()
+        }
+    }
+    
+    override func removeLines() {
+        super.removeLines()
+        xLines.removeAll()
+        oLines.removeAll()
+    }
+    
+    func updateTurnLabel(){
+        if !xTurn{
+            turnLabel.text = "O"
+            nameLabel.text = oUser["name"] as? String
+            stopActionsOnGameLayer("X")
+            startActionForNodeType("O")
+        }else{
+            turnLabel.text = "X"
+            nameLabel.text = xUser["name"] as? String
+            stopActionsOnGameLayer("O")
+            startActionForNodeType("X")
+        }
     }
     
     override func removeViews() {
@@ -373,11 +428,11 @@ class MultiplayerBoard: Board {
     func animateLastMove(shapeLayer: LineShapeLayer){
 
         let animation = CABasicAnimation(keyPath: "lineWidth")
-        animation.toValue = 8
+        animation.toValue = 6
         animation.duration = 0.5
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
         animation.autoreverses = true
-        animation.repeatCount = 3
+        animation.repeatCount = 4
         animation.delegate = self
         animation.fillMode = kCAFillModeBoth // keep to value after finishing
         animation.removedOnCompletion = false // don't remove after finishing

@@ -26,7 +26,7 @@ class XandOScene: SKScene {
         print("notification received")
         var title = "Your turn"
         if let newGame = notification.userInfo!["newGame"]{
-            if newGame as! Bool == true{
+            if newGame as! String == "Y"{
                 title = "You were invited to a new game"
             }
         }
@@ -34,7 +34,7 @@ class XandOScene: SKScene {
         let alertController = UIAlertController(title:title, message: "load game?", preferredStyle: .Alert)
         let okayAction = UIAlertAction(title: "Okay", style: .Default) { (action) in
             let game = notification.userInfo!["game"] as! PFObject
-            BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
+            BoardSetupController().setupGame(game, size: self.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
                 if success{
                     self.transitiontoLoadedBoard(secondScene)
                     PFInstallation.currentInstallation().badge = 0

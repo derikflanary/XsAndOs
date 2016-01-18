@@ -634,12 +634,21 @@ class Board: XandOScene {
     }
     
     func declareWinner(winningTeam: String){
-        let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-            self.gameover()
+        let confettiView = SAConfettiView(frame: self.view!.bounds)
+        self.view!.addSubview(confettiView)
+        confettiView.startConfetti()
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+                self.gameover()
+                confettiView.stopConfetti()
+                confettiView.removeFromSuperview()
+            }
+            alertController.addAction(cancelAction)
+            self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
         }
-        alertController.addAction(cancelAction)
-        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+        
     }
     
 //UNDO MOVE//
@@ -774,12 +783,7 @@ class Board: XandOScene {
     override func removeViews(){
         self.removeAllChildren()
         self.removeAllActions()
-        for shape in xLines{
-            shape.removeFromSuperlayer()
-        }
-        for shape in oLines{
-            shape.removeFromSuperlayer()
-        }
+        removeLines()
         nodeX.removeAll()
         nodeO.removeAll()
         xLines.removeAll()
@@ -788,6 +792,16 @@ class Board: XandOScene {
         restartButton.removeFromSuperview()
         backButton.removeFromSuperview()
         undoButton.removeFromSuperview()
+    }
+    
+    func removeLines(){
+        for shape in xLines{
+            shape.removeFromSuperlayer()
+        }
+        for shape in oLines{
+            shape.removeFromSuperlayer()
+        }
+
     }
     
 //BUTTON FUNCTIONS
