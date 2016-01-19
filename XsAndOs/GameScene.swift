@@ -29,7 +29,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
         startButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
-        startButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        startButton.setTitleColor(textColor, forState: .Normal)
         startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
         
@@ -37,10 +37,13 @@ class GameScene: XandOScene, UITextFieldDelegate {
         label.numberOfLines = 0
         label.text = "Choose the number of Rows and Columns (Min:4 | Max:8)"
         label.font = UIFont.systemFontOfSize(15)
+        label.textColor = textColor
         label.textAlignment = .Center
         
         sizeField.frame = CGRectZero
-        sizeField.placeholder = "5"
+        sizeField.backgroundColor = flint
+        sizeField.textColor = textColor
+        sizeField.placeholder = "7"
         sizeField.keyboardType = UIKeyboardType.NumberPad
         sizeField.textAlignment = .Center
         sizeField.borderStyle = .RoundedRect
@@ -56,14 +59,14 @@ class GameScene: XandOScene, UITextFieldDelegate {
         friendButton.frame = CGRectZero
         friendButton.setTitle("Play with Friends", forState: .Normal)
         friendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
-        friendButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        friendButton.setTitleColor(blu, forState: .Normal)
         friendButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         friendButton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
         
         currentGamesButton.frame = CGRectZero
         currentGamesButton.setTitle("Current Games", forState: .Normal)
         currentGamesButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
-        currentGamesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        currentGamesButton.setTitleColor(blu, forState: .Normal)
         currentGamesButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         currentGamesButton.addTarget(self, action: "currentGamesPressed", forControlEvents: .TouchUpInside)
         currentGamesButton.highlighted = true
@@ -95,7 +98,6 @@ class GameScene: XandOScene, UITextFieldDelegate {
     
     override init(size: CGSize) {
         super.init(size: size)
-        self.backgroundColor = SKColor.whiteColor()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -106,8 +108,8 @@ class GameScene: XandOScene, UITextFieldDelegate {
         var dim : Int
         var rows = Int(sizeField.text!)
         if rows == nil{
-            dim = 9
-            rows = 5
+            dim = 13
+            rows = 7
         }else{
             dim = BoardSetupController().calculateDim(rows!)
         }

@@ -64,17 +64,30 @@ class CurrentGamesScene: TableViewScene {
                 game = finishedGames[indexPath.row] as PFObject
             }
             let xUser = game["xTeam"] as! PFUser
-            let name = xUser["name"]
+            let name = xUser["name"] as! String
             let oUser = game["oTeam"] as! PFUser
-            let oName = oUser["name"]
+            let oName = oUser["name"] as! String
+            let xTurn = game["xTurn"] as! Bool
+            let currentUser = PFUser.currentUser()
+            let myName = currentUser!["name"] as! String
+            var usersTurn = false
+            if name == myName && xTurn || oName == myName && !xTurn{
+                usersTurn = true
+            }
+            cell.textLabel?.textColor = backgroundColor
+            cell.detailTextLabel?.textColor = flint
+            if usersTurn{
+                cell.textLabel?.textColor = blu
+            }
+            
             let finishedGame = game["finished"] as! Bool
-            var text = "X:\(name)  |  O:\(oName)"
+            let text = "X:\(name)  |  O:\(oName)"
             if finishedGame{
-                text = text + " (finished)"
-                cell.textLabel?.textColor = UIColor.redColor()
+                cell.textLabel?.textColor = yel
             }
             cell.textLabel?.text = text
             cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"
+            cell.contentView.backgroundColor = textColor
 
         }
         return cell

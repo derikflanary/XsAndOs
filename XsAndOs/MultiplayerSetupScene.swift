@@ -23,11 +23,10 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
-        self.backgroundColor = SKColor.whiteColor()
         
         backButton.frame = CGRectMake(10, 20, 50, 30)
         backButton.setTitle("Main", forState: .Normal)
-        backButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
+        backButton.setTitleColor(textColor, forState: .Normal)
         backButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
         backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
         backButton.tag = 20
@@ -37,22 +36,26 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
         oppLabel.numberOfLines = 0
         let oppName = opponent["name"]
         oppLabel.text = "Opponent: \(oppName)"
+        oppLabel.textColor = textColor
         oppLabel.textAlignment = .Center
         
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
         startButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
-        startButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        startButton.setTitleColor(textColor, forState: .Normal)
         startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
         
         label.frame = CGRectMake(0, 150, self.view!.frame.size.width, 40)
         label.numberOfLines = 0
         label.text = "Choose the number of Rows and Columns (Min:4 | Max:8)"
+        label.textColor = textColor
         label.textAlignment = .Center
         
         sizeField.frame = CGRectZero
-        sizeField.placeholder = "5"
+        sizeField.placeholder = "7"
+        sizeField.backgroundColor = flint
+        sizeField.textColor = textColor
         sizeField.keyboardType = UIKeyboardType.NumberPad
         sizeField.textAlignment = .Center
         sizeField.borderStyle = .RoundedRect
@@ -78,8 +81,8 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
         var dim : Int
         var rows = Int(sizeField.text!)
         if rows == nil{
-            dim = 9
-            rows = 5
+            dim = 13
+            rows = 7
         }else{
             dim = BoardSetupController().calculateDim(rows!)
         }

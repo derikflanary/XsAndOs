@@ -8,11 +8,18 @@
 
 import Foundation
 import SpriteKit
-import Parse 
+import Parse
+
+let textColor = UIColor(red: 0.78, green: 0.81, blue: 0.83, alpha: 1.0)
+let blu = UIColor(red: 0.54, green: 0.75, blue: 0.93, alpha: 1.0)
+let yel = UIColor(red: 0.78, green: 0.36, blue: 0.35, alpha: 1.0)
+let flint = UIColor(red: 0.49, green: 0.55, blue: 0.60, alpha: 1.0)
+let backColor = UIColor(red: 0.22, green: 0.31, blue: 0.38, alpha: 1.0)
 
 class XandOScene: SKScene {
     
     override func didMoveToView(view: SKView) {
+        backgroundColor = backColor
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "directGameNotification:", name:"LoadGameDirect", object: nil)
     }

@@ -17,17 +17,18 @@ class TableViewScene: XandOScene, UITableViewDataSource, UITableViewDelegate {
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
-        self.backgroundColor = SKColor.whiteColor()
+        self.backgroundColor = backColor
         
-        cancelButton.frame = CGRectMake(0, 20, 100, 30)
+        cancelButton.frame = CGRectMake(0, 20, view.frame.size.width, 30)
         cancelButton.setTitle("Cancel", forState: .Normal)
         cancelButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
-        cancelButton.setTitleColor(UIColor(white: 0.4, alpha: 1.0), forState: .Normal)
+        cancelButton.setTitleColor(textColor, forState: .Normal)
         cancelButton.setTitleColor(UIColor(white: 0.7, alpha: 1.0), forState: .Highlighted)
         cancelButton.addTarget(self, action: "cancelPressed", forControlEvents: .TouchUpInside)
         self.view?.addSubview(cancelButton)
         
         tableView = UITableView(frame: CGRectMake(0, 50, self.view!.frame.size.width, self.view!.frame.size.height - 50), style: .Grouped)
+        tableView.backgroundColor = backgroundColor
         tableView.dataSource = self
         tableView.delegate = self
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")

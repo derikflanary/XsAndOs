@@ -88,7 +88,6 @@ class Board: XandOScene {
     
 //GAME SETUP
     func startGame(){
-        self.backgroundColor = SKColor.whiteColor()
         gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
         setUpMainAnimation()
@@ -96,7 +95,7 @@ class Board: XandOScene {
         drawSquare()
         
         restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
-        restartButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        restartButton.setTitleColor(textColor, forState: .Normal)
         restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
         restartButton.setTitle("Restart", forState: UIControlState.Normal)
         restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
@@ -105,7 +104,7 @@ class Board: XandOScene {
         
         backButton.frame = CGRectMake(10, 20, 50, 30)
         backButton.setTitle("Main", forState: .Normal)
-        backButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
+        backButton.setTitleColor(textColor, forState: .Normal)
         backButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
         backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
         backButton.tag = 20
@@ -113,7 +112,7 @@ class Board: XandOScene {
         
         undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 30)
         undoButton.setTitle("Undo", forState: .Normal)
-        undoButton.setTitleColor(UIColor(white: 0.4, alpha: 1), forState: .Normal)
+        undoButton.setTitleColor(textColor, forState: .Normal)
         undoButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
         undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
         undoButton.tag = 30
@@ -122,7 +121,7 @@ class Board: XandOScene {
         
         turnLabel = SKLabelNode(text: "X")
         turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
-        turnLabel.fontColor = SKColor.blackColor()
+        turnLabel.fontColor = textColor
         turnLabel.zPosition = 3
         self.addChild(turnLabel)
         
@@ -206,7 +205,7 @@ class Board: XandOScene {
         square.fillColor = SKColor.clearColor()
         square.position = CGPointMake(x, y)
         square.zPosition = 0
-        square.strokeColor = SKColor.lightGrayColor()
+        square.strokeColor = flint
         self.addChild(square)
 
     }
@@ -461,10 +460,10 @@ class Board: XandOScene {
         pointB = convertPointToView(pointB)
         let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
         var lineArray = xLines
-        var strokeColor = UIColor.redColor().CGColor
+        var strokeColor = yel.CGColor
         if type == "O"{
             lineArray = oLines
-            strokeColor = UIColor.blueColor().CGColor
+            strokeColor = blu.CGColor
         }
         var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line

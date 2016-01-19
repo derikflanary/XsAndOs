@@ -41,7 +41,7 @@ class MultiplayerBoard: Board {
         let name = xUser["name"] as! String
         nameLabel = SKLabelNode(text: name)
         nameLabel.position = CGPointMake(self.frame.width/2, turnLabel.position.y - 30)
-        nameLabel.fontColor = SKColor.blackColor()
+        nameLabel.fontColor = textColor
         nameLabel.fontSize = 24
         nameLabel.zPosition = 3
         
@@ -167,7 +167,7 @@ class MultiplayerBoard: Board {
     private func gameSavedMessage(dimView: UIView){
         let alert = SKLabelNode(text: "Move Sent")
         alert.position = CGPointMake(turnLabel.position.x, turnLabel.position.y + 50)
-        alert.fontColor = SKColor.redColor()
+        alert.fontColor = blu
         alert.fontSize = 30
         alert.zPosition = 3
         addChild(alert)
@@ -181,7 +181,7 @@ class MultiplayerBoard: Board {
     }
     
     func dimBackground(dimView: UIView){
-        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: UIColor.redColor(), size: 200)
+        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: yel, size: 200)
         activityIndicator.frame = CGRectMake((view?.frame.size.width)!/2 - 25, (view?.frame.size.height)!/2, 50.0, 50.0);
         dimView.addSubview(activityIndicator)
         activityIndicator.startAnimating()
@@ -351,8 +351,8 @@ class MultiplayerBoard: Board {
     
     func loopThroughParseLines(type: String){
         var parseLines = xLinesParse
-        var stroke = UIColor.redColor().CGColor
-        if type == "O" {parseLines = oLinesParse; stroke = UIColor.blueColor().CGColor}
+        var stroke = yel.CGColor
+        if type == "O" {parseLines = oLinesParse; stroke = blu.CGColor}
         for lineArray in parseLines{
             var firstShapeNode = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
             for line in lineArray{
@@ -413,9 +413,9 @@ class MultiplayerBoard: Board {
         let newPath = UIBezierPath()
         newPath.moveToPoint(pointA)
         newPath.addLineToPoint(pointB)
-        var stroke = UIColor.redColor().CGColor
+        var stroke = yel.CGColor
         if xTurn{
-            stroke = UIColor.blueColor().CGColor
+            stroke = blu.CGColor
         }
         let shape = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: newPath.CGPath, color: stroke)
         shape.path = newPath.CGPath
