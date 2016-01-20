@@ -95,9 +95,10 @@ class Board: XandOScene {
         drawSquare()
         
         restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
-        restartButton.setTitleColor(textColor, forState: .Normal)
+        restartButton.setTitleColor(thirdColor, forState: .Normal)
         restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
         restartButton.setTitle("Restart", forState: UIControlState.Normal)
+        restartButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
         restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
         restartButton.tag = 10
         self.view?.addSubview(restartButton)
@@ -106,6 +107,7 @@ class Board: XandOScene {
         backButton.setTitle("Main", forState: .Normal)
         backButton.setTitleColor(textColor, forState: .Normal)
         backButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
+        backButton.titleLabel?.font = UIFont(name: boldFontName, size: 16)
         backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
         backButton.tag = 20
         self.view?.addSubview(backButton)
@@ -114,6 +116,7 @@ class Board: XandOScene {
         undoButton.setTitle("Undo", forState: .Normal)
         undoButton.setTitleColor(textColor, forState: .Normal)
         undoButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
+        undoButton.titleLabel?.font = UIFont(name: boldFontName, size: 16)
         undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
         undoButton.tag = 30
         self.view?.addSubview(undoButton)
@@ -121,8 +124,11 @@ class Board: XandOScene {
         
         turnLabel = SKLabelNode(text: "X")
         turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
-        turnLabel.fontColor = textColor
+        turnLabel.fontColor = xColor
+        turnLabel.fontName = mainFontName
+        turnLabel.fontSize = 40
         turnLabel.zPosition = 3
+        turnLabel.runAction(nodeAction)
         self.addChild(turnLabel)
         
         isXTurn()
@@ -373,11 +379,13 @@ class Board: XandOScene {
         if turnLabel.text == "X"{
             xTurn = false
             turnLabel.text = "O"
+            turnLabel.fontColor = oColor
             stopActionsOnGameLayer("X")
             startActionForNodeType("O")
         }else{
             xTurn = true
             turnLabel.text = "X"
+            turnLabel.fontColor = xColor
             stopActionsOnGameLayer("O")
             startActionForNodeType("X")
         }
@@ -460,10 +468,10 @@ class Board: XandOScene {
         pointB = convertPointToView(pointB)
         let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
         var lineArray = xLines
-        var strokeColor = yel.CGColor
+        var strokeColor = xColor.CGColor
         if type == "O"{
             lineArray = oLines
-            strokeColor = blu.CGColor
+            strokeColor = oColor.CGColor
         }
         var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line
@@ -694,9 +702,12 @@ class Board: XandOScene {
         let lineToRemove = lineArray[index!]
         lineToRemove.removeFromSuperlayer()
         lineArray.removeAtIndex(index!)
-        let lineToAdd = previousMoveDetails.oldLines[0]
-        lineArray.append(lineToAdd)
-        view?.layer.addSublayer(lineToAdd)
+//        let lineToAdd = previousMoveDetails.oldLines[0]
+        for line in previousMoveDetails.oldLines{
+            lineArray.append(line)
+            view?.layer.addSublayer(line)
+        }
+        
         if xTurn{
             oLines = lineArray
         }else{

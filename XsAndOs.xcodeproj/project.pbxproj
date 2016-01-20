@@ -46,6 +46,27 @@
 		EE03D3131C49B21500078CF6 /* DGActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE03D2F11C49B21500078CF6 /* DGActivityIndicatorView.m */; };
 		EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = EE03D31C1C4AC9BE00078CF6 /* .gitkeep */; };
 		EE03D3241C4AC9BE00078CF6 /* SAConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D31D1C4AC9BE00078CF6 /* SAConfettiView.swift */; };
+		EE03D33A1C4EF71B00078CF6 /* SF-UI-Display-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */; };
+		EE03D33B1C4EF71B00078CF6 /* SF-UI-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */; };
+		EE03D33C1C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */; };
+		EE03D33D1C4EF71B00078CF6 /* SF-UI-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3281C4EF71B00078CF6 /* SF-UI-Display-Light.otf */; };
+		EE03D33E1C4EF71B00078CF6 /* SF-UI-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3291C4EF71B00078CF6 /* SF-UI-Display-Medium.otf */; };
+		EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */; };
+		EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */; };
+		EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */; };
+		EE03D3421C4EF71B00078CF6 /* SF-UI-Display-Ultralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32D1C4EF71B00078CF6 /* SF-UI-Display-Ultralight.otf */; };
+		EE03D3431C4EF71B00078CF6 /* SF-UI-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32E1C4EF71B00078CF6 /* SF-UI-Text-Bold.otf */; };
+		EE03D3441C4EF71B00078CF6 /* SF-UI-Text-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32F1C4EF71B00078CF6 /* SF-UI-Text-BoldItalic.otf */; };
+		EE03D3451C4EF71B00078CF6 /* SF-UI-Text-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3301C4EF71B00078CF6 /* SF-UI-Text-Heavy.otf */; };
+		EE03D3461C4EF71B00078CF6 /* SF-UI-Text-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3311C4EF71B00078CF6 /* SF-UI-Text-HeavyItalic.otf */; };
+		EE03D3471C4EF71B00078CF6 /* SF-UI-Text-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3321C4EF71B00078CF6 /* SF-UI-Text-Light.otf */; };
+		EE03D3481C4EF71B00078CF6 /* SF-UI-Text-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3331C4EF71B00078CF6 /* SF-UI-Text-LightItalic.otf */; };
+		EE03D3491C4EF71B00078CF6 /* SF-UI-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3341C4EF71B00078CF6 /* SF-UI-Text-Medium.otf */; };
+		EE03D34A1C4EF71B00078CF6 /* SF-UI-Text-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3351C4EF71B00078CF6 /* SF-UI-Text-MediumItalic.otf */; };
+		EE03D34B1C4EF71B00078CF6 /* SF-UI-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3361C4EF71B00078CF6 /* SF-UI-Text-Regular.otf */; };
+		EE03D34C1C4EF71B00078CF6 /* SF-UI-Text-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3371C4EF71B00078CF6 /* SF-UI-Text-RegularItalic.otf */; };
+		EE03D34D1C4EF71B00078CF6 /* SF-UI-Text-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3381C4EF71B00078CF6 /* SF-UI-Text-Semibold.otf */; };
+		EE03D34E1C4EF71B00078CF6 /* SF-UI-Text-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3391C4EF71B00078CF6 /* SF-UI-Text-SemiboldItalic.otf */; };
 		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
 		EE2FB4D51C3AEBF200C91D68 /* XGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */; };
 		EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */; };
@@ -180,6 +201,27 @@
 		EE03D2F11C49B21500078CF6 /* DGActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGActivityIndicatorView.m; sourceTree = "<group>"; };
 		EE03D31C1C4AC9BE00078CF6 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		EE03D31D1C4AC9BE00078CF6 /* SAConfettiView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAConfettiView.swift; sourceTree = "<group>"; };
+		EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Black.otf"; sourceTree = "<group>"; };
+		EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Bold.otf"; sourceTree = "<group>"; };
+		EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Heavy.otf"; sourceTree = "<group>"; };
+		EE03D3281C4EF71B00078CF6 /* SF-UI-Display-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Light.otf"; sourceTree = "<group>"; };
+		EE03D3291C4EF71B00078CF6 /* SF-UI-Display-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Medium.otf"; sourceTree = "<group>"; };
+		EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Regular.otf"; sourceTree = "<group>"; };
+		EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Semibold.otf"; sourceTree = "<group>"; };
+		EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Thin.otf"; sourceTree = "<group>"; };
+		EE03D32D1C4EF71B00078CF6 /* SF-UI-Display-Ultralight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Ultralight.otf"; sourceTree = "<group>"; };
+		EE03D32E1C4EF71B00078CF6 /* SF-UI-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Bold.otf"; sourceTree = "<group>"; };
+		EE03D32F1C4EF71B00078CF6 /* SF-UI-Text-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-BoldItalic.otf"; sourceTree = "<group>"; };
+		EE03D3301C4EF71B00078CF6 /* SF-UI-Text-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Heavy.otf"; sourceTree = "<group>"; };
+		EE03D3311C4EF71B00078CF6 /* SF-UI-Text-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-HeavyItalic.otf"; sourceTree = "<group>"; };
+		EE03D3321C4EF71B00078CF6 /* SF-UI-Text-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Light.otf"; sourceTree = "<group>"; };
+		EE03D3331C4EF71B00078CF6 /* SF-UI-Text-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-LightItalic.otf"; sourceTree = "<group>"; };
+		EE03D3341C4EF71B00078CF6 /* SF-UI-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Medium.otf"; sourceTree = "<group>"; };
+		EE03D3351C4EF71B00078CF6 /* SF-UI-Text-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-MediumItalic.otf"; sourceTree = "<group>"; };
+		EE03D3361C4EF71B00078CF6 /* SF-UI-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Regular.otf"; sourceTree = "<group>"; };
+		EE03D3371C4EF71B00078CF6 /* SF-UI-Text-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-RegularItalic.otf"; sourceTree = "<group>"; };
+		EE03D3381C4EF71B00078CF6 /* SF-UI-Text-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-Semibold.otf"; sourceTree = "<group>"; };
+		EE03D3391C4EF71B00078CF6 /* SF-UI-Text-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Text-SemiboldItalic.otf"; sourceTree = "<group>"; };
 		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
 		EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGameController.swift; sourceTree = "<group>"; };
 		EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplayerSetupScene.swift; sourceTree = "<group>"; };
@@ -375,6 +417,34 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		EE03D34F1C4EF72300078CF6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */,
+				EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */,
+				EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */,
+				EE03D3281C4EF71B00078CF6 /* SF-UI-Display-Light.otf */,
+				EE03D3291C4EF71B00078CF6 /* SF-UI-Display-Medium.otf */,
+				EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */,
+				EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */,
+				EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */,
+				EE03D32D1C4EF71B00078CF6 /* SF-UI-Display-Ultralight.otf */,
+				EE03D32E1C4EF71B00078CF6 /* SF-UI-Text-Bold.otf */,
+				EE03D32F1C4EF71B00078CF6 /* SF-UI-Text-BoldItalic.otf */,
+				EE03D3301C4EF71B00078CF6 /* SF-UI-Text-Heavy.otf */,
+				EE03D3311C4EF71B00078CF6 /* SF-UI-Text-HeavyItalic.otf */,
+				EE03D3321C4EF71B00078CF6 /* SF-UI-Text-Light.otf */,
+				EE03D3331C4EF71B00078CF6 /* SF-UI-Text-LightItalic.otf */,
+				EE03D3341C4EF71B00078CF6 /* SF-UI-Text-Medium.otf */,
+				EE03D3351C4EF71B00078CF6 /* SF-UI-Text-MediumItalic.otf */,
+				EE03D3361C4EF71B00078CF6 /* SF-UI-Text-Regular.otf */,
+				EE03D3371C4EF71B00078CF6 /* SF-UI-Text-RegularItalic.otf */,
+				EE03D3381C4EF71B00078CF6 /* SF-UI-Text-Semibold.otf */,
+				EE03D3391C4EF71B00078CF6 /* SF-UI-Text-SemiboldItalic.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		EE2FB4D61C3AED0000C91D68 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +516,7 @@
 				EE03D3141C4AC9BE00078CF6 /* Confetti */,
 				EE03D2AB1C49B21500078CF6 /* DGActivityIndicatorView */,
 				EE534B801C481B8F0085E806 /* Dot Game */,
+				EE03D34F1C4EF72300078CF6 /* Resources */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
 				EE5E818B1BDEC1410004424F /* Assets.xcassets */,
 				EE5E818D1BDEC1410004424F /* LaunchScreen.storyboard */,
@@ -624,11 +695,32 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE03D3431C4EF71B00078CF6 /* SF-UI-Text-Bold.otf in Resources */,
+				EE03D33B1C4EF71B00078CF6 /* SF-UI-Display-Bold.otf in Resources */,
+				EE03D3481C4EF71B00078CF6 /* SF-UI-Text-LightItalic.otf in Resources */,
+				EE03D3451C4EF71B00078CF6 /* SF-UI-Text-Heavy.otf in Resources */,
+				EE03D3461C4EF71B00078CF6 /* SF-UI-Text-HeavyItalic.otf in Resources */,
 				EE5E81831BDEC1410004424F /* GameScene.sks in Resources */,
+				EE03D34C1C4EF71B00078CF6 /* SF-UI-Text-RegularItalic.otf in Resources */,
+				EE03D33E1C4EF71B00078CF6 /* SF-UI-Display-Medium.otf in Resources */,
 				EE5E818F1BDEC1410004424F /* LaunchScreen.storyboard in Resources */,
 				EE5E818C1BDEC1410004424F /* Assets.xcassets in Resources */,
+				EE03D33A1C4EF71B00078CF6 /* SF-UI-Display-Black.otf in Resources */,
+				EE03D34A1C4EF71B00078CF6 /* SF-UI-Text-MediumItalic.otf in Resources */,
+				EE03D34E1C4EF71B00078CF6 /* SF-UI-Text-SemiboldItalic.otf in Resources */,
+				EE03D34B1C4EF71B00078CF6 /* SF-UI-Text-Regular.otf in Resources */,
+				EE03D33D1C4EF71B00078CF6 /* SF-UI-Display-Light.otf in Resources */,
 				EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */,
+				EE03D3491C4EF71B00078CF6 /* SF-UI-Text-Medium.otf in Resources */,
+				EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */,
+				EE03D3441C4EF71B00078CF6 /* SF-UI-Text-BoldItalic.otf in Resources */,
+				EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */,
+				EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */,
+				EE03D3421C4EF71B00078CF6 /* SF-UI-Display-Ultralight.otf in Resources */,
 				EE5E818A1BDEC1410004424F /* Main.storyboard in Resources */,
+				EE03D33C1C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf in Resources */,
+				EE03D3471C4EF71B00078CF6 /* SF-UI-Text-Light.otf in Resources */,
+				EE03D34D1C4EF71B00078CF6 /* SF-UI-Text-Semibold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

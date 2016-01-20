@@ -26,9 +26,10 @@ class GameScene: XandOScene, UITextFieldDelegate {
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
+        
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
-        startButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
+        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 40)
         startButton.setTitleColor(textColor, forState: .Normal)
         startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
@@ -36,13 +37,14 @@ class GameScene: XandOScene, UITextFieldDelegate {
         label.frame = CGRectMake(0, 150, self.view!.frame.size.width, 50)
         label.numberOfLines = 0
         label.text = "Choose the number of Rows and Columns (Min:4 | Max:8)"
-        label.font = UIFont.systemFontOfSize(15)
+        label.font = UIFont(name: mainFontName, size: 18)
         label.textColor = textColor
         label.textAlignment = .Center
         
         sizeField.frame = CGRectZero
         sizeField.backgroundColor = flint
-        sizeField.textColor = textColor
+        sizeField.textColor = thirdColor
+        sizeField.font = UIFont(name: mainFontName, size: 16)
         sizeField.placeholder = "7"
         sizeField.keyboardType = UIKeyboardType.NumberPad
         sizeField.textAlignment = .Center
@@ -51,22 +53,22 @@ class GameScene: XandOScene, UITextFieldDelegate {
         
         fbLoginbutton.frame = CGRectZero
         fbLoginbutton.setTitle("Log in with Facebook", forState: .Normal)
-        fbLoginbutton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
+        fbLoginbutton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
         fbLoginbutton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         fbLoginbutton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         fbLoginbutton.addTarget(self, action: "fbLoginPressed", forControlEvents: .TouchUpInside)
         
         friendButton.frame = CGRectZero
         friendButton.setTitle("Play with Friends", forState: .Normal)
-        friendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
-        friendButton.setTitleColor(blu, forState: .Normal)
+        friendButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
+        friendButton.setTitleColor(oColor, forState: .Normal)
         friendButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         friendButton.addTarget(self, action: "friendPressed", forControlEvents: .TouchUpInside)
         
         currentGamesButton.frame = CGRectZero
         currentGamesButton.setTitle("Current Games", forState: .Normal)
-        currentGamesButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
-        currentGamesButton.setTitleColor(blu, forState: .Normal)
+        currentGamesButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
+        currentGamesButton.setTitleColor(oColor, forState: .Normal)
         currentGamesButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         currentGamesButton.addTarget(self, action: "currentGamesPressed", forControlEvents: .TouchUpInside)
         currentGamesButton.highlighted = true
@@ -83,7 +85,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
             stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton, currentGamesButton])
         }
         stackView.axis = .Vertical
-        stackView.spacing = 16
+        stackView.spacing = 21
         stackView.distribution = .EqualSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         self.view?.addSubview(stackView)
@@ -93,7 +95,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
         stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
         stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
-        stackView.heightAnchor.constraintEqualToConstant(260).active = true
+        stackView.heightAnchor.constraintEqualToConstant(300).active = true
     }
     
     override init(size: CGSize) {

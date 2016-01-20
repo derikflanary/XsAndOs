@@ -77,13 +77,13 @@ class CurrentGamesScene: TableViewScene {
             cell.textLabel?.textColor = backgroundColor
             cell.detailTextLabel?.textColor = flint
             if usersTurn{
-                cell.textLabel?.textColor = blu
+                cell.textLabel?.textColor = oColor
             }
             
             let finishedGame = game["finished"] as! Bool
             let text = "X:\(name)  |  O:\(oName)"
             if finishedGame{
-                cell.textLabel?.textColor = yel
+                cell.textLabel?.textColor = xColor
             }
             cell.textLabel?.text = text
             cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"

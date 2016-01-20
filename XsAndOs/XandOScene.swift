@@ -11,10 +11,14 @@ import SpriteKit
 import Parse
 
 let textColor = UIColor(red: 0.78, green: 0.81, blue: 0.83, alpha: 1.0)
-let blu = UIColor(red: 0.54, green: 0.75, blue: 0.93, alpha: 1.0)
-let yel = UIColor(red: 0.78, green: 0.36, blue: 0.35, alpha: 1.0)
+let oColor = UIColor(red: 0.54, green: 0.75, blue: 0.93, alpha: 1.0)
+let xColor = UIColor(red: 0.78, green: 0.36, blue: 0.35, alpha: 1.0)
 let flint = UIColor(red: 0.49, green: 0.55, blue: 0.60, alpha: 1.0)
 let backColor = UIColor(red: 0.22, green: 0.31, blue: 0.38, alpha: 1.0)
+let thirdColor = UIColor(red:0.98, green:0.88, blue:0.48, alpha:1.0)
+let boldFontName = "SFUIDisplay-Bold"
+let mainFontName = "SFUIDisplay-Regular"
+let lightFontName = "SFUIDisplay-Light"
 
 class XandOScene: SKScene {
     

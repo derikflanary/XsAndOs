@@ -42,12 +42,14 @@ class MultiplayerBoard: Board {
         nameLabel = SKLabelNode(text: name)
         nameLabel.position = CGPointMake(self.frame.width/2, turnLabel.position.y - 30)
         nameLabel.fontColor = textColor
+        nameLabel.fontName = lightFontName
         nameLabel.fontSize = 24
         nameLabel.zPosition = 3
         
         self.addChild(nameLabel)
         if !xTurn{
             turnLabel.text = "O"
+            turnLabel.fontColor = oColor
             nameLabel.text = oUser["name"] as? String
         }
         turnLabel.runAction(nodeAction)
@@ -112,12 +114,14 @@ class MultiplayerBoard: Board {
         if xTurn{
             xTurn = false
             turnLabel.text = "O"
+            turnLabel.fontColor = oColor
             nameLabel.text = oUser["name"] as? String
             stopActionsOnGameLayer("X")
             startActionForNodeType("O")
         }else{
             xTurn = true
             turnLabel.text = "X"
+            turnLabel.fontColor = xColor
             nameLabel.text = xUser["name"] as? String
             stopActionsOnGameLayer("O")
             startActionForNodeType("X")
@@ -167,8 +171,9 @@ class MultiplayerBoard: Board {
     private func gameSavedMessage(dimView: UIView){
         let alert = SKLabelNode(text: "Move Sent")
         alert.position = CGPointMake(turnLabel.position.x, turnLabel.position.y + 50)
-        alert.fontColor = blu
-        alert.fontSize = 30
+        alert.fontColor = thirdColor
+        alert.fontName = boldFontName
+        alert.fontSize = 50
         alert.zPosition = 3
         addChild(alert)
         alert.setScale(0.1)
@@ -181,7 +186,7 @@ class MultiplayerBoard: Board {
     }
     
     func dimBackground(dimView: UIView){
-        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: yel, size: 200)
+        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: textColor, size: 200)
         activityIndicator.frame = CGRectMake((view?.frame.size.width)!/2 - 25, (view?.frame.size.height)!/2, 50.0, 50.0);
         dimView.addSubview(activityIndicator)
         activityIndicator.startAnimating()
@@ -305,11 +310,13 @@ class MultiplayerBoard: Board {
         if !xTurn{
             turnLabel.text = "O"
             nameLabel.text = oUser["name"] as? String
+            turnLabel.fontColor = oColor
             stopActionsOnGameLayer("X")
             startActionForNodeType("O")
         }else{
             turnLabel.text = "X"
             nameLabel.text = xUser["name"] as? String
+            turnLabel.fontColor = xColor
             stopActionsOnGameLayer("O")
             startActionForNodeType("X")
         }
@@ -351,8 +358,8 @@ class MultiplayerBoard: Board {
     
     func loopThroughParseLines(type: String){
         var parseLines = xLinesParse
-        var stroke = yel.CGColor
-        if type == "O" {parseLines = oLinesParse; stroke = blu.CGColor}
+        var stroke = xColor.CGColor
+        if type == "O" {parseLines = oLinesParse; stroke = oColor.CGColor}
         for lineArray in parseLines{
             var firstShapeNode = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
             for line in lineArray{
@@ -413,9 +420,9 @@ class MultiplayerBoard: Board {
         let newPath = UIBezierPath()
         newPath.moveToPoint(pointA)
         newPath.addLineToPoint(pointB)
-        var stroke = yel.CGColor
+        var stroke = xColor.CGColor
         if xTurn{
-            stroke = blu.CGColor
+            stroke = oColor.CGColor
         }
         let shape = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: newPath.CGPath, color: stroke)
         shape.path = newPath.CGPath
