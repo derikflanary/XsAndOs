@@ -188,7 +188,21 @@ class Board: XandOScene {
                 }
                 sprite?.anchorPoint = CGPointMake(0.5, 0.5)
                 sprite?.zPosition = 2
+                sprite?.setScale(0.0)
                 gameLayer.addChild(sprite!)
+                let fadeOut = SKAction.scaleTo(1.3, duration: 0.5)
+                let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
+//                gameLayer.enumerateChildNodesWithName("X", usingBlock: {
+//                    node, stop in
+//                    node.runAction(SKAction.sequence([fadeOut, fadeIn]))
+//                    // do something with node or stop
+//                })
+//                gameLayer.enumerateChildNodesWithName("O", usingBlock: {
+//                    node, stop in
+//                    node.runAction(SKAction.sequence([fadeOut, fadeIn]))
+//                    // do something with node or stop
+//                })
+                sprite?.runAction(SKAction.sequence([fadeOut, fadeIn]))
             }
         }
         animateNodes()
