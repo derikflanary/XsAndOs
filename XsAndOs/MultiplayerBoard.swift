@@ -32,6 +32,7 @@ class MultiplayerBoard: Board {
     var oLinesParse : [[[String:Int]]] = []
     var layersToDelete = [LineShapeLayer]()
     var activityIndicator = DGActivityIndicatorView()
+    let dimView = UIView()
     
     override func startGame() {
         xTurn = xTurnLoad
@@ -131,7 +132,7 @@ class MultiplayerBoard: Board {
     }
     
     private func saveGame(){
-        let dimView = UIView(frame: (view?.frame)!)
+        dimView.frame = (view?.frame)!
         dimBackground(dimView)
         backButton.userInteractionEnabled = false
         backButton.alpha = 0.5
@@ -147,7 +148,7 @@ class MultiplayerBoard: Board {
                     if self.gameFinished{
                         self.backButton.userInteractionEnabled = true
                         self.backButton.alpha = 1
-                        self.gameSavedMessage(dimView)
+                        self.gameSavedMessage(self.dimView)
                         return
                     }else{
                         PushNotificationController().pushNotificationTheirTurn(receiver, gameID: self.gameID)
@@ -156,14 +157,14 @@ class MultiplayerBoard: Board {
                     PushNotificationController().pushNotificationNewGame(receiver, gameID: self.gameID)
                 }
                 dispatch_async(dispatch_get_main_queue(),{
-                    self.gameSavedMessage(dimView)
+                    self.gameSavedMessage(self.dimView)
                     self.moveMade = false
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
                 self.backButton.alpha = 1
                 self.showFailToSaveAlert()
-                self.unDimBackground(dimView)
+                self.unDimBackground(self.dimView)
             }
         }
     }
@@ -255,6 +256,7 @@ class MultiplayerBoard: Board {
         let receiver = self.receiver()
         PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
         gameFinished = true
+        unDimBackground(self.dimView)
         mainPressed()
     }
     
@@ -290,14 +292,22 @@ class MultiplayerBoard: Board {
         oLinesParse = loadedScene.oLinesParse
         recentMove = loadedScene.recentMove
         xTurn = loadedScene.xTurnLoad
-        removeLines()
-        drawLoadedLines()
-        drawLines()
         updateTurnLabel()
+        if recentMove.count > 0{
+            let pointsDict = recentMove[0]
+            createPathFromDictionary(pointsDict)
+        }
         gameFinished = loadedScene.gameFinished
         if gameFinished{
             finishedGameMessage()
         }
+    }
+    
+    func finishLoadingMoves(){
+        finishAnimationOnLastMove(layersToDelete.last!)
+        removeLines()
+        drawLoadedLines()
+        drawLines()
     }
     
     override func removeLines() {
@@ -346,14 +356,8 @@ class MultiplayerBoard: Board {
     
 //LOADING THE BOARD//
     func drawLoadedLines(){
-        print(xLinesParse)
-        print(oLinesParse)
         loopThroughParseLines("X")
         loopThroughParseLines("O")
-        if recentMove.count > 0{
-            let pointsDict = recentMove[0]
-            createPathFromDictionary(pointsDict)
-        }
     }
     
     func loopThroughParseLines(type: String){
@@ -425,26 +429,44 @@ class MultiplayerBoard: Board {
             stroke = oColor.CGColor
         }
         let shape = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: newPath.CGPath, color: stroke)
-        shape.path = newPath.CGPath
+        shape.lineWidth = 0
         view?.layer.addSublayer(shape)
+        animateInLastMove(shape)
         layersToDelete.append(shape)
-        animateLastMove(shape)
+        
 
     }
     
-    func animateLastMove(shapeLayer: LineShapeLayer){
+    func animateInLastMove(shapeLayer: LineShapeLayer){
+        let animation1 = CABasicAnimation(keyPath: "lineWidth")
+        animation1.fromValue = 0
+        animation1.toValue = 4
+        animation1.beginTime = CACurrentMediaTime()
+        animation1.duration = 0.5
+        animation1.repeatCount = 0
+        animation1.delegate = self
+        animation1.fillMode = kCAFillModeForwards
+        animation1.removedOnCompletion = false
+        shapeLayer.addAnimation(animation1, forKey: animation1.keyPath)
+    }
+    
+    func finishAnimationOnLastMove(shapeLayer: LineShapeLayer){
+        let animation2 = CABasicAnimation(keyPath: "lineWidth")
+        animation2.fromValue = 4
+        animation2.toValue = 6
+        animation2.duration = 0.5
+        animation2.autoreverses = true
+        animation2.repeatCount = 4
+        animation2.fillMode = kCAFillModeForwards // keep to value after finishing
+        animation2.removedOnCompletion = true // don't remove after finishing
+        shapeLayer.addAnimation(animation2, forKey: animation2.keyPath)
 
-        let animation = CABasicAnimation(keyPath: "lineWidth")
-        animation.toValue = 6
-        animation.duration = 0.5
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
-        animation.autoreverses = true
-        animation.repeatCount = 4
-        animation.delegate = self
-        animation.fillMode = kCAFillModeBoth // keep to value after finishing
-        animation.removedOnCompletion = false // don't remove after finishing
-        shapeLayer.addAnimation(animation, forKey: animation.keyPath)
-
+    }
+    
+    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        if flag{
+            finishLoadingMoves()
+        }
     }
 }
 

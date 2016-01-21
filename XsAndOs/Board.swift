@@ -798,7 +798,7 @@ class Board: XandOScene {
         nodeO.removeAll()
         xLines.removeAll()
         oLines.removeAll()
-        grid.removeArray()
+//        grid.removeArray()
         restartButton.removeFromSuperview()
         backButton.removeFromSuperview()
         undoButton.removeFromSuperview()
