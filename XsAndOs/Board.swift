@@ -11,10 +11,7 @@ import SpriteKit
 //var dim = 9
 let bottomPadding : CGFloat = 100
 
-enum LastMove {
-    case SingleLine
-    case AppendedLine
-}
+
 
 struct PreviousMoveDetails {
     var oldLines = [LineShapeLayer]()
@@ -36,6 +33,11 @@ struct RecentCoordinates {
 }
 
 class Board: XandOScene {
+    
+    enum LastMove {
+        case SingleLine
+        case AppendedLine
+    }
     
     var rows : Int
     var dim : Int
@@ -62,6 +64,7 @@ class Board: XandOScene {
     let undoButton = UIButton()
     let backButton = UIButton()
     var nodeAction = SKAction()
+    var square = CAShapeLayer()
     var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
@@ -192,16 +195,6 @@ class Board: XandOScene {
                 gameLayer.addChild(sprite!)
                 let fadeOut = SKAction.scaleTo(1.3, duration: 0.5)
                 let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
-//                gameLayer.enumerateChildNodesWithName("X", usingBlock: {
-//                    node, stop in
-//                    node.runAction(SKAction.sequence([fadeOut, fadeIn]))
-//                    // do something with node or stop
-//                })
-//                gameLayer.enumerateChildNodesWithName("O", usingBlock: {
-//                    node, stop in
-//                    node.runAction(SKAction.sequence([fadeOut, fadeIn]))
-//                    // do something with node or stop
-//                })
                 sprite?.runAction(SKAction.sequence([fadeOut, fadeIn]))
             }
         }
@@ -215,18 +208,37 @@ class Board: XandOScene {
     }
     
     func drawSquare(){
+        var point = pointForColumn(1, row: dim - 1, size: 0.0)
+        point = convertPointToView(point)
         
-        let x = xIsopin! * (CGFloat(dim) - CGFloat(rows) + 0.5)
-        let y = bottomPadding + (yIsopin! * (CGFloat(dim) - CGFloat(rows)))
+        let x = xIsopin!
+        let y = point.y + xIsopin!/2
         let width = (self.view?.frame.size.width)! - (xIsopin! * 2)
         let height = width
-        let square = SKShapeNode(rectOfSize: CGSize(width: width, height: height))
-        square.name = "square"
-        square.fillColor = SKColor.clearColor()
-        square.position = CGPointMake(x, y)
-        square.zPosition = 0
-        square.strokeColor = flint
-        self.addChild(square)
+        let a = CGPointMake(x, y)
+        let b = CGPointMake(x + width, y)
+        let c = CGPointMake(x + width, y + height)
+        let d = CGPointMake(x, y + height)
+        
+        let squarePath = UIBezierPath()
+        squarePath.moveToPoint(a)
+        squarePath.addLineToPoint(b)
+        squarePath.addLineToPoint(c)
+        squarePath.addLineToPoint(d)
+        squarePath.addLineToPoint(a)
+        square = CAShapeLayer()
+        square.path = squarePath.CGPath
+        square.strokeColor = flint.CGColor
+        square.fillColor = UIColor.clearColor().CGColor
+        square.strokeEnd = 0.0
+        view?.layer.addSublayer(square)
+        let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        pathAnimation.duration = 1.25
+        pathAnimation.fromValue = 0
+        pathAnimation.toValue = 1
+        pathAnimation.removedOnCompletion = false
+        pathAnimation.fillMode = kCAFillModeBoth
+        square.addAnimation(pathAnimation, forKey: pathAnimation.keyPath)
 
     }
     
@@ -812,7 +824,7 @@ class Board: XandOScene {
         nodeO.removeAll()
         xLines.removeAll()
         oLines.removeAll()
-//        grid.removeArray()
+        square.removeFromSuperlayer()
         restartButton.removeFromSuperview()
         backButton.removeFromSuperview()
         undoButton.removeFromSuperview()
