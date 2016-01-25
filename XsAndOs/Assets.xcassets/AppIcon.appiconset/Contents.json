@@ -84,9 +84,8 @@
       "scale" : "2x"
     },
     {
-      "size" : "60x60",
       "idiom" : "car",
-      "filename" : "Icon-Small-60@3x.png",
+      "size" : "60x60",
       "scale" : "3x"
     },
     {
@@ -148,6 +147,13 @@
       "idiom" : "mac",
       "filename" : "iTunesArtwork.png",
       "scale" : "2x"
+    },
+    {
+      "size" : "60x60",
+      "idiom" : "iphone",
+      "filename" : "Icon-Small-60@3x.png",
+      "unassigned" : true,
+      "scale" : "3x"
     }
   ],
   "info" : {

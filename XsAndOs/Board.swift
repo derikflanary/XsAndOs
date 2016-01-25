@@ -233,7 +233,7 @@ class Board: XandOScene {
         square.strokeEnd = 0.0
         view?.layer.addSublayer(square)
         let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        pathAnimation.duration = 1.25
+        pathAnimation.duration = 1.0
         pathAnimation.fromValue = 0
         pathAnimation.toValue = 1
         pathAnimation.removedOnCompletion = false
@@ -512,6 +512,7 @@ class Board: XandOScene {
             animateWidth(shapeNode)
             appendLineArrays(shapeNode)
             lastMove = .SingleLine
+            previousMoveDetails.newAppendedLine = shapeNode
         }
         undoButton.hidden = false
     }
@@ -674,9 +675,9 @@ class Board: XandOScene {
         dispatch_after(delayTime, dispatch_get_main_queue()) {
             let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
             let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-                self.gameover()
                 confettiView.stopConfetti()
                 confettiView.removeFromSuperview()
+                self.gameover()
             }
             alertController.addAction(cancelAction)
             self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
@@ -728,7 +729,6 @@ class Board: XandOScene {
         let lineToRemove = lineArray[index!]
         lineToRemove.removeFromSuperlayer()
         lineArray.removeAtIndex(index!)
-//        let lineToAdd = previousMoveDetails.oldLines[0]
         for line in previousMoveDetails.oldLines{
             lineArray.append(line)
             view?.layer.addSublayer(line)

@@ -131,16 +131,31 @@ class MultiplayerBoard: Board {
         saveGame()
     }
     
+    private func prepareOldLinesForSave() -> [[[String:Int]]]{
+        var oldLineDicts = [[[String:Int]]]()
+        for line in previousMoveDetails.oldLines{
+            line.convertLinesForParse()
+            oldLineDicts.append(line.linesForParse)
+        }
+        return oldLineDicts
+    }
+    
+    private func prepareRecentMoveForSave(){
+        let coordinateDict = recentCoordinateToDict(recentCoordinates!)
+        recentMove.removeAll()
+        recentMove.append(coordinateDict)
+    }
+    
     private func saveGame(){
         dimView.frame = (view?.frame)!
         dimBackground(dimView)
         backButton.userInteractionEnabled = false
         backButton.alpha = 0.5
-        let (xLineDicts, oLineDicts) = convertLinesToDictionaries()
-        let coordinateDict = recentCoordinateToDict(recentCoordinates!)
-        recentMove.removeAll()
-        recentMove.append(coordinateDict)
-        XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, xLines: xLineDicts, oLines: oLineDicts, gameId: gameID, xId: xObjId, oId: oObjId, lastMove: recentMove) { (success) -> Void in
+        
+        let oldLineDicts = prepareOldLinesForSave()
+        previousMoveDetails.newAppendedLine.convertLinesForParse()
+        prepareRecentMoveForSave()
+        XGameController.Singleton.sharedInstance.updateGameOnParse(xTurn, newLine: previousMoveDetails.newAppendedLine.linesForParse, oldLines: oldLineDicts, gameId: gameID, xId: xObjId, oId: oObjId, lastMove: recentMove) { (success) -> Void in
             if success{
                 print("game saved")
                 let receiver = self.receiver()
@@ -213,7 +228,6 @@ class MultiplayerBoard: Board {
         let alertController = UIAlertController(title: "Move Not Sent", message: "Check your network connection and try again", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
             self.undoLastMove()
-            
         }
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
