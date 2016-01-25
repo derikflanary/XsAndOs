@@ -101,6 +101,7 @@ class XGameController: NSObject {
                     PFObject.fetchAllIfNeededInBackground(results, block: { (objects: [AnyObject]?, error :NSError?) -> Void in
                         if error == nil{
                             let games = objects as! [PFObject]
+                            self.deleteOldGames(results!)
                             completion(true, games)
                         }else{
                             completion(false, results!)
@@ -109,6 +110,23 @@ class XGameController: NSObject {
                 }else{
                     completion(false, [])
                 }
+            }
+        }
+        
+        func deleteOldGames(games: [PFObject]){
+            for game in games{
+                let gameDate = game.createdAt
+                let todayDate = NSDate()
+                let timeInterval = todayDate.timeIntervalSinceDate(gameDate!)
+                let hours = timeInterval / 3600
+                if hours >= 168{
+                    let xLines = game["xLines"] as! PFObject
+                    let oLines = game["oLines"] as! PFObject
+                    xLines.deleteEventually()
+                    oLines.deleteEventually()
+                    game.deleteEventually()
+                }
+                print(hours)
             }
         }
         
