@@ -115,18 +115,24 @@ class XGameController: NSObject {
         
         func deleteOldGames(games: [PFObject]){
             for game in games{
+                let finished = game["finished"] as! Bool
                 let gameDate = game.createdAt
                 let todayDate = NSDate()
                 let timeInterval = todayDate.timeIntervalSinceDate(gameDate!)
                 let hours = timeInterval / 3600
-                if hours >= 168{
+                if hours >= 168 && finished{
+                    let xLines = game["xLines"] as! PFObject
+                    let oLines = game["oLines"] as! PFObject
+                    xLines.deleteEventually()
+                    oLines.deleteEventually()
+                    game.deleteEventually()
+                }else if hours > 340{
                     let xLines = game["xLines"] as! PFObject
                     let oLines = game["oLines"] as! PFObject
                     xLines.deleteEventually()
                     oLines.deleteEventually()
                     game.deleteEventually()
                 }
-                print(hours)
             }
         }
         

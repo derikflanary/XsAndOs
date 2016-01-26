@@ -71,13 +71,13 @@ class GameScene: XandOScene, UITextFieldDelegate {
         currentGamesButton.setTitleColor(oColor, forState: .Normal)
         currentGamesButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         currentGamesButton.addTarget(self, action: "currentGamesPressed", forControlEvents: .TouchUpInside)
-        currentGamesButton.highlighted = true
-        currentGamesButton.enabled = false
+        currentGamesButton.highlighted = false
+        currentGamesButton.enabled = true
         
         if PFUser.currentUser() != nil{
             stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton, currentGamesButton])
             friendsList = (PFUser.currentUser()?.valueForKey("friends"))! as! [[String : String]]
-            checkCurrentGames()
+//            checkCurrentGames()
             let myinstallation = PFInstallation.currentInstallation()
             myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
             myinstallation.saveInBackground()
@@ -152,21 +152,8 @@ class GameScene: XandOScene, UITextFieldDelegate {
         transitionToFriendList(friendsList)
     }
     
-    func checkCurrentGames(){
-        XGameController.Singleton.sharedInstance.fetchGamesForUser(PFUser.currentUser()!) { (success, games) -> Void in
-            guard success else{return}
-            if games.count > 0{
-                dispatch_async(dispatch_get_main_queue(),{
-                    self.currentGames = games
-                    self.currentGamesButton.enabled = true
-                    self.currentGamesButton.highlighted = false
-                })
-            }
-        }
-    }
-    
     func currentGamesPressed(){
-        transitionToCurrentGames(currentGames)
+        transitionToCurrentGames()
     }
     
     private func transitionToFriendList(friendList : [[String:String]]){
@@ -178,10 +165,9 @@ class GameScene: XandOScene, UITextFieldDelegate {
 
     }
     
-    private func transitionToCurrentGames(games : [PFObject]){
+    func transitionToCurrentGames(){
         stackView.removeFromSuperview()
         let secondScene = CurrentGamesScene()
-        secondScene.games = currentGames
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }

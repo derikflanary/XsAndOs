@@ -27,6 +27,23 @@ class XandOScene: SKScene {
         backgroundColor = backColor
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "directGameNotification:", name:"LoadGameDirect", object: nil)
+        
+//        let menuButtonSize: CGSize = CGSize(width: 64.0, height: 64.0)
+//        let menuButton = ExpandingMenuButton(frame: CGRect(origin: CGPointZero, size: menuButtonSize), centerImage: UIImage(named: "x")!, centerHighlightedImage: UIImage(named: "x")!)
+//        menuButton.center = CGPointMake(self.view!.bounds.width/2, self.view!.bounds.height - 60.0)
+//        menuButton.expandingDirection = .Bottom
+//        view.addSubview(menuButton)
+//        
+//        let item1 = ExpandingMenuItem(size: menuButtonSize, title: "Music", image: UIImage(named: "x")!, highlightedImage: UIImage(named: "x")!, backgroundImage: UIImage(named: "x"), backgroundHighlightedImage: UIImage(named: "x")) { () -> Void in
+//            // Do some action
+//        }
+//    
+//        let item5 = ExpandingMenuItem(size: menuButtonSize, title: "Sleep", image: UIImage(named: "o")!, highlightedImage: UIImage(named: "o")!, backgroundImage: UIImage(named: "o"), backgroundHighlightedImage: UIImage(named: "o")) { () -> Void in
+//            // Do some action
+//        }
+//        
+//        menuButton.addMenuItems([item1, item5])
+
     }
     
     func removeViews(){

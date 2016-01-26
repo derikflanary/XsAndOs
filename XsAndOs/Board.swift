@@ -586,16 +586,6 @@ class Board: XandOScene {
         return line
     }
     
-    func animateLine(line: LineShapeLayer){
-        let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        pathAnimation.duration = 0.25
-        pathAnimation.fromValue = 0.0
-        pathAnimation.toValue = 1.0
-        pathAnimation.fillMode = kCAFillModeBoth // keep to value after finishing
-        pathAnimation.removedOnCompletion = false
-        line.addAnimation(pathAnimation, forKey: "strokeEndAnimation")
-    }
-    
     func animateWidth(line: LineShapeLayer){
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
@@ -672,16 +662,17 @@ class Board: XandOScene {
         self.view!.addSubview(confettiView)
         confettiView.startConfetti()
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
+        
             let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
             let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+                dispatch_after(delayTime, dispatch_get_main_queue()) {
                 confettiView.stopConfetti()
                 confettiView.removeFromSuperview()
                 self.gameover()
+                }
             }
             alertController.addAction(cancelAction)
             self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
-        }
         
     }
     

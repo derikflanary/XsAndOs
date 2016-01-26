@@ -32,9 +32,11 @@ class MultiplayerBoard: Board {
     var oLinesParse : [[[String:Int]]] = []
     var layersToDelete = [LineShapeLayer]()
     var activityIndicator = DGActivityIndicatorView()
+    var firstLoad = Bool()
     let dimView = UIView()
     
     override func startGame() {
+        firstLoad = true
         xTurn = xTurnLoad
         super.startGame()
         undoButton.removeFromSuperview()
@@ -86,14 +88,44 @@ class MultiplayerBoard: Board {
         loopThroughLines("O")
         markIntersections("X")
         markIntersections("O")
+        if recentMove.count > 0 && firstLoad{
+            lastMoveLoadAndAnimate()
+            firstLoad = false
+        }
     }
     
     func loopThroughLines(type: String){
         var linesArray = xLines
         if type == "O" {linesArray = oLines}
         for line in linesArray{
-            view?.layer.addSublayer(line)
+            if firstLoad{
+                line.lineWidth = 0
+                view?.layer.addSublayer(line)
+                animateWidthDelayed(line)
+            }else{
+                view?.layer.addSublayer(line)
+            }
         }
+    }
+    
+    func lastMoveLoadAndAnimate(){
+        let pointsDict = recentMove[0]
+        var (pointA, pointB) = pointsFromDictionary(pointsDict)
+        pointA = convertPointToView(pointA)
+        pointB = convertPointToView(pointB)
+        let newPath = UIBezierPath()
+        newPath.moveToPoint(pointA)
+        newPath.addLineToPoint(pointB)
+        var stroke = xColor.CGColor
+        if xTurn{
+            stroke = oColor.CGColor
+        }
+        let shape = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: newPath.CGPath, color: stroke)
+        shape.lineWidth = 0
+        view?.layer.addSublayer(shape)
+        layersToDelete.append(shape)
+        animationOnLastMove(shape)
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -290,6 +322,7 @@ class MultiplayerBoard: Board {
                     if success{
                         dispatch_async(dispatch_get_main_queue(),{
 //                            self.transitiontoLoadedBoard(secondScene)
+                            self.firstLoad = false
                             self.loadMove(secondScene)
                             PFInstallation.currentInstallation().badge = 0
                         })
@@ -467,15 +500,40 @@ class MultiplayerBoard: Board {
     func finishAnimationOnLastMove(shapeLayer: LineShapeLayer){
         let animation2 = CABasicAnimation(keyPath: "lineWidth")
         animation2.fromValue = 4
-        animation2.toValue = 6
+        animation2.toValue = 7
         animation2.duration = 0.5
         animation2.autoreverses = true
-        animation2.repeatCount = 4
+        animation2.repeatCount = 5
         animation2.fillMode = kCAFillModeForwards // keep to value after finishing
         animation2.removedOnCompletion = true // don't remove after finishing
         shapeLayer.addAnimation(animation2, forKey: animation2.keyPath)
 
     }
+    func animationOnLastMove(shapeLayer: LineShapeLayer){
+        let animation2 = CABasicAnimation(keyPath: "lineWidth")
+        animation2.fromValue = 4
+        animation2.toValue = 7
+        animation2.duration = 0.5
+        animation2.autoreverses = true
+        animation2.beginTime = CACurrentMediaTime() + 2.5
+        animation2.repeatCount = 5
+        animation2.fillMode = kCAFillModeForwards // keep to value after finishing
+        animation2.removedOnCompletion = true // don't remove after finishing
+        shapeLayer.addAnimation(animation2, forKey: animation2.keyPath)
+        
+    }
+
+    func animateWidthDelayed(line: LineShapeLayer){
+        let animation = CABasicAnimation(keyPath: "lineWidth")
+        animation.toValue = 4
+        animation.duration = 1.0
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.beginTime = CACurrentMediaTime() + 1.5
+        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.removedOnCompletion = false // don't remove after finishing
+        line.addAnimation(animation, forKey: animation.keyPath)
+    }
+
     
     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
         if flag{

@@ -17,17 +17,33 @@ class CurrentGamesScene: TableViewScene {
     var currentGames = [PFObject]()
     
     override func didMoveToView(view: SKView) {
+        
+        checkCurrentGames()
+        
         PFInstallation.currentInstallation().badge = 0
-        for game in games{
-            let finishedGame = game["finished"] as! Bool
-            if finishedGame{
-                finishedGames.append(game)
-            }else{
-                currentGames.append(game)
-            }
-        }
         super.didMoveToView(view)
     }
+    
+    func checkCurrentGames(){
+        XGameController.Singleton.sharedInstance.fetchGamesForUser(PFUser.currentUser()!) { (success, games) -> Void in
+            guard success else{return}
+            if games.count > 0{
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.games = games
+                    for game in games{
+                        let finishedGame = game["finished"] as! Bool
+                        if finishedGame{
+                            self.finishedGames.append(game)
+                        }else{
+                            self.currentGames.append(game)
+                        }
+                    }
+                    self.tableView.reloadData()
+                })
+            }
+        }
+    }
+
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0{

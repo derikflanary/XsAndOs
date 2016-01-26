@@ -54,6 +54,11 @@
 		EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */; };
 		EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */; };
 		EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */; };
+		EE03D3EE1C56E49400078CF6 /* ExpandingMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D3EC1C56E49400078CF6 /* ExpandingMenuButton.swift */; };
+		EE03D3EF1C56E49400078CF6 /* ExpandingMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D3ED1C56E49400078CF6 /* ExpandingMenuItem.swift */; };
+		EE03D3F41C56E5A000078CF6 /* expanding.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F11C56E5A000078CF6 /* expanding.caf */; };
+		EE03D3F51C56E5A000078CF6 /* fold.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F21C56E5A000078CF6 /* fold.caf */; };
+		EE03D3F61C56E5A000078CF6 /* selected.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F31C56E5A000078CF6 /* selected.caf */; };
 		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
 		EE2FB4D51C3AEBF200C91D68 /* XGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */; };
 		EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */; };
@@ -195,6 +200,11 @@
 		EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Regular.otf"; sourceTree = "<group>"; };
 		EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Semibold.otf"; sourceTree = "<group>"; };
 		EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Thin.otf"; sourceTree = "<group>"; };
+		EE03D3EC1C56E49400078CF6 /* ExpandingMenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpandingMenuButton.swift; path = "../../../../Downloads/ExpandingMenu-master/Pod/Classes/ExpandingMenuButton.swift"; sourceTree = "<group>"; };
+		EE03D3ED1C56E49400078CF6 /* ExpandingMenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpandingMenuItem.swift; path = "../../../../Downloads/ExpandingMenu-master/Pod/Classes/ExpandingMenuItem.swift"; sourceTree = "<group>"; };
+		EE03D3F11C56E5A000078CF6 /* expanding.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = expanding.caf; sourceTree = "<group>"; };
+		EE03D3F21C56E5A000078CF6 /* fold.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fold.caf; sourceTree = "<group>"; };
+		EE03D3F31C56E5A000078CF6 /* selected.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = selected.caf; sourceTree = "<group>"; };
 		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
 		EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGameController.swift; sourceTree = "<group>"; };
 		EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplayerSetupScene.swift; sourceTree = "<group>"; };
@@ -392,6 +402,7 @@
 		EE03D34F1C4EF72300078CF6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				EE03D3F01C56E5A000078CF6 /* Sounds */,
 				EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */,
 				EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */,
 				EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */,
@@ -402,6 +413,17 @@
 				EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		EE03D3F01C56E5A000078CF6 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				EE03D3F11C56E5A000078CF6 /* expanding.caf */,
+				EE03D3F21C56E5A000078CF6 /* fold.caf */,
+				EE03D3F31C56E5A000078CF6 /* selected.caf */,
+			);
+			name = Sounds;
+			path = "../../../../Downloads/ExpandingMenu-master/Pod/Assets/Sounds";
 			sourceTree = "<group>";
 		};
 		EE2FB4D61C3AED0000C91D68 /* Models */ = {
@@ -473,6 +495,8 @@
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE03D3141C4AC9BE00078CF6 /* Confetti */,
 				EE03D2AB1C49B21500078CF6 /* DGActivityIndicatorView */,
+				EE03D3EC1C56E49400078CF6 /* ExpandingMenuButton.swift */,
+				EE03D3ED1C56E49400078CF6 /* ExpandingMenuItem.swift */,
 				EE534B801C481B8F0085E806 /* Dot Game */,
 				EE03D34F1C4EF72300078CF6 /* Resources */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
@@ -656,14 +680,17 @@
 				EE03D33B1C4EF71B00078CF6 /* SF-UI-Display-Bold.otf in Resources */,
 				EE5E81831BDEC1410004424F /* GameScene.sks in Resources */,
 				EE03D33E1C4EF71B00078CF6 /* SF-UI-Display-Medium.otf in Resources */,
+				EE03D3F51C56E5A000078CF6 /* fold.caf in Resources */,
 				EE5E818F1BDEC1410004424F /* LaunchScreen.storyboard in Resources */,
 				EE5E818C1BDEC1410004424F /* Assets.xcassets in Resources */,
 				EE03D33A1C4EF71B00078CF6 /* SF-UI-Display-Black.otf in Resources */,
 				EE03D33D1C4EF71B00078CF6 /* SF-UI-Display-Light.otf in Resources */,
 				EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */,
 				EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */,
+				EE03D3F41C56E5A000078CF6 /* expanding.caf in Resources */,
 				EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */,
 				EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */,
+				EE03D3F61C56E5A000078CF6 /* selected.caf in Resources */,
 				EE5E818A1BDEC1410004424F /* Main.storyboard in Resources */,
 				EE03D33C1C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf in Resources */,
 			);
@@ -714,6 +741,7 @@
 				EE2FB4DE1C3B472C00C91D68 /* MultiplayerBoard.swift in Sources */,
 				EE03D2F31C49B21500078CF6 /* DGActivityIndicatorBallClipRotateAnimation.m in Sources */,
 				EE03D2FB1C49B21500078CF6 /* DGActivityIndicatorBallScaleAnimation.m in Sources */,
+				EE03D3EF1C56E49400078CF6 /* ExpandingMenuItem.swift in Sources */,
 				EE03D3081C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutAnimation.m in Sources */,
 				EE03D3121C49B21500078CF6 /* DGActivityIndicatorTwoDotsAnimation.m in Sources */,
 				EE03D30E1C49B21500078CF6 /* DGActivityIndicatorThreeDotsAnimation.m in Sources */,
@@ -733,6 +761,7 @@
 				EE03D3091C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m in Sources */,
 				EE03D2F71C49B21500078CF6 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */,
 				EE03D3021C49B21500078CF6 /* DGActivityIndicatorBallZigZagDeflectAnimation.m in Sources */,
+				EE03D3EE1C56E49400078CF6 /* ExpandingMenuButton.swift in Sources */,
 				EE03D2FA1C49B21500078CF6 /* DGActivityIndicatorBallRotateAnimation.m in Sources */,
 				EE03D3031C49B21500078CF6 /* DGActivityIndicatorCookieTerminatorAnimation.m in Sources */,
 				EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */,
