@@ -30,7 +30,7 @@ class FacebookController: NSObject {
                         })
                     }
                     
-                    self.fetchFriendsForUser(user, completion: { (success, friends) -> Void in
+                    self.fetchFriendsForUser(user, completion: { (success, friends, inviteFriends) -> Void in
                         guard success else{completion(false, friends) ; return}
                         completion(true, friends)
                     })
@@ -53,9 +53,36 @@ class FacebookController: NSObject {
                 }
             }
             
-            func fetchFriendsForUser(user : PFUser, completion: (Bool, [[String:String]]) -> Void){
+            func fetchFriendsForUser(user : PFUser, completion: (Bool, friends: [[String:String]], invitables: [[String:String]]) -> Void){
 
                 let request = FBSDKGraphRequest(graphPath:"/me/friends", parameters:["fields": "id, name, email"]);
+                request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+                    
+                    if error == nil {
+                        let resultdict = result as! NSDictionary
+                        let data : NSArray = resultdict.objectForKey("data") as! NSArray
+                        user.setObject(data, forKey: "friends")
+                        user.saveInBackground()
+                        
+                        self.fetchInvitableFriendsForUser(user, completion: { (success, inviteFriends) -> Void in
+                            if success{
+                                completion(true, friends: data as! [[String : String]], invitables: inviteFriends)
+                            }else{
+                                completion(false, friends: data as! [[String : String]], invitables: [[String : String]]())
+                            }
+                        })
+
+                        
+                    } else {
+                        print("Error Getting Friends \(error)");
+                        completion(false, friends: result as! [[String : String]], invitables: result as! [[String : String]])
+                    }
+                }
+            }
+            
+            func fetchInvitableFriendsForUser(user : PFUser, completion: (Bool, [[String:String]]) -> Void){
+                
+                let request = FBSDKGraphRequest(graphPath:"/me/taggable_friends", parameters:["fields": "id, name, email"]);
                 request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
                     
                     if error == nil {
@@ -67,10 +94,11 @@ class FacebookController: NSObject {
                         
                     } else {
                         print("Error Getting Friends \(error)");
-                        completion(false, result as! [[String : String]])
+                        completion(false, [[String : String]]())
                     }
                 }
             }
+
             
             
             func fetchFriendWithFacebookID(id : String, completion: (PFUser) -> Void){

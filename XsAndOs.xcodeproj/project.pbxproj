@@ -54,8 +54,6 @@
 		EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */; };
 		EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */; };
 		EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */; };
-		EE03D3EE1C56E49400078CF6 /* ExpandingMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D3EC1C56E49400078CF6 /* ExpandingMenuButton.swift */; };
-		EE03D3EF1C56E49400078CF6 /* ExpandingMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D3ED1C56E49400078CF6 /* ExpandingMenuItem.swift */; };
 		EE03D3F41C56E5A000078CF6 /* expanding.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F11C56E5A000078CF6 /* expanding.caf */; };
 		EE03D3F51C56E5A000078CF6 /* fold.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F21C56E5A000078CF6 /* fold.caf */; };
 		EE03D3F61C56E5A000078CF6 /* selected.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F31C56E5A000078CF6 /* selected.caf */; };
@@ -200,8 +198,6 @@
 		EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Regular.otf"; sourceTree = "<group>"; };
 		EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Semibold.otf"; sourceTree = "<group>"; };
 		EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Thin.otf"; sourceTree = "<group>"; };
-		EE03D3EC1C56E49400078CF6 /* ExpandingMenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpandingMenuButton.swift; path = "../../../../Downloads/ExpandingMenu-master/Pod/Classes/ExpandingMenuButton.swift"; sourceTree = "<group>"; };
-		EE03D3ED1C56E49400078CF6 /* ExpandingMenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExpandingMenuItem.swift; path = "../../../../Downloads/ExpandingMenu-master/Pod/Classes/ExpandingMenuItem.swift"; sourceTree = "<group>"; };
 		EE03D3F11C56E5A000078CF6 /* expanding.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = expanding.caf; sourceTree = "<group>"; };
 		EE03D3F21C56E5A000078CF6 /* fold.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fold.caf; sourceTree = "<group>"; };
 		EE03D3F31C56E5A000078CF6 /* selected.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = selected.caf; sourceTree = "<group>"; };
@@ -426,6 +422,50 @@
 			path = "../../../../Downloads/ExpandingMenu-master/Pod/Assets/Sounds";
 			sourceTree = "<group>";
 		};
+		EE03D3FA1C582E9200078CF6 /* Parent Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4DF1C3BA7F800C91D68 /* TableViewScene.swift */,
+				EE0379041C3F051100312DF4 /* XandOScene.swift */,
+			);
+			name = "Parent Scenes";
+			sourceTree = "<group>";
+		};
+		EE03D3FB1C582EB300078CF6 /* Main Scene */ = {
+			isa = PBXGroup;
+			children = (
+				EE5E81841BDEC1410004424F /* GameScene.swift */,
+				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
+			);
+			name = "Main Scene";
+			sourceTree = "<group>";
+		};
+		EE03D3FC1C582EC300078CF6 /* Multiplayer */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
+				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
+			);
+			name = Multiplayer;
+			sourceTree = "<group>";
+		};
+		EE03D3FD1C582ED300078CF6 /* Play With Friends */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4E11C3BA96000C91D68 /* CurrentGamesScene.swift */,
+				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
+			);
+			name = "Play With Friends";
+			sourceTree = "<group>";
+		};
+		EE03D3FE1C582EFF00078CF6 /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				EE65F55C1C31F1D700E51138 /* FacebookController.swift */,
+			);
+			name = Facebook;
+			sourceTree = "<group>";
+		};
 		EE2FB4D61C3AED0000C91D68 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -440,7 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
-				EE65F55C1C31F1D700E51138 /* FacebookController.swift */,
+				EE03D3FE1C582EFF00078CF6 /* Facebook */,
 				EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */,
 				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
 				EE2FB4DB1C3B3CDA00C91D68 /* PushNotificationController.swift */,
@@ -482,21 +522,15 @@
 			isa = PBXGroup;
 			children = (
 				EE5E81801BDEC1410004424F /* AppDelegate.swift */,
-				EE0379041C3F051100312DF4 /* XandOScene.swift */,
-				EE5E81841BDEC1410004424F /* GameScene.swift */,
-				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
-				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
-				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
-				EE2FB4E11C3BA96000C91D68 /* CurrentGamesScene.swift */,
-				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
-				EE2FB4DF1C3BA7F800C91D68 /* TableViewScene.swift */,
+				EE03D3FA1C582E9200078CF6 /* Parent Scenes */,
+				EE03D3FB1C582EB300078CF6 /* Main Scene */,
+				EE03D3FC1C582EC300078CF6 /* Multiplayer */,
+				EE03D3FD1C582ED300078CF6 /* Play With Friends */,
 				EE2FB4D61C3AED0000C91D68 /* Models */,
 				EE534B7B1C45C6290085E806 /* Controllers */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE03D3141C4AC9BE00078CF6 /* Confetti */,
 				EE03D2AB1C49B21500078CF6 /* DGActivityIndicatorView */,
-				EE03D3EC1C56E49400078CF6 /* ExpandingMenuButton.swift */,
-				EE03D3ED1C56E49400078CF6 /* ExpandingMenuItem.swift */,
 				EE534B801C481B8F0085E806 /* Dot Game */,
 				EE03D34F1C4EF72300078CF6 /* Resources */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
@@ -741,7 +775,6 @@
 				EE2FB4DE1C3B472C00C91D68 /* MultiplayerBoard.swift in Sources */,
 				EE03D2F31C49B21500078CF6 /* DGActivityIndicatorBallClipRotateAnimation.m in Sources */,
 				EE03D2FB1C49B21500078CF6 /* DGActivityIndicatorBallScaleAnimation.m in Sources */,
-				EE03D3EF1C56E49400078CF6 /* ExpandingMenuItem.swift in Sources */,
 				EE03D3081C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutAnimation.m in Sources */,
 				EE03D3121C49B21500078CF6 /* DGActivityIndicatorTwoDotsAnimation.m in Sources */,
 				EE03D30E1C49B21500078CF6 /* DGActivityIndicatorThreeDotsAnimation.m in Sources */,
@@ -761,7 +794,6 @@
 				EE03D3091C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m in Sources */,
 				EE03D2F71C49B21500078CF6 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */,
 				EE03D3021C49B21500078CF6 /* DGActivityIndicatorBallZigZagDeflectAnimation.m in Sources */,
-				EE03D3EE1C56E49400078CF6 /* ExpandingMenuButton.swift in Sources */,
 				EE03D2FA1C49B21500078CF6 /* DGActivityIndicatorBallRotateAnimation.m in Sources */,
 				EE03D3031C49B21500078CF6 /* DGActivityIndicatorCookieTerminatorAnimation.m in Sources */,
 				EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */,

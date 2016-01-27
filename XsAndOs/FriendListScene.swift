@@ -12,25 +12,49 @@ import Parse
 
 class FriendListScene: TableViewScene{
     var friends = [[String:String]]()
+    var inviteFriends = [[String: String]]()
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
-        FacebookController.Singleton.sharedInstance.fetchFriendsForUser(PFUser.currentUser()!) { (success: Bool,theFriends: [[String : String]]) -> Void in
+        guard let currentUser = PFUser.currentUser() else{return}
+        FacebookController.Singleton.sharedInstance.fetchFriendsForUser(currentUser) { (success: Bool, friends: [[String:String]], invitables: [[String:String]]) -> Void in
             if success{
                 dispatch_async(dispatch_get_main_queue(),{
-                    self.friends = theFriends
+                    self.friends = friends
+                    self.inviteFriends = invitables
+                    var vNames = self.stringArrayFromDictionary(invitables, key: "name")
+                    let fNames = self.stringArrayFromDictionary(friends, key: "name")
+                    
+                    for name in fNames{
+                        if let x = vNames.indexOf(name){
+                            vNames.removeAtIndex(x)
+                            self.inviteFriends.removeAtIndex(x)
+                        }
+                    }
+                    print(self.inviteFriends)
                     self.tableView.reloadData()
                 })
             }
         }
     }
     
+    func stringArrayFromDictionary(characters: [[String:String]], key: String) -> [String] {
+        return characters.map { character in
+            character[key] ?? ""
+        }
+    }
+
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        if section == 0{
+            return friends.count
+        }else{
+            return inviteFriends.count
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -43,9 +67,17 @@ class FriendListScene: TableViewScene{
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-        if friends.count > 0{
-            let friend = friends[indexPath.row] as Dictionary
-            cell.textLabel?.text = friend["name"]
+        if indexPath.section == 0{
+            if friends.count > 0{
+                let friend = friends[indexPath.row] as Dictionary
+                cell.textLabel?.text = friend["name"]
+            }
+
+        }else{
+            if inviteFriends.count > 0{
+                let friend = inviteFriends[indexPath.row] as Dictionary
+                cell.textLabel?.text = friend["name"]
+            }
         }
         
         return cell
@@ -54,8 +86,8 @@ class FriendListScene: TableViewScene{
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0{
             let friend = friends[indexPath.row] as Dictionary
-            let id = friend["id"]
-            FacebookController.Singleton.sharedInstance.fetchFriendWithFacebookID(id!, completion: { (user) -> Void in
+            guard let id = friend["id"] else {return}
+            FacebookController.Singleton.sharedInstance.fetchFriendWithFacebookID(id, completion: { (user) -> Void in
                 let opponent = user as PFUser
                 self.transitionToSetupScene(opponent)
             })
@@ -72,4 +104,18 @@ class FriendListScene: TableViewScene{
         removeViews()
     }
     
+}
+
+extension Array where Element: Equatable {
+    mutating func removeObject(object: Element) {
+        if let index = self.indexOf(object) {
+            self.removeAtIndex(index)
+        }
+    }
+    
+    mutating func removeObjectsInArray(array: [Element]) {
+        for object in array {
+            self.removeObject(object)
+        }
+    }
 }

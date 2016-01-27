@@ -19,14 +19,17 @@ class GameScene: XandOScene, UITextFieldDelegate {
     private let fbLoginbutton = UIButton()
     private let friendButton = UIButton()
     private let currentGamesButton = UIButton()
-    var friendsList = [[String:String]]()
     var currentGames = [PFObject]()
     private var activityIndicator = UIActivityIndicatorView()
     let transition = SKTransition.crossFadeWithDuration(1)
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
+        layoutViews()
         
+    }
+    
+    private func layoutViews(){
         startButton.frame = CGRectMake(0, 100, (self.view?.frame.size.width)!, 50)
         startButton.setTitle("Start Game", forState: .Normal)
         startButton.titleLabel?.font = UIFont(name: boldFontName, size: 40)
@@ -74,10 +77,8 @@ class GameScene: XandOScene, UITextFieldDelegate {
         currentGamesButton.highlighted = false
         currentGamesButton.enabled = true
         
-        if PFUser.currentUser() != nil{
+        if let currentUser = PFUser.currentUser(){
             stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton, currentGamesButton])
-            friendsList = (PFUser.currentUser()?.valueForKey("friends"))! as! [[String : String]]
-//            checkCurrentGames()
             let myinstallation = PFInstallation.currentInstallation()
             myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
             myinstallation.saveInBackground()
@@ -130,12 +131,13 @@ class GameScene: XandOScene, UITextFieldDelegate {
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
             if success{
                 //update the UI here
-                let myinstallation = PFInstallation.currentInstallation()
-                myinstallation.setObject((PFUser.currentUser()?.username)!, forKey: "ownerUsername")
-                myinstallation.saveInBackground()
-                
+                if let currentUser = PFUser.currentUser(){
+                    let myinstallation = PFInstallation.currentInstallation()
+                    myinstallation.setObject(currentUser.username!, forKey: "ownerUsername")
+                    myinstallation.saveInBackground()
+                }
+
                 dispatch_async(dispatch_get_main_queue(),{
-                    self.friendsList = friendList
                     self.stackView.removeArrangedSubview(self.fbLoginbutton)
                     self.fbLoginbutton.removeFromSuperview()
                     self.stackView.addArrangedSubview(self.friendButton)
@@ -149,17 +151,16 @@ class GameScene: XandOScene, UITextFieldDelegate {
     }
     
     func friendPressed(){
-        transitionToFriendList(friendsList)
+        transitionToFriendList()
     }
     
     func currentGamesPressed(){
         transitionToCurrentGames()
     }
     
-    private func transitionToFriendList(friendList : [[String:String]]){
+    private func transitionToFriendList(){
         stackView.removeFromSuperview()
         let secondScene = FriendListScene()
-        secondScene.friends = friendList
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
 
