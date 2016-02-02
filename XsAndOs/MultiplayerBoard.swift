@@ -434,8 +434,8 @@ class MultiplayerBoard: Board {
     }
     
     private func pointsFromDictionary(line: [String:Int]) -> (CGPoint, CGPoint){
-        let pointA = pointForColumn(line[columnAKey]!, row: line[rowAKey]!, size: 1)
-        let pointB = pointForColumn(line[columnBKey]!, row: line[rowBKey]!, size: 1)
+        let pointA = pointForColumn(line[columnAKey]!, row: line[rowAKey]!)
+        let pointB = pointForColumn(line[columnBKey]!, row: line[rowBKey]!)
         return (pointA, pointB)
     }
     
@@ -448,7 +448,7 @@ class MultiplayerBoard: Board {
             for coordinate in line.coordinates{
                 let interCol = (coordinate.columnA + coordinate.columnB) / 2
                 let interRow = (coordinate.rowA + coordinate.rowB) / 2
-                let intersection = gridItemAtColumn(interCol, row: interRow)
+                let intersection = gridItem(column: interCol, row: interRow)
                 if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
                     intersection?.nodePos.ptWho = type
                 }

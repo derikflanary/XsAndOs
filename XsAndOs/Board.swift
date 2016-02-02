@@ -10,7 +10,8 @@ import SpriteKit
 
 //var dim = 9
 let bottomPadding : CGFloat = 100
-
+let x = "X"
+let o = "O"
 
 
 struct PreviousMoveDetails {
@@ -41,12 +42,12 @@ class Board: XandOScene {
     
     var rows : Int
     var dim : Int
-    var nodeX = [Nodes]()
-    var nodeO = [Nodes]()
+    var nodeX = [Node]()
+    var nodeO = [Node]()
     var yIsopin : CGFloat?    // distance between nodes Vertical
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
-    var grid : Array2D<Nodes>
+    var grid : Array2D<Node>
     var selectedNode = SKSpriteNode()
     var secondSelectedNode = SKSpriteNode()
     var xTurn : Bool = true
@@ -89,7 +90,7 @@ class Board: XandOScene {
     }
     
     
-//GAME SETUP
+// MARK: - GAME SETUP
     func startGame(){
         gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
@@ -125,7 +126,7 @@ class Board: XandOScene {
         self.view?.addSubview(undoButton)
         undoButton.hidden = true
         
-        turnLabel = SKLabelNode(text: "X")
+        turnLabel = SKLabelNode(text: x)
         turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
         turnLabel.fontColor = xColor
         turnLabel.fontName = mainFontName
@@ -145,21 +146,21 @@ class Board: XandOScene {
         nodeAction = pulseForever
     }
     
-//DRAWING THE BOARD
+//MARK: - DRAWING THE BOARD
     func buildArrayOfNodes(){
-        var set = Set<Nodes>()
+        var set = Set<Node>()
         
         for  theRow in 0...dim - 1{
             for column in 0...dim - 1 {
-                let node = Nodes(column: column, row: theRow, theNodeType: NodeType.Empty)
+                let node = Node(column: column, row: theRow, theNodeType: NodeType.Empty)
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
                     node.nodeType = NodeType.O
                     node.sprite = SKSpriteNode(imageNamed: "o")
-                    node.sprite?.name = "O"
+                    node.sprite?.name = o
                 }else if (theRow + 1) % 2 != 0 && (column + 1) % 2 == 0{
                     node.nodeType = NodeType.X
                     node.sprite = SKSpriteNode(imageNamed: "x")
-                    node.sprite?.name = "X"
+                    node.sprite?.name = x
                 }else{
                     if theRow == 0 || theRow == dim - 1 || column == 0 || column == dim - 1{
                         node.nodeType = NodeType.Empty
@@ -176,11 +177,11 @@ class Board: XandOScene {
         paintXsnOs(set)
     }
     
-    func paintXsnOs(nodes: Set<Nodes>){
+    func paintXsnOs(nodes: Set<Node>){
         for node in nodes{
 
             if node.sprite != nil{
-                let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!, size: (node.sprite?.frame.size.width)!)
+                let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!)
                 let sprite = node.sprite
                 sprite?.color = SKColor.redColor()
                 sprite?.position = position
@@ -196,19 +197,22 @@ class Board: XandOScene {
                 let fadeOut = SKAction.scaleTo(1.3, duration: 0.5)
                 let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
                 sprite?.runAction(SKAction.sequence([fadeOut, fadeIn]))
+            }else{
+                let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!)
+                node.position = position
             }
         }
         animateNodes()
     }
     
-    func pointForColumn(column: Int, row: Int, size: CGFloat) -> CGPoint {
+    func pointForColumn(column: Int, row: Int) -> CGPoint {
         return CGPoint(
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
             y: CGFloat(row) * yIsopin! + bottomPadding)
     }
     
     func drawSquare(){
-        var point = pointForColumn(1, row: dim - 1, size: 0.0)
+        var point = pointForColumn(1, row: dim - 1)
         point = convertPointToView(point)
         
         let x = xIsopin!
@@ -243,7 +247,7 @@ class Board: XandOScene {
     }
     
     func animateNodes(){
-        startActionForNodeType("X")
+        startActionForNodeType(x)
     }
     
     func startActionForNodeType(type: String){
@@ -269,9 +273,9 @@ class Board: XandOScene {
     
     func turnString() -> String{
         if xTurn{
-            return "X"
+            return x
         }else{
-            return "O"
+            return o
         }
     }
     
@@ -288,18 +292,18 @@ class Board: XandOScene {
             let location = touch.locationInNode(self.gameLayer)
             let touchedNode = self.nodeAtPoint(location)
             
-            if touchedNode.name == "X" || touchedNode.name == "O"{
+            if touchedNode.name == x || touchedNode.name == o{
                 
-                if selectedNode.name == "X" && touchedNode.name == "X"{
+                if selectedNode.name == x && touchedNode.name == x{
                     guard xTurn else{return}
-                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: x){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         switchTurns()
                     }
                     resetSelectedNode()
-                }else if selectedNode.name == "O" && touchedNode.name == "O"{
+                }else if selectedNode.name == o && touchedNode.name == o{
                     guard !xTurn else{return}
-                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
+                    if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: o){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                         switchTurns()
                     }
@@ -307,10 +311,10 @@ class Board: XandOScene {
                 }else{
                     selectedNode.setScale(1.0)
                     selectedNode = touchedNode as! SKSpriteNode
-                    if touchedNode.name == "X" && xTurn{
+                    if touchedNode.name == x && xTurn{
                         selectedNode.setScale(1.25)
                         startPoint = selectedNode.position
-                    }else if touchedNode.name == "O" && !xTurn{
+                    }else if touchedNode.name == o && !xTurn{
                         selectedNode.setScale(1.25)
                         startPoint = selectedNode.position
                     }
@@ -329,19 +333,19 @@ class Board: XandOScene {
             let touchedNode = self.nodeAtPoint(location)
             
             if !pointsConnected && startPoint != CGPointZero{
-                if touchedNode.name == "X" && xTurn && touchedNode != selectedNode{
+                if touchedNode.name == x && xTurn && touchedNode != selectedNode{
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
                         nextPoint = touchedNode.position
-                        drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "X")
+                        drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: x)
                         pointsConnected = true
                         return
                     }else{
                         drawPotentialLineBetweenPoints(startPoint, pointB: location, type: "N")
                     }
-                }else if touchedNode.name == "O" && !xTurn{
+                }else if touchedNode.name == o && !xTurn{
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
                         nextPoint = touchedNode.position
-                        drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "O")
+                        drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: o)
                         pointsConnected = true
                         return
                     }else{
@@ -367,16 +371,16 @@ class Board: XandOScene {
         }
         for location: CGPoint in touchedLocations {
             let touchedNode = self.nodeAtPoint(location)
-            if selectedNode.name == "X" && touchedNode.name == "X"{
+            if selectedNode.name == x && touchedNode.name == x{
                 guard xTurn else{touchedLocations.removeAll(); return}
-                if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "X"){
+                if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: x){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     cleanUpMove()
                     return
                 }
-            }else if selectedNode.name == "O" && touchedNode.name == "O"{
+            }else if selectedNode.name == o && touchedNode.name == o{
                 guard !xTurn else{touchedLocations.removeAll(); return}
-                if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: "O"){
+                if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: o){
                     drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
                     cleanUpMove()
                     return
@@ -402,18 +406,21 @@ class Board: XandOScene {
     
     func switchTurns(){
 
-        if turnLabel.text == "X"{
+        if turnLabel.text == x{
             xTurn = false
-            turnLabel.text = "O"
+            turnLabel.text = o
             turnLabel.fontColor = oColor
-            stopActionsOnGameLayer("X")
-            startActionForNodeType("O")
+            stopActionsOnGameLayer(x)
+            startActionForNodeType(o)
+            
+            let lineAI = LineAI(grid: grid)
+            lineAI.calculateShortestPath(grid[1,1]!, toNode: grid[dim - 2,1]!)
         }else{
             xTurn = true
-            turnLabel.text = "X"
+            turnLabel.text = x
             turnLabel.fontColor = xColor
-            stopActionsOnGameLayer("O")
-            startActionForNodeType("X")
+            stopActionsOnGameLayer(o)
+            startActionForNodeType(x)
         }
     }
     
@@ -443,7 +450,7 @@ class Board: XandOScene {
                             interCol = Int(column) + 1
                         }
                     }
-                    let intersection = gridItemAtColumn(interCol, row: interRow)
+                    let intersection = gridItem(column: interCol, row: interRow)
                     if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
                         intersection?.nodePos.ptWho = type
                         lastIntersection = LastIntersectionLocation(row: interRow, col: interCol)
@@ -495,7 +502,7 @@ class Board: XandOScene {
         let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
         var lineArray = xLines
         var strokeColor = xColor.CGColor
-        if type == "O"{
+        if type == o{
             lineArray = oLines
             strokeColor = oColor.CGColor
         }
@@ -552,7 +559,7 @@ class Board: XandOScene {
     }
     
     func appendLineArrays(shapeNode : LineShapeLayer){
-        if shapeNode.team == "X"{
+        if shapeNode.team == x{
             xLines.append(shapeNode)
         }else{
             oLines.append(shapeNode)
@@ -560,11 +567,11 @@ class Board: XandOScene {
     }
     
     func deleteLineFromArrays(lineToDelete: LineShapeLayer){
-        if lineToDelete.team == "X"{
+        if lineToDelete.team == x{
             if let index = xLines.indexOf(lineToDelete){
                 xLines.removeAtIndex(index)
             }
-        }else if lineToDelete.team == "O"{
+        }else if lineToDelete.team == o{
             if let index = oLines.indexOf(lineToDelete){
                 oLines.removeAtIndex(index)
             }
@@ -616,9 +623,9 @@ class Board: XandOScene {
 //WINNING FUNCTIONS
     func checkForWinner(line: LineShapeLayer){
         //check each coordinate on the newly appended line to see if it touches both ends of the board
-        if line.team == "X"{
+        if line.team == x{
             loopCoordinatesForXWinner(line)
-        }else if line.team == "O"{
+        }else if line.team == o{
             loopCoordinatesForOWinner(line)
         }
     }
@@ -709,7 +716,7 @@ class Board: XandOScene {
     }
     
     private func resetIntersection(){
-        let intersection = gridItemAtColumn(lastIntersection.col, row: lastIntersection.row)
+        let intersection = gridItem(column: lastIntersection.col, row: lastIntersection.row)
         intersection?.nodePos.ptWho = ""
     }
     
@@ -797,7 +804,7 @@ class Board: XandOScene {
         }
     }
     
-    func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
+    func gridItem(column column: Int, row: Int) -> Node? {
         assert(column >= 0 && column <= dim)
         assert(row >= 0 && row <= dim)
         return grid[column, row]

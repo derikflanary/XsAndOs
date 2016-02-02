@@ -57,6 +57,9 @@
 		EE03D3F41C56E5A000078CF6 /* expanding.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F11C56E5A000078CF6 /* expanding.caf */; };
 		EE03D3F51C56E5A000078CF6 /* fold.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F21C56E5A000078CF6 /* fold.caf */; };
 		EE03D3F61C56E5A000078CF6 /* selected.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F31C56E5A000078CF6 /* selected.caf */; };
+		EE03D4051C596ED700078CF6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */; };
+		EE03D4071C5987BB00078CF6 /* ShortestPathStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */; };
+		EE03D4091C598A7800078CF6 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D4081C598A7800078CF6 /* Coordinate.swift */; };
 		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
 		EE2FB4D51C3AEBF200C91D68 /* XGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */; };
 		EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */; };
@@ -95,6 +98,7 @@
 		EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65F55C1C31F1D700E51138 /* FacebookController.swift */; };
 		EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5131BF158F0009191EA /* Array2D.swift */; };
 		EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5151BF15E4A009191EA /* Nodes.swift */; };
+		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
 
@@ -201,6 +205,9 @@
 		EE03D3F11C56E5A000078CF6 /* expanding.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = expanding.caf; sourceTree = "<group>"; };
 		EE03D3F21C56E5A000078CF6 /* fold.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fold.caf; sourceTree = "<group>"; };
 		EE03D3F31C56E5A000078CF6 /* selected.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = selected.caf; sourceTree = "<group>"; };
+		EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKShareKit.framework"; sourceTree = "<group>"; };
+		EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortestPathStep.swift; sourceTree = "<group>"; };
+		EE03D4081C598A7800078CF6 /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
 		EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGameController.swift; sourceTree = "<group>"; };
 		EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplayerSetupScene.swift; sourceTree = "<group>"; };
@@ -246,6 +253,7 @@
 		EE65F55C1C31F1D700E51138 /* FacebookController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookController.swift; sourceTree = "<group>"; };
 		EE8FD5131BF158F0009191EA /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		EE8FD5151BF15E4A009191EA /* Nodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nodes.swift; sourceTree = "<group>"; };
+		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -266,6 +274,7 @@
 				EE65F1ED1C31C9E200E51138 /* Parse.framework in Frameworks */,
 				EE03790A1C3F1E1B00312DF4 /* Crashlytics.framework in Frameworks */,
 				EE65F5591C31DF7900E51138 /* FBSDKCoreKit.framework in Frameworks */,
+				EE03D4051C596ED700078CF6 /* FBSDKShareKit.framework in Frameworks */,
 				EE65F1EC1C31C9E200E51138 /* Bolts.framework in Frameworks */,
 				EE65F1EF1C31C9E200E51138 /* ParseFacebookUtilsV4.framework in Frameworks */,
 				EE65F1EE1C31C9E200E51138 /* ParseFacebookUtils.framework in Frameworks */,
@@ -436,6 +445,7 @@
 			children = (
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
 				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
+				EEE9E3DC1C6002DF0041E0BA /* AI */,
 			);
 			name = "Main Scene";
 			sourceTree = "<group>";
@@ -445,6 +455,7 @@
 			children = (
 				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
 				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
+				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
 			);
 			name = Multiplayer;
 			sourceTree = "<group>";
@@ -472,6 +483,7 @@
 				EE8FD5151BF15E4A009191EA /* Nodes.swift */,
 				EE8FD5131BF158F0009191EA /* Array2D.swift */,
 				EE534B7E1C4819BF0085E806 /* LineShapeLayer.swift */,
+				EE03D4081C598A7800078CF6 /* Coordinate.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -482,7 +494,6 @@
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
 				EE03D3FE1C582EFF00078CF6 /* Facebook */,
 				EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */,
-				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
 				EE2FB4DB1C3B3CDA00C91D68 /* PushNotificationController.swift */,
 			);
 			name = Controllers;
@@ -584,6 +595,7 @@
 		EE65F2031C31CC3300E51138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */,
 				EE0379071C3F1E1A00312DF4 /* Fabric.framework */,
 				EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */,
 				EE65F55A1C31DF9000E51138 /* FBSDKLoginKit.framework */,
@@ -598,6 +610,15 @@
 				EE65F1F21C31CA0D00E51138 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EEE9E3DC1C6002DF0041E0BA /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */,
+				EEE9E3DD1C60043C0041E0BA /* LineAI.swift */,
+			);
+			name = AI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -816,10 +837,13 @@
 				EE03D2FC1C49B21500078CF6 /* DGActivityIndicatorBallScaleMultipleAnimation.m in Sources */,
 				EE03D3051C49B21500078CF6 /* DGActivityIndicatorFiveDotsAnimation.m in Sources */,
 				EE03D2FD1C49B21500078CF6 /* DGActivityIndicatorBallScaleRippleAnimation.m in Sources */,
+				EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */,
+				EE03D4091C598A7800078CF6 /* Coordinate.swift in Sources */,
 				EE03D3001C49B21500078CF6 /* DGActivityIndicatorBallTrianglePathAnimation.m in Sources */,
 				EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */,
 				EE5E81811BDEC1410004424F /* AppDelegate.swift in Sources */,
 				EE03D2F81C49B21500078CF6 /* DGActivityIndicatorBallPulseAnimation.m in Sources */,
+				EE03D4071C5987BB00078CF6 /* ShortestPathStep.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,13 +8,6 @@
 
 import Foundation
 
-struct Coordinate {
-    var columnA : Int
-    var rowA : Int
-    var columnB : Int
-    var rowB : Int
-}
-
 class LineShapeLayer : CAShapeLayer {
     
     var team : String?
@@ -36,13 +29,13 @@ class LineShapeLayer : CAShapeLayer {
     }
 
     private func setupValues(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String){
-        let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+        let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, position: nil)
         coordinates.append(coordinate)
         self.team = team
     }
     
     func addCoordinate(columnA: Int, rowA: Int, columnB: Int, rowB: Int){
-        let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
+        let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, position: nil)
         coordinates.append(coordinate)
     }
     

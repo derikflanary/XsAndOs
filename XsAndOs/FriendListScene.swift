@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 import Parse
 
-class FriendListScene: TableViewScene{
+class FriendListScene: TableViewScene, FBSDKAppInviteDialogDelegate{
     var friends = [[String:String]]()
     var inviteFriends = [[String: String]]()
     
@@ -49,7 +49,7 @@ class FriendListScene: TableViewScene{
         if section == 0{
             return friends.count
         }else{
-            return inviteFriends.count
+            return 1
         }
     }
     
@@ -74,10 +74,11 @@ class FriendListScene: TableViewScene{
             }
 
         }else{
-            if inviteFriends.count > 0{
-                let friend = inviteFriends[indexPath.row] as Dictionary
-                cell.textLabel?.text = friend["name"]
-            }
+            cell.textLabel?.text = "Invite Friends To Play!"
+//            if inviteFriends.count > 0{
+//                let friend = inviteFriends[indexPath.row] as Dictionary
+//                cell.textLabel?.text = friend["name"]
+//            }
         }
         
         return cell
@@ -91,6 +92,10 @@ class FriendListScene: TableViewScene{
                 let opponent = user as PFUser
                 self.transitionToSetupScene(opponent)
             })
+        }else{
+            let content = FBSDKAppInviteContent()
+            content.appLinkURL = NSURL(string: "https://itunes.apple.com/us/app/provo-ghost-tours-game-cycling/id1031990080?mt=8")
+            FBSDKAppInviteDialog.showFromViewController(self.view?.window?.rootViewController, withContent: content, delegate: self)
         }
         
     }
@@ -102,6 +107,14 @@ class FriendListScene: TableViewScene{
         nextScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(nextScene, transition: transition)
         removeViews()
+    }
+    
+    func appInviteDialog(appInviteDialog: FBSDKAppInviteDialog!, didCompleteWithResults results: [NSObject : AnyObject]!) {
+        print("invite did complete")
+    }
+    
+    func appInviteDialog(appInviteDialog: FBSDKAppInviteDialog!, didFailWithError error: NSError!) {
+        print(error)
     }
     
 }

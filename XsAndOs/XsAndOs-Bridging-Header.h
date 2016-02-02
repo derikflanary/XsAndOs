@@ -6,3 +6,4 @@
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "DGActivityIndicatorView.h"
+#import <FBSDKShareKit/FBSDKShareKit.h>

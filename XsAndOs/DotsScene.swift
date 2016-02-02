@@ -12,11 +12,11 @@ import SpriteKit
 class DotsScene: XandOScene {
     
     var dim : Int
-    var nodez = [Nodes]()
+    var nodez = [Node]()
     var yIsopin : CGFloat?    // distance between nodes Vertical
     var xIsopin : CGFloat?
     let gameLayer = SKNode()
-    var grid : Array2D<Nodes>
+    var grid : Array2D<Node>
     var touchedNode = SKNode()
     
     init(theDim: Int, size: CGSize) {
@@ -41,11 +41,11 @@ class DotsScene: XandOScene {
     
     //DRAWING THE BOARD
     func buildArrayOfNodes(){
-        var set = Set<Nodes>()
+        var set = Set<Node>()
         
         for  theRow in 0...dim - 1{
             for column in 0...dim - 1 {
-                let node = Nodes(column: column, row: theRow, theNodeType: NodeType.Empty)
+                let node = Node(column: column, row: theRow, theNodeType: NodeType.Empty)
                 if theRow % 2 != 0 || column % 2 != 0{
                     node.nodeType = .Intersection
                     node.sprite?.name = "Intersection"
@@ -62,7 +62,7 @@ class DotsScene: XandOScene {
         paintDots(set)
     }
     
-    func paintDots(nodes: Set<Nodes>){
+    func paintDots(nodes: Set<Node>){
         for node in nodes{
             
             if node.sprite != nil{
@@ -97,7 +97,7 @@ class DotsScene: XandOScene {
         }
     }
     
-    func gridItemAtColumn(column: Int, row: Int) -> Nodes? {
+    func gridItemAtColumn(column: Int, row: Int) -> Node? {
         assert(column >= 0 && column <= dim)
         assert(row >= 0 && row <= dim)
         return grid[column, row]

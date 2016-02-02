@@ -10,24 +10,25 @@ import Foundation
 
 import SpriteKit
 
-enum NodeType: Int {
-    case Unknown = 0, Empty, Intersection, X, O, Dot
+enum NodeType {
+    case Unknown, Empty, Intersection, X, O, Dot
 }
 
 struct Point
 {
-    var column : Int? 	// this is the array element  multiply it by  YIsopin + Dim * 11/3 and it will be the screen position.
+    var column : Int?
     var row : Int?
     var ptClr : SKColor
     var ptWho : String?
     
 }
 
-class Nodes: Hashable  {
+class Node: Hashable  {
     
     var nodePos = Point(column: 0, row: 0, ptClr: SKColor.redColor(), ptWho: "")
     var nodeType : NodeType
-    var sprite :SKSpriteNode?
+    var sprite : SKSpriteNode?
+    var position : CGPoint?
     
     init(column: Int, row: Int, theNodeType: NodeType) {
         self.nodePos.column = column
@@ -40,6 +41,6 @@ class Nodes: Hashable  {
     }
 }
 
-func ==(lhs: Nodes, rhs: Nodes) -> Bool {
+func ==(lhs: Node, rhs: Node) -> Bool {
     return lhs.nodePos.column == rhs.nodePos.column && lhs.nodePos.row == rhs.nodePos.row
 }
