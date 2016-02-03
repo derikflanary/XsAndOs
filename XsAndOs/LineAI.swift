@@ -10,16 +10,22 @@ import Foundation
 
 class LineAI {
     
+    //MARK: - PROPERTIES
+    
     private var openSteps = [ShortestPathStep]()
     private var closedSteps = [ShortestPathStep]()
     var grid : Array2D<Node>
     var pathFound = false
     
+    //MARK: - INIT
     init(grid: Array2D<Node>){
         self.grid = grid
     }
     
-    func calculateShortestPath(fromNode: Node, toNode: Node){
+    //MARK: - PATH CALCULATION
+    
+    func calculateShortestPath(fromNode: Node, toNode: Node) -> [ShortestPathStep]{
+        var shortestPath = [ShortestPathStep]()
         insertStepInOpenSteps(ShortestPathStep(node: fromNode))
         let toStep = ShortestPathStep(node: toNode)
         repeat{
@@ -35,15 +41,12 @@ class LineAI {
             // If the currentStep is the desired tile coordinate, we are done!
             if currentStep.location.column == toNode.nodePos.column && currentStep.location.row == toNode.nodePos.row{
                 pathFound = true
-                var tmpStep : ShortestPathStep? = currentStep
                 print("Path Found")
-                repeat{
-                    print(tmpStep?.description)
-                    tmpStep = tmpStep!.parent
-                }while tmpStep != nil
+                shortestPath = constructShortestPath(currentStep)
+                
                 break
             }
-            
+            print("Current step: \(currentStep.description)")
             // Get the adjacent tiles coord of the current step
             let adjNodes = availableAdjacentSteps(currentStep.location)
             for node in adjNodes{
@@ -52,7 +55,7 @@ class LineAI {
                     continue
                 }
                 // Compute the cost from the current step to that step
-                let moveCost = costToMoveFromStep(currentStep, toStep: step)
+                let moveCost = costToMoveToStep(step)
                 
                 // Check if the step is already in the open list
                 if !(openSteps.contains{$0 == step}){
@@ -90,12 +93,15 @@ class LineAI {
                         }
                     }
                 }
+//                print(step.description)
             }
         }while openSteps.count > 0
         
         if !pathFound { // No path found
             print("no path found")
+            return [ShortestPathStep]()
         }
+        return shortestPath
     }
         
     private func insertStepInOpenSteps(step: ShortestPathStep){
@@ -108,18 +114,20 @@ class LineAI {
     // Compute the H score from a position to another (from the current position to the final desired position
     private func computeHScoreFromLocations(fromLoc: Location, toLoc: Location) -> Int{
         let cols = abs((toLoc.column - fromLoc.column)/2)
-        let rs = abs(toLoc.row - fromLoc.row)
+        var rs = abs(toLoc.row - fromLoc.row)/2
+        if abs(toLoc.row - fromLoc.row) % 2 != 0{
+            rs += 1
+        }
         let h = cols + rs
-        print ("cols:\(cols), rows:\(rs), h:\(h)")
         return h
         // Here we use the Manhattan method, which calculates the total number of step moved horizontally and vertically to reach the
         // final desired step from the current step, ignoring any obstacles that may be in the way
     }
     
-    private func costToMoveFromStep(fromStep: ShortestPathStep, toStep: ShortestPathStep) -> Int{
-        let intersectionLocation = Location(column: abs(fromStep.location.column - toStep.location.column), row: abs(fromStep.location.row - toStep.location.row))
-        let node = grid[intersectionLocation.column, intersectionLocation.row]
-        if node?.nodeType == .O{
+    private func costToMoveToStep(toStep: ShortestPathStep) -> Int{
+        
+        let node = grid[toStep.location.column, toStep.location.row]
+        if node?.nodePos.ptWho == o{
             return 0
         }else{
             return 1
@@ -128,10 +136,21 @@ class LineAI {
     
     private func availableAdjacentSteps(location: Location) -> [Node]{
         var nodes = [Node]()
-        nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //top
-        nodes = addNodeToArrayIfValid(column: location.column - 2, row: location.row, nodes: nodes) //left
-        nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottom
-        nodes = addNodeToArrayIfValid(column: location.column + 2, row: location.row, nodes: nodes) //right
+        if location.row % 2 == 0{ //the current step is a vertical line
+            nodes = addNodeToArrayIfValid(column: location.column, row: location.row + 2, nodes: nodes) //top
+            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row + 1, nodes: nodes) //topleft
+            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row - 1, nodes: nodes) //bottomleft
+            nodes = addNodeToArrayIfValid(column: location.column, row: location.row - 2, nodes: nodes) //bottom
+            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //topright
+            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottomright
+        }else{ // current step is horizontal
+            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //topright
+            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row + 1, nodes: nodes) //topleft
+            nodes = addNodeToArrayIfValid(column: location.column - 2, row: location.row, nodes: nodes) //left
+            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottomright
+            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row - 1, nodes: nodes) //bottomleft
+            nodes = addNodeToArrayIfValid(column: location.column + 2, row: location.row, nodes: nodes) //right
+        }
         return nodes
     }
     
@@ -153,6 +172,21 @@ class LineAI {
     private func typeAtIntersection(column column: Int, row: Int) -> NodeType{
         let node = grid[column, row]
         return (node?.nodeType)!
+    }
+    
+    private func constructShortestPath(var step: ShortestPathStep?) -> [ShortestPathStep]{
+        var steps = [ShortestPathStep]()
+        guard step != nil else {return steps}
+        repeat{
+            steps.insert(step!, atIndex: 0)//add every step at beginning to go from start to finish
+            step = step!.parent
+        }while step != nil
+        
+        for step in steps{//print out steps for testing
+            print(step.description)
+        }
+        return steps
+        
     }
     
     

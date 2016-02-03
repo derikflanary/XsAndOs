@@ -36,9 +36,6 @@ class ShortestPathStep{
         self.parent = nil
     }
     
-    
-    
-    
 }
 
 extension ShortestPathStep: Equatable {}
