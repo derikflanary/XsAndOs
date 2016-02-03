@@ -27,6 +27,8 @@ class LineAI {
     func calculateShortestPath(fromNode: Node, toNode: Node) -> [ShortestPathStep]{
         var shortestPath = [ShortestPathStep]()
         insertStepInOpenSteps(ShortestPathStep(node: fromNode))
+        guard fromNode.nodePos.ptWho != x else {return shortestPath}
+        guard toNode.nodePos.ptWho != x else {return shortestPath}
         let toStep = ShortestPathStep(node: toNode)
         repeat{
             // Get the lowest F cost step
