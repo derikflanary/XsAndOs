@@ -16,45 +16,86 @@ class LineAI {
     private var closedSteps = [ShortestPathStep]()
     var grid : Array2D<Node>
     var pathFound = false
+    var rows: Int {
+        return grid.rows
+    }
+    var columns: Int{
+        return grid.columns
+    }
     
     //MARK: - INIT
     init(grid: Array2D<Node>){
         self.grid = grid
     }
-    
+    //MARK: - MAIN FUNCTION
     func calculateAIMove() {
+        var shortPaths = calculateAllShortPaths()
+        var shortestPaths = findPathsWithLowestFScore(shortPaths)
+        
+    }
+    
+//    private func shortPathToCoordinate(path: ShortPath) -> Coordinate{
+//        
+//    }
+
+    //MARK: - ALL PATH CALCULATION
+    
+    private func calculateAllShortPaths() -> [ShortPath]{
         var shortPaths = [ShortPath]()
-        let columns = grid.columns
-        let rows = grid.rows
         var firstRow = 1
         var lastRow = 1
+        
+        //Every row finds the shortest path to every row
         repeat {
             print("firstrow:\(firstRow), lastRow:\(lastRow)")
             let fromNode = grid[1,firstRow]!
             let toNode = grid[columns - 2,lastRow]!
-            guard fromNode.nodeType == .Intersection && toNode.nodeType == .Intersection else {return}
+            guard fromNode.nodeType == .Intersection && toNode.nodeType == .Intersection else {break}
             let shortPath = calculateShortestPath(fromNode, toNode: toNode)
             if shortPath.steps.count > 0{
                 shortPaths.append(shortPath)
             }
+            //Move up to next last row
             lastRow += 2
+            
+            //if all last rows are check, move up to next first row
             if lastRow >= rows - 1{
                 lastRow = 1
                 firstRow += 2
             }
-            print(shortPath.steps.count)
         }while firstRow <= rows - 1
+        return shortPaths
     }
     
-    //MARK: - PATH CALCULATION
+    private func findPathsWithLowestFScore(var shortPaths: [ShortPath]) -> [ShortPath]{
+        //Sort Paths by fScore
+        shortPaths.sortInPlace({
+            return $0.fScore < $1.fScore
+        })
+        let lowf = shortPaths[0].fScore
+        
+        //Create Array with only the lowest fScore
+        var shortestPaths = [ShortPath]()
+        for path in shortPaths{
+            if path.fScore == lowf{
+                shortestPaths.append(path)
+            }
+        }
+        return shortestPaths
+    }
+    
+    //MARK: - SINGLE PATH CALCULATION
     
     func calculateShortestPath(fromNode: Node, toNode: Node) -> ShortPath{
         var shortestPath = [ShortestPathStep]()
         var shortPath = ShortPath(steps: shortestPath)
-        insertStepInOpenSteps(ShortestPathStep(node: fromNode))
+        let firstStep = ShortestPathStep(node: fromNode)
+        let toStep = ShortestPathStep(node: toNode)
+        firstStep.hScore = computeHScoreFromLocations(firstStep.location, toLoc: toStep.location)
+        insertStepInOpenSteps(firstStep)
         guard fromNode.nodePos.ptWho != x else {print("x"); return shortPath}
         guard toNode.nodePos.ptWho != x else {print("x"); return shortPath}
-        let toStep = ShortestPathStep(node: toNode)
+        
         repeat{
             // Get the lowest F cost step
             // Because the list is ordered, the first step is always the one with the lowest F cost
@@ -192,8 +233,8 @@ class LineAI {
     }
     
     private func isValidLocation(column column: Int, row: Int) -> Bool{
-        guard (column >= 0 && column <= grid.columns) else {return false}
-        guard(row >= 0 && row <= grid.rows) else {return false}
+        guard (column >= 0 && column <= columns) else {return false}
+        guard(row >= 0 && row <= rows) else {return false}
         return true
     }
     
