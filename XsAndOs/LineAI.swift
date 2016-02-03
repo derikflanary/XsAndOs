@@ -22,13 +22,38 @@ class LineAI {
         self.grid = grid
     }
     
+    func calculateAIMove() {
+        var shortPaths = [ShortPath]()
+        let columns = grid.columns
+        let rows = grid.rows
+        var firstRow = 1
+        var lastRow = 1
+        repeat {
+            print("firstrow:\(firstRow), lastRow:\(lastRow)")
+            let fromNode = grid[1,firstRow]!
+            let toNode = grid[columns - 2,lastRow]!
+            guard fromNode.nodeType == .Intersection && toNode.nodeType == .Intersection else {return}
+            let shortPath = calculateShortestPath(fromNode, toNode: toNode)
+            if shortPath.steps.count > 0{
+                shortPaths.append(shortPath)
+            }
+            lastRow += 2
+            if lastRow >= rows - 1{
+                lastRow = 1
+                firstRow += 2
+            }
+            print(shortPath.steps.count)
+        }while firstRow <= rows - 1
+    }
+    
     //MARK: - PATH CALCULATION
     
-    func calculateShortestPath(fromNode: Node, toNode: Node) -> [ShortestPathStep]{
+    func calculateShortestPath(fromNode: Node, toNode: Node) -> ShortPath{
         var shortestPath = [ShortestPathStep]()
+        var shortPath = ShortPath(steps: shortestPath)
         insertStepInOpenSteps(ShortestPathStep(node: fromNode))
-        guard fromNode.nodePos.ptWho != x else {return shortestPath}
-        guard toNode.nodePos.ptWho != x else {return shortestPath}
+        guard fromNode.nodePos.ptWho != x else {print("x"); return shortPath}
+        guard toNode.nodePos.ptWho != x else {print("x"); return shortPath}
         let toStep = ShortestPathStep(node: toNode)
         repeat{
             // Get the lowest F cost step
@@ -45,10 +70,10 @@ class LineAI {
                 pathFound = true
                 print("Path Found")
                 shortestPath = constructShortestPath(currentStep)
-                
+                shortPath.steps = shortestPath
                 break
             }
-            print("Current step: \(currentStep.description)")
+//            print("Current step: \(currentStep.description)")
             // Get the adjacent tiles coord of the current step
             let adjNodes = availableAdjacentSteps(currentStep.location)
             for node in adjNodes{
@@ -98,12 +123,13 @@ class LineAI {
 //                print(step.description)
             }
         }while openSteps.count > 0
-        
+        openSteps.removeAll()
+        closedSteps.removeAll()
         if !pathFound { // No path found
             print("no path found")
-            return [ShortestPathStep]()
+            return shortPath
         }
-        return shortestPath
+        return shortPath
     }
         
     private func insertStepInOpenSteps(step: ShortestPathStep){

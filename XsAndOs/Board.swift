@@ -150,7 +150,7 @@ class Board: XandOScene {
     func buildArrayOfNodes(){
         var set = Set<Node>()
         
-        for  theRow in 0...dim - 1{
+        for theRow in 0...dim - 1{
             for column in 0...dim - 1 {
                 let node = Node(column: column, row: theRow, theNodeType: NodeType.Empty)
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
@@ -413,8 +413,7 @@ class Board: XandOScene {
             stopActionsOnGameLayer(x)
             startActionForNodeType(o)
             
-            let lineAI = LineAI(grid: grid)
-            lineAI.calculateShortestPath(grid[1,1]!, toNode: grid[dim - 2,1]!)
+            performAIMove()
         }else{
             xTurn = true
             turnLabel.text = x
@@ -422,6 +421,12 @@ class Board: XandOScene {
             stopActionsOnGameLayer(o)
             startActionForNodeType(x)
         }
+    }
+    
+    func performAIMove(){
+        let lineAI = LineAI(grid: grid)
+        lineAI.calculateAIMove()
+
     }
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
