@@ -414,6 +414,7 @@ class Board: XandOScene {
             startActionForNodeType(o)
             
             performAIMove()
+
         }else{
             xTurn = true
             turnLabel.text = x
@@ -425,8 +426,15 @@ class Board: XandOScene {
     
     func performAIMove(){
         let lineAI = LineAI(grid: grid)
-        lineAI.calculateAIMove()
-
+        let (coord, node) = lineAI.calculateAIMove()
+        guard coord != nil || node != nil else {return}
+        let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
+        let pointB = pointForColumn(coord!.columnB, row: coord!.rowB)
+        let interNode = gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
+        interNode?.nodePos.ptWho = o
+        drawLineBetweenPoints(pointA, pointB: pointB, type: o)
+        switchTurns()
+        
     }
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{

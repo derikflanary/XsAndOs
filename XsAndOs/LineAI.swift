@@ -28,15 +28,30 @@ class LineAI {
         self.grid = grid
     }
     //MARK: - MAIN FUNCTION
-    func calculateAIMove() {
-        var shortPaths = calculateAllShortPaths()
-        var shortestPaths = findPathsWithLowestFScore(shortPaths)
+    func calculateAIMove() -> (Coordinate?, Node?) {
+        let shortPaths = calculateAllShortPaths()
+        guard shortPaths.count > 0 else {return (nil, nil)}
+        let shortestPaths = findPathsWithLowestFScore(shortPaths)
+        return shortPathToCoordinate(shortestPaths[0])
         
     }
     
-//    private func shortPathToCoordinate(path: ShortPath) -> Coordinate{
-//        
-//    }
+    private func shortPathToCoordinate(path: ShortPath) -> (coordinate: Coordinate?, node: Node?){
+        var nodeToDraw = Node(column: 0, row: 0, theNodeType: .Intersection)
+        for step in path.steps{
+            if let node = nodeFromStep(step){
+                if node.nodePos.ptWho == ""{
+                    nodeToDraw = node
+                    break
+                }
+            }
+        }
+        if nodeToDraw.nodePos.row! % 2 == 0{ //the current step is a vertical line
+            return (Coordinate(columnA: nodeToDraw.nodePos.column!, rowA: nodeToDraw.nodePos.row! + 1 , columnB: nodeToDraw.nodePos.column!, rowB: nodeToDraw.nodePos.row! - 1, position: nil), nodeToDraw)
+        }else{
+            return (Coordinate(columnA: nodeToDraw.nodePos.column! + 1, rowA: nodeToDraw.nodePos.row! , columnB: nodeToDraw.nodePos.column! - 1, rowB: nodeToDraw.nodePos.row!, position: nil), nodeToDraw)
+        }
+    }
 
     //MARK: - ALL PATH CALCULATION
     
@@ -195,8 +210,9 @@ class LineAI {
     
     private func costToMoveToStep(toStep: ShortestPathStep) -> Int{
         
-        let node = grid[toStep.location.column, toStep.location.row]
+        let node = nodeFromStep(toStep)
         if node?.nodePos.ptWho == o{
+
             return 0
         }else{
             return 1
@@ -257,6 +273,8 @@ class LineAI {
         return steps
         
     }
-    
+    private func nodeFromStep(step: ShortestPathStep) -> Node?{
+        return  grid[step.location.column, step.location.row]
+    }
     
 }

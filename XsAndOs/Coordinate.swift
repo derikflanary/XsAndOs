@@ -14,4 +14,5 @@ struct Coordinate {
     var columnB : Int
     var rowB : Int
     var position : CGPoint?
+    
 }

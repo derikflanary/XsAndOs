@@ -27,7 +27,6 @@ class ShortestPathStep{
         return "col:\(location.column), row:\(location.row), g:\(gScore), h:\(hScore), f:\(fScore)"
     }
     var parent : ShortestPathStep?
-    
     // MARK: - Initialization
     
     init(node: Node){
