@@ -10,5 +10,16 @@ import Foundation
 
 class LineAIService {
     
+    var grid : Array2D<Node>
     
+    //MARK: - INIT
+    init(grid: Array2D<Node>){
+        self.grid = grid
+    }
+
+    
+    func calculateAIMove() -> (Coordinate?, Node?) {
+        let lineAI = LineAI(grid: grid)
+        return lineAI.calculateAIMove()
+    }
 }

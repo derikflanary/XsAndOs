@@ -72,6 +72,7 @@ class Board: XandOScene {
     let backButton = UIButton()
     var nodeAction = SKAction()
     var square = CAShapeLayer()
+    var winner = false
     var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
@@ -421,7 +422,7 @@ class Board: XandOScene {
             turnLabel.fontColor = oColor
             stopActionsOnGameLayer(x)
             startActionForNodeType(o)
-            
+            guard !winner else {return}
             performAIMove()
 
         }else{
@@ -687,6 +688,7 @@ class Board: XandOScene {
     }
     
     func declareWinner(winningTeam: String){
+        winner = true
         let confettiView = SAConfettiView(frame: self.view!.bounds)
         self.view!.addSubview(confettiView)
         confettiView.startConfetti()

@@ -34,7 +34,6 @@ class LineAI {
         }else{
             return x
         }
-
     }
     
     //MARK: - INIT
@@ -48,8 +47,32 @@ class LineAI {
         player = .AI //switch to AI mode
         let shortestPathsAI = lowestPaths() //fetch shortest paths for AI player "o"
         
-        return shortPathToCoordinateAndNode(shortestPathsAI[0])
+        if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+            return stepToCoordinateAndNode(stepToDraw)
+        }else{
+            return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
+        }
         
+        
+    }
+    
+    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath]) -> ShortestPathStep?{
+        for pathUser in shortPathsUser{
+            for pathAI in shortPathsAI{
+                for stepUser in pathUser.steps{
+                    for stepAI in pathAI.steps{
+                        if stepUser.location.column == stepAI.location.column{
+                            if let node = nodeFromStep(stepAI){
+                                if node.nodePos.ptWho == ""{
+                                    return stepAI
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nil
     }
     
     //MARK: - FIND PLAYER SHORT PATH
@@ -331,7 +354,9 @@ class LineAI {
         return  grid[step.location.column, step.location.row]
     }
     
-    private func shortPathToCoordinateAndNode(path: ShortPath) -> (coordinate: Coordinate?, node: Node?){
+    //MARK: - TO COORDINATE AND NODE METHODS
+    
+    private func randomShortPathToCoordinateAndNode(path: ShortPath) -> (coordinate: Coordinate?, node: Node?){
         var nodeToDraw = Node(column: 0, row: 0, theNodeType: .Intersection)
         for step in path.steps{
             if let node = nodeFromStep(step){
@@ -346,6 +371,18 @@ class LineAI {
         }else{
             return (Coordinate(columnA: nodeToDraw.nodePos.column! + 1, rowA: nodeToDraw.nodePos.row! , columnB: nodeToDraw.nodePos.column! - 1, rowB: nodeToDraw.nodePos.row!, position: nil), nodeToDraw)
         }
+    }
+
+    private func stepToCoordinateAndNode(step: ShortestPathStep) -> (coordinate: Coordinate?, node: Node?){
+        
+        if let node = nodeFromStep(step){
+            if node.nodePos.row! % 2 == 0{ //the current step is a vertical line
+                return (Coordinate(columnA: node.nodePos.column!, rowA: node.nodePos.row! + 1 , columnB: node.nodePos.column!, rowB: node.nodePos.row! - 1, position: nil), node)
+            }else{
+                return (Coordinate(columnA: node.nodePos.column! + 1, rowA: node.nodePos.row! , columnB: node.nodePos.column! - 1, rowB: node.nodePos.row!, position: nil), node)
+            }
+        }
+        return (nil, nil)
     }
 
     
