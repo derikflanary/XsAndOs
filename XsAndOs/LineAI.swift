@@ -29,9 +29,10 @@ class LineAI {
     }
     //MARK: - MAIN FUNCTION
     func calculateAIMove() -> (Coordinate?, Node?) {
-        let shortPaths = calculateAllShortPaths()
+        let shortPaths = calculateAllShortPaths()  //Find every possible short path
         guard shortPaths.count > 0 else {return (nil, nil)}
-        let shortestPaths = findPathsWithLowestFScore(shortPaths)
+        let shortestPaths = findPathsWithLowestFScore(shortPaths) //remove all paths but the lowest fScore ones
+        
         return shortPathToCoordinate(shortestPaths[0])
         
     }
@@ -104,12 +105,15 @@ class LineAI {
     func calculateShortestPath(fromNode: Node, toNode: Node) -> ShortPath{
         var shortestPath = [ShortestPathStep]()
         var shortPath = ShortPath(steps: shortestPath)
+        
+        // If either intersection is occupied by x then no path
+        guard fromNode.nodePos.ptWho != x else {print("x"); return shortPath}
+        guard toNode.nodePos.ptWho != x else {print("x"); return shortPath}
+        //Calculate firststep hscore and add to openlist
         let firstStep = ShortestPathStep(node: fromNode)
         let toStep = ShortestPathStep(node: toNode)
         firstStep.hScore = computeHScoreFromLocations(firstStep.location, toLoc: toStep.location)
         insertStepInOpenSteps(firstStep)
-        guard fromNode.nodePos.ptWho != x else {print("x"); return shortPath}
-        guard toNode.nodePos.ptWho != x else {print("x"); return shortPath}
         
         repeat{
             // Get the lowest F cost step

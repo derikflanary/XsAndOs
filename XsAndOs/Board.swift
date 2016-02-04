@@ -40,6 +40,11 @@ class Board: XandOScene {
         case AppendedLine
     }
     
+    enum GameType {
+        case Local
+        case AI
+    }
+    
     var rows : Int
     var dim : Int
     var nodeX = [Node]()
@@ -62,6 +67,7 @@ class Board: XandOScene {
     var potentialShapeNode = CAShapeLayer()
     var restartButton = UIButton()
     var lastMove = LastMove.SingleLine
+    var gameType = GameType.AI
     let undoButton = UIButton()
     let backButton = UIButton()
     var nodeAction = SKAction()
@@ -135,6 +141,9 @@ class Board: XandOScene {
         turnLabel.runAction(nodeAction)
         self.addChild(turnLabel)
         
+        if gameType == .AI{
+            undoButton.removeFromSuperview()
+        }
         isXTurn()
     }
     
