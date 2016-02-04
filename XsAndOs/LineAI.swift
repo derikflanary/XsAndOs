@@ -10,6 +10,11 @@ import Foundation
 
 class LineAI {
     
+    enum Player {
+        case User
+        case AI
+    }
+    
     //MARK: - PROPERTIES
     
     private var openSteps = [ShortestPathStep]()
@@ -22,38 +27,44 @@ class LineAI {
     var columns: Int{
         return grid.columns
     }
+    var player = Player.AI
+    var otherTeam: String {
+        if player == .User{
+            return o
+        }else{
+            return x
+        }
+
+    }
     
     //MARK: - INIT
     init(grid: Array2D<Node>){
         self.grid = grid
     }
-    //MARK: - MAIN FUNCTION
+    //MARK: - AI SHORT PATH
     func calculateAIMove() -> (Coordinate?, Node?) {
-        let shortPaths = calculateAllShortPaths()  //Find every possible short path
-        guard shortPaths.count > 0 else {return (nil, nil)}
-        let shortestPaths = findPathsWithLowestFScore(shortPaths) //remove all paths but the lowest fScore ones
+        let shortestPathsUser = calculatePlayerShortPaths() //fetch the shortest paths for the user
         
-        return shortPathToCoordinate(shortestPaths[0])
+        player = .AI //switch to AI mode
+        let shortestPathsAI = lowestPaths() //fetch shortest paths for AI player "o"
+        
+        return shortPathToCoordinateAndNode(shortestPathsAI[0])
         
     }
     
-    private func shortPathToCoordinate(path: ShortPath) -> (coordinate: Coordinate?, node: Node?){
-        var nodeToDraw = Node(column: 0, row: 0, theNodeType: .Intersection)
-        for step in path.steps{
-            if let node = nodeFromStep(step){
-                if node.nodePos.ptWho == ""{
-                    nodeToDraw = node
-                    break
-                }
-            }
-        }
-        if nodeToDraw.nodePos.row! % 2 == 0{ //the current step is a vertical line
-            return (Coordinate(columnA: nodeToDraw.nodePos.column!, rowA: nodeToDraw.nodePos.row! + 1 , columnB: nodeToDraw.nodePos.column!, rowB: nodeToDraw.nodePos.row! - 1, position: nil), nodeToDraw)
-        }else{
-            return (Coordinate(columnA: nodeToDraw.nodePos.column! + 1, rowA: nodeToDraw.nodePos.row! , columnB: nodeToDraw.nodePos.column! - 1, rowB: nodeToDraw.nodePos.row!, position: nil), nodeToDraw)
-        }
+    //MARK: - FIND PLAYER SHORT PATH
+    func calculatePlayerShortPaths() -> [ShortPath]{
+        player = .User
+        return lowestPaths()
     }
-
+    
+    //MARK: - LOWEST PATHS
+    private func lowestPaths() -> [ShortPath]{
+        let shortPaths = calculateAllShortPaths()  //Find every possible short path
+        guard shortPaths.count > 0 else {return shortPaths}
+        return findPathsWithLowestFScore(shortPaths)//remove all paths but the lowest fScore ones
+    }
+    
     //MARK: - ALL PATH CALCULATION
     
     private func calculateAllShortPaths() -> [ShortPath]{
@@ -63,9 +74,13 @@ class LineAI {
         
         //Every row finds the shortest path to every row
         repeat {
-            print("firstrow:\(firstRow), lastRow:\(lastRow)")
-            let fromNode = grid[1,firstRow]!
-            let toNode = grid[columns - 2,lastRow]!
+            print("firstcol:\(firstRow), lastcol:\(lastRow)")
+            var fromNode = grid[1,firstRow]!
+            var toNode = grid[columns - 2,lastRow]!
+            if player == .User{
+                fromNode = grid[firstRow, 1]!
+                toNode = grid[lastRow, rows - 2]!
+            }
             guard fromNode.nodeType == .Intersection && toNode.nodeType == .Intersection else {break}
             let shortPath = calculateShortestPath(fromNode, toNode: toNode)
             if shortPath.steps.count > 0{
@@ -105,10 +120,10 @@ class LineAI {
     func calculateShortestPath(fromNode: Node, toNode: Node) -> ShortPath{
         var shortestPath = [ShortestPathStep]()
         var shortPath = ShortPath(steps: shortestPath)
-        
+    
         // If either intersection is occupied by x then no path
-        guard fromNode.nodePos.ptWho != x else {print("x"); return shortPath}
-        guard toNode.nodePos.ptWho != x else {print("x"); return shortPath}
+        guard fromNode.nodePos.ptWho != otherTeam else {print("x"); return shortPath}
+        guard toNode.nodePos.ptWho != otherTeam else {print("x"); return shortPath}
         //Calculate firststep hscore and add to openlist
         let firstStep = ShortestPathStep(node: fromNode)
         let toStep = ShortestPathStep(node: toNode)
@@ -199,6 +214,7 @@ class LineAI {
         })
     }
     
+    //MARK: - HSCORE METHODS
     // Compute the H score from a position to another (from the current position to the final desired position
     private func computeHScoreFromLocations(fromLoc: Location, toLoc: Location) -> Int{
         let cols = abs((toLoc.column - fromLoc.column)/2)
@@ -212,40 +228,71 @@ class LineAI {
         // final desired step from the current step, ignoring any obstacles that may be in the way
     }
     
+    //MARK STEP COST METHODS
     private func costToMoveToStep(toStep: ShortestPathStep) -> Int{
         
         let node = nodeFromStep(toStep)
-        if node?.nodePos.ptWho == o{
-
-            return 0
-        }else{
-            return 1
+        switch player {
+        case .AI:
+            if node?.nodePos.ptWho == o{
+                return 0
+            }else{
+                return 1
+            }
+        case .User:
+            if node?.nodePos.ptWho == x{
+                return 0
+            }else{
+                return 1
+            }
         }
     }
     
+    //MARK: - ADJACENT STEP METHODS
     private func availableAdjacentSteps(location: Location) -> [Node]{
         var nodes = [Node]()
-        if location.row % 2 == 0{ //the current step is a vertical line
-            nodes = addNodeToArrayIfValid(column: location.column, row: location.row + 2, nodes: nodes) //top
-            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row + 1, nodes: nodes) //topleft
-            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row - 1, nodes: nodes) //bottomleft
-            nodes = addNodeToArrayIfValid(column: location.column, row: location.row - 2, nodes: nodes) //bottom
-            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //topright
-            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottomright
-        }else{ // current step is horizontal
-            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //topright
-            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row + 1, nodes: nodes) //topleft
-            nodes = addNodeToArrayIfValid(column: location.column - 2, row: location.row, nodes: nodes) //left
-            nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottomright
-            nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row - 1, nodes: nodes) //bottomleft
-            nodes = addNodeToArrayIfValid(column: location.column + 2, row: location.row, nodes: nodes) //right
+
+        switch player {
+        case .AI:
+            if location.row % 2 == 0{ //the current step is a vertical line
+                nodes = verticalLineAdjNodes(location: location, nodes: nodes)
+            }else{ // current step is horizontal
+                nodes = horizontalLineAdjNodes(location: location, nodes: nodes)
+            }
+        case .User:
+            if location.row % 2 == 0{ //the current step is a vertical line
+                nodes = horizontalLineAdjNodes(location: location, nodes: nodes)
+            }else{ // current step is horizontal
+                nodes = verticalLineAdjNodes(location: location, nodes: nodes)
+            }
         }
+        
+        return nodes
+    }
+    
+    private func verticalLineAdjNodes(location location: Location,var nodes: [Node]) -> [Node]{
+        nodes = addNodeToArrayIfValid(column: location.column, row: location.row + 2, nodes: nodes) //top
+        nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row + 1, nodes: nodes) //topleft
+        nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row - 1, nodes: nodes) //bottomleft
+        nodes = addNodeToArrayIfValid(column: location.column, row: location.row - 2, nodes: nodes) //bottom
+        nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //topright
+        nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottomright
+        return nodes
+    }
+    
+    private func horizontalLineAdjNodes(location location: Location,var nodes: [Node]) -> [Node]{
+        nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row + 1, nodes: nodes) //topright
+        nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row + 1, nodes: nodes) //topleft
+        nodes = addNodeToArrayIfValid(column: location.column - 2, row: location.row, nodes: nodes) //left
+        nodes = addNodeToArrayIfValid(column: location.column + 1, row: location.row - 1, nodes: nodes) //bottomright
+        nodes = addNodeToArrayIfValid(column: location.column - 1, row: location.row - 1, nodes: nodes) //bottomleft
+        nodes = addNodeToArrayIfValid(column: location.column + 2, row: location.row, nodes: nodes) //right
         return nodes
     }
     
     private func addNodeToArrayIfValid(column column: Int, row: Int, var nodes: [Node]) -> [Node]{
         if isValidLocation(column: column, row: row){
-            if typeAtIntersection(column: column, row: row) == .Intersection && grid[column,row]?.nodePos.ptWho != x{
+            if typeAtIntersection(column: column, row: row) == .Intersection && grid[column,row]?.nodePos.ptWho != otherTeam{
                 nodes.append(grid[column, row]!)
             }
         }
@@ -253,11 +300,12 @@ class LineAI {
     }
     
     private func isValidLocation(column column: Int, row: Int) -> Bool{
-        guard (column >= 0 && column <= columns) else {return false}
-        guard(row >= 0 && row <= rows) else {return false}
+        guard (column >= 0 && column <= columns - 1) else {return false}
+        guard(row >= 0 && row <= rows - 1) else {return false}
         return true
     }
     
+    //MARK: - OTHER METHODS
     private func typeAtIntersection(column column: Int, row: Int) -> NodeType{
         let node = grid[column, row]
         return (node?.nodeType)!
@@ -277,8 +325,28 @@ class LineAI {
         return steps
         
     }
+    
+    //MARK: - CONVERSION METHODS
     private func nodeFromStep(step: ShortestPathStep) -> Node?{
         return  grid[step.location.column, step.location.row]
     }
+    
+    private func shortPathToCoordinateAndNode(path: ShortPath) -> (coordinate: Coordinate?, node: Node?){
+        var nodeToDraw = Node(column: 0, row: 0, theNodeType: .Intersection)
+        for step in path.steps{
+            if let node = nodeFromStep(step){
+                if node.nodePos.ptWho == ""{
+                    nodeToDraw = node
+                    break
+                }
+            }
+        }
+        if nodeToDraw.nodePos.row! % 2 == 0{ //the current step is a vertical line
+            return (Coordinate(columnA: nodeToDraw.nodePos.column!, rowA: nodeToDraw.nodePos.row! + 1 , columnB: nodeToDraw.nodePos.column!, rowB: nodeToDraw.nodePos.row! - 1, position: nil), nodeToDraw)
+        }else{
+            return (Coordinate(columnA: nodeToDraw.nodePos.column! + 1, rowA: nodeToDraw.nodePos.row! , columnB: nodeToDraw.nodePos.column! - 1, rowB: nodeToDraw.nodePos.row!, position: nil), nodeToDraw)
+        }
+    }
+
     
 }

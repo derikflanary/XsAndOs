@@ -100,6 +100,7 @@
 		EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5151BF15E4A009191EA /* Nodes.swift */; };
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
+		EEE9E3E31C63D52B0041E0BA /* LineAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E21C63D52B0041E0BA /* LineAIService.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
 
@@ -256,6 +257,7 @@
 		EE8FD5151BF15E4A009191EA /* Nodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nodes.swift; sourceTree = "<group>"; };
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
+		EEE9E3E21C63D52B0041E0BA /* LineAIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAIService.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -617,8 +619,9 @@
 		EEE9E3DC1C6002DF0041E0BA /* AI */ = {
 			isa = PBXGroup;
 			children = (
-				EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */,
 				EEE9E3DD1C60043C0041E0BA /* LineAI.swift */,
+				EEE9E3E21C63D52B0041E0BA /* LineAIService.swift */,
+				EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */,
 				EEE9E3E01C62A3840041E0BA /* ShortPath.swift */,
 			);
 			name = AI;
@@ -818,6 +821,7 @@
 				EE03D3091C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m in Sources */,
 				EE03D2F71C49B21500078CF6 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */,
 				EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */,
+				EEE9E3E31C63D52B0041E0BA /* LineAIService.swift in Sources */,
 				EE03D3021C49B21500078CF6 /* DGActivityIndicatorBallZigZagDeflectAnimation.m in Sources */,
 				EE03D2FA1C49B21500078CF6 /* DGActivityIndicatorBallRotateAnimation.m in Sources */,
 				EE03D3031C49B21500078CF6 /* DGActivityIndicatorCookieTerminatorAnimation.m in Sources */,
