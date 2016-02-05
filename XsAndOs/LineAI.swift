@@ -15,6 +15,12 @@ class LineAI {
         case AI
     }
     
+    internal enum DifficultySetting{
+        case Easy
+        case Moderate
+        case Hard
+    }
+    
     //MARK: - PROPERTIES
     
     private var openSteps = [ShortestPathStep]()
@@ -35,10 +41,12 @@ class LineAI {
             return x
         }
     }
+    var difficulty : DifficultySetting
     
     //MARK: - INIT
-    init(grid: Array2D<Node>){
+    init(grid: Array2D<Node>, difficulty: DifficultySetting){
         self.grid = grid
+        self.difficulty = difficulty
     }
     //MARK: - AI SHORT PATH
     func calculateAIMove() -> (Coordinate?, Node?) {
@@ -47,13 +55,28 @@ class LineAI {
         player = .AI //switch to AI mode
         let shortestPathsAI = lowestPaths() //fetch shortest paths for AI player "o"
         
-        if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
-            return stepToCoordinateAndNode(stepToDraw)
-        }else{
-            return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
+        switch difficulty{
+        case .Easy:
+            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+                return stepToCoordinateAndNode(stepToDraw)
+            }else{
+                return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
+            }
+            
+        case .Moderate:
+            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+                return stepToCoordinateAndNode(stepToDraw)
+            }else{
+                return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
+            }
+            
+        case .Hard:
+            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+                return stepToCoordinateAndNode(stepToDraw)
+            }else{
+                return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
+            }
         }
-        
-        
     }
     
     func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath]) -> ShortestPathStep?{
