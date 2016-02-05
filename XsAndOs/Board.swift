@@ -144,6 +144,7 @@ class Board: XandOScene {
         
         if gameType == .AI{
             undoButton.removeFromSuperview()
+            turnLabel.removeFromParent()
         }
         isXTurn()
     }
@@ -308,14 +309,14 @@ class Board: XandOScene {
                     guard xTurn else{return}
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: x){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                        switchTurns()
+//                        switchTurns()
                     }
                     resetSelectedNode()
                 }else if selectedNode.name == o && touchedNode.name == o{
                     guard !xTurn else{return}
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: o){
                         drawLineBetweenPoints(selectedNode.position, pointB: touchedNode.position, type: selectedNode.name!)
-                        switchTurns()
+//                        switchTurns()
                     }
                     resetSelectedNode()
                 }else{
@@ -404,7 +405,7 @@ class Board: XandOScene {
     }
     
     private func cleanUpMove(){
-        switchTurns()
+//        switchTurns()
         resetSelectedNode()
         touchedLocations.removeAll()
     }
@@ -412,39 +413,6 @@ class Board: XandOScene {
     private func resetSelectedNode(){
         selectedNode.setScale(1.0)
         selectedNode = SKSpriteNode()
-    }
-    
-    func switchTurns(){
-
-        if turnLabel.text == x{
-            xTurn = false
-            turnLabel.text = o
-            turnLabel.fontColor = oColor
-            stopActionsOnGameLayer(x)
-            startActionForNodeType(o)
-            guard !winner else {return}
-            performAIMove()
-
-        }else{
-            xTurn = true
-            turnLabel.text = x
-            turnLabel.fontColor = xColor
-            stopActionsOnGameLayer(o)
-            startActionForNodeType(x)
-        }
-    }
-    
-    func performAIMove(){
-        let lineAI = LineAI(grid: grid)
-        let (coord, node) = lineAI.calculateAIMove()
-        guard coord != nil || node != nil else {return}
-        let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
-        let pointB = pointForColumn(coord!.columnB, row: coord!.rowB)
-        let interNode = gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
-        interNode?.nodePos.ptWho = o
-        drawLineBetweenPoints(pointA, pointB: pointB, type: o)
-        switchTurns()
-        
     }
     
     func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
@@ -523,13 +491,16 @@ class Board: XandOScene {
         pointA = convertPointToView(pointA)
         pointB = convertPointToView(pointB)
         let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
+        
         var lineArray = xLines
         var strokeColor = xColor.CGColor
         if type == o{
             lineArray = oLines
             strokeColor = oColor.CGColor
         }
+        
         var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
+        
         //check every coordinate in xlines to see if any existing lines touch the new line then add new line
         for lineShapeLayer in lineArray{
             (match, matchedLine, lineToDelete) = loopThroughCoordinates(lineShapeLayer, matchedLine: matchedLine, path: path, columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, match: match)
@@ -539,7 +510,8 @@ class Board: XandOScene {
         if !match{
             let shapeNode = LineShapeLayer(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
             view?.layer.addSublayer(shapeNode)
-            animateWidth(shapeNode)
+            animateLine(shapeNode, type: .Normal)
+//            animateWidth(shapeNode)
             appendLineArrays(shapeNode)
             lastMove = .SingleLine
             previousMoveDetails.newAppendedLine = shapeNode
@@ -569,7 +541,8 @@ class Board: XandOScene {
                     matchedLine = lineShapeLayer
                     let tempLine = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: path, color: matchedLine.strokeColor!)
                     view?.layer.addSublayer(tempLine)
-                    animateWidthThenDelete(tempLine)
+                    animateLine(tempLine, type: .Delete)
+//                    animateWidthThenDelete(tempLine)
                     matchedLine.appendPath(path)
                     matchedLine.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
                     previousMoveDetails.newAppendedLine = matchedLine
@@ -614,6 +587,76 @@ class Board: XandOScene {
         line.copyLineValues(lineShapeLayer)
         previousMoveDetails.oldLines.append(line)
         return line
+    }
+    
+    func switchTurns(){
+        guard !winner else {return}
+        if xTurn{
+            xTurn = false
+            turnLabel.text = o
+            turnLabel.fontColor = oColor
+            stopActionsOnGameLayer(x)
+            startActionForNodeType(o)
+            
+            performAIMove()
+        }else{
+            xTurn = true
+            turnLabel.text = x
+            turnLabel.fontColor = xColor
+            stopActionsOnGameLayer(o)
+            startActionForNodeType(x)
+        }
+    }
+    
+    func performAIMove(){
+        let lineAI = LineAI(grid: grid, difficulty: .Moderate)
+        let (coord, node) = lineAI.calculateAIMove()
+        guard coord != nil || node != nil else {return}
+        let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
+        let pointB = pointForColumn(coord!.columnB, row: coord!.rowB)
+        let interNode = gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
+        interNode?.nodePos.ptWho = o
+        NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
+            self.drawLineBetweenPoints(pointA, pointB: pointB, type: o)
+        }
+        
+//        switchTurns()
+//        
+//        let aiCalculator = AIMoveCalculator(grid: grid)
+//        aiCalculator.qualityOfService = .Background
+//        
+//        aiCalculator.completionBlock = {
+//            if aiCalculator.cancelled {
+//                return
+//            }
+//            let coord = aiCalculator.coordinate
+//            let node = aiCalculator.node
+//            guard coord != nil || node != nil else {return}
+//            let pointA = self.pointForColumn(coord!.columnA, row: coord!.rowA)
+//            let pointB = self.pointForColumn(coord!.columnB, row: coord!.rowB)
+//            let interNode = self.gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
+//            interNode?.nodePos.ptWho = o
+//            
+//            self.drawLineBetweenPoints(pointA, pointB: pointB, type: o)
+////            self.switchTurns()
+//        }
+//        aiCalculator.start()
+        
+    }
+
+    
+    func animateLine(line: LineShapeLayer, type: LineAnimationOperation.AnimationType){
+        let operationQueue = NSOperationQueue.mainQueue()
+        let animationOp = LineAnimationOperation(line: line, type: type)
+        animationOp.completionBlock = {
+            self.switchTurns()
+        }
+        switch type{
+        case .Normal:
+            operationQueue.addOperation(animationOp)
+        case .Delete:
+            operationQueue.addOperation(animationOp)
+        }
     }
     
     func animateWidth(line: LineShapeLayer){

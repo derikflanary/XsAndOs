@@ -120,7 +120,7 @@ class LineAI {
         
         //Every row finds the shortest path to every row
         repeat {
-            print("firstcol:\(firstRow), lastcol:\(lastRow)")
+//            print("firstcol:\(firstRow), lastcol:\(lastRow)")
             var fromNode = grid[1,firstRow]!
             var toNode = grid[columns - 2,lastRow]!
             if player == .User{
@@ -365,9 +365,6 @@ class LineAI {
             step = step!.parent
         }while step != nil
         
-        for step in steps{//print out steps for testing
-            print(step.description)
-        }
         return steps
         
     }

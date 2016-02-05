@@ -96,11 +96,13 @@
 		EE65F5591C31DF7900E51138 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE65F5581C31DF7900E51138 /* FBSDKCoreKit.framework */; };
 		EE65F55B1C31DF9000E51138 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE65F55A1C31DF9000E51138 /* FBSDKLoginKit.framework */; };
 		EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE65F55C1C31F1D700E51138 /* FacebookController.swift */; };
+		EE7FDDD81C65325F00B390BC /* LineAnimationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */; };
+		EE8D9EF61C65256A00B84761 /* AIOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8D9EF51C65256A00B84761 /* AIOperation.swift */; };
 		EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5131BF158F0009191EA /* Array2D.swift */; };
 		EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5151BF15E4A009191EA /* Nodes.swift */; };
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
-		EEE9E3E31C63D52B0041E0BA /* LineAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E21C63D52B0041E0BA /* LineAIService.swift */; };
+		EEF0696E1C64087200CC5288 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF0696D1C64087200CC5288 /* Settings.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
 
@@ -253,11 +255,13 @@
 		EE65F5581C31DF7900E51138 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		EE65F55A1C31DF9000E51138 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		EE65F55C1C31F1D700E51138 /* FacebookController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookController.swift; sourceTree = "<group>"; };
+		EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAnimationOperation.swift; sourceTree = "<group>"; };
+		EE8D9EF51C65256A00B84761 /* AIOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AIOperation.swift; sourceTree = "<group>"; };
 		EE8FD5131BF158F0009191EA /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		EE8FD5151BF15E4A009191EA /* Nodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nodes.swift; sourceTree = "<group>"; };
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
-		EEE9E3E21C63D52B0041E0BA /* LineAIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAIService.swift; sourceTree = "<group>"; };
+		EEF0696D1C64087200CC5288 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -449,6 +453,7 @@
 			children = (
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
 				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
+				EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */,
 				EEE9E3DC1C6002DF0041E0BA /* AI */,
 			);
 			name = "Main Scene";
@@ -537,6 +542,7 @@
 			isa = PBXGroup;
 			children = (
 				EE5E81801BDEC1410004424F /* AppDelegate.swift */,
+				EEF0696D1C64087200CC5288 /* Settings.swift */,
 				EE03D3FA1C582E9200078CF6 /* Parent Scenes */,
 				EE03D3FB1C582EB300078CF6 /* Main Scene */,
 				EE03D3FC1C582EC300078CF6 /* Multiplayer */,
@@ -620,7 +626,7 @@
 			isa = PBXGroup;
 			children = (
 				EEE9E3DD1C60043C0041E0BA /* LineAI.swift */,
-				EEE9E3E21C63D52B0041E0BA /* LineAIService.swift */,
+				EE8D9EF51C65256A00B84761 /* AIOperation.swift */,
 				EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */,
 				EEE9E3E01C62A3840041E0BA /* ShortPath.swift */,
 			);
@@ -818,12 +824,13 @@
 				EE03D2FF1C49B21500078CF6 /* DGActivityIndicatorBallSpinFadeLoader.m in Sources */,
 				EE534B7F1C4819BF0085E806 /* LineShapeLayer.swift in Sources */,
 				EE2FB4DC1C3B3CDA00C91D68 /* PushNotificationController.swift in Sources */,
+				EE7FDDD81C65325F00B390BC /* LineAnimationOperation.swift in Sources */,
 				EE03D3091C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m in Sources */,
 				EE03D2F71C49B21500078CF6 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */,
 				EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */,
-				EEE9E3E31C63D52B0041E0BA /* LineAIService.swift in Sources */,
 				EE03D3021C49B21500078CF6 /* DGActivityIndicatorBallZigZagDeflectAnimation.m in Sources */,
 				EE03D2FA1C49B21500078CF6 /* DGActivityIndicatorBallRotateAnimation.m in Sources */,
+				EEF0696E1C64087200CC5288 /* Settings.swift in Sources */,
 				EE03D3031C49B21500078CF6 /* DGActivityIndicatorCookieTerminatorAnimation.m in Sources */,
 				EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */,
 				EE534B7D1C45C64F0085E806 /* DotsScene.swift in Sources */,
@@ -848,6 +855,7 @@
 				EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */,
 				EE03D4091C598A7800078CF6 /* Coordinate.swift in Sources */,
 				EE03D3001C49B21500078CF6 /* DGActivityIndicatorBallTrianglePathAnimation.m in Sources */,
+				EE8D9EF61C65256A00B84761 /* AIOperation.swift in Sources */,
 				EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */,
 				EE5E81811BDEC1410004424F /* AppDelegate.swift in Sources */,
 				EE03D2F81C49B21500078CF6 /* DGActivityIndicatorBallPulseAnimation.m in Sources */,
