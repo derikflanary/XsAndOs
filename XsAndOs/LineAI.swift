@@ -34,6 +34,13 @@ class LineAI {
         return grid.columns
     }
     var player = Player.AI
+    var team: String {
+        if player == .User{
+            return x
+        }else{
+            return o
+        }
+    }
     var otherTeam: String {
         if player == .User{
             return o
@@ -51,27 +58,30 @@ class LineAI {
     //MARK: - AI SHORT PATH
     func calculateAIMove() -> (Coordinate?, Node?) {
         let shortestPathsUser = calculatePlayerShortPaths() //fetch the shortest paths for the user
-        
-        player = .AI //switch to AI mode
-        let shortestPathsAI = lowestPaths() //fetch shortest paths for AI player "o"
+        for path in shortestPathsUser{
+            for step in path.steps{
+                print(step.description)
+            }
+        }
+        let shortestPathsAI = calculateAIShortPaths() //fetch shortest paths for AI player "o"
         
         switch difficulty{
         case .Easy:
-            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI, difficulty: .Easy){
                 return stepToCoordinateAndNode(stepToDraw)
             }else{
                 return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
             }
             
         case .Moderate:
-            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI, difficulty: .Moderate){
                 return stepToCoordinateAndNode(stepToDraw)
             }else{
                 return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
             }
             
         case .Hard:
-            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI){
+            if let stepToDraw = intersectingShortPath(shortPathsUser: shortestPathsUser, shortPathsAI: shortestPathsAI, difficulty: .Hard){
                 return stepToCoordinateAndNode(stepToDraw)
             }else{
                 return randomShortPathToCoordinateAndNode(shortestPathsAI[0])
@@ -79,12 +89,51 @@ class LineAI {
         }
     }
     
-    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath]) -> ShortestPathStep?{
+    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath], difficulty: DifficultySetting) -> ShortestPathStep?{
         for pathUser in shortPathsUser{
             for pathAI in shortPathsAI{
                 for stepUser in pathUser.steps{
                     for stepAI in pathAI.steps{
-                        if stepUser.location.column == stepAI.location.column{
+                        switch difficulty{
+                        case .Easy:
+                            if stepUser.location.column == stepAI.location.column{
+                                if let node = nodeFromStep(stepAI){
+                                    if node.nodePos.ptWho == ""{
+                                        return stepAI
+                                    }
+                                }
+                            }
+                        case .Moderate:
+                            if stepUser.location.column == stepAI.location.column{
+                                if let node = nodeFromStep(stepAI){
+                                    if node.nodePos.ptWho == ""{
+                                        return stepAI
+                                    }
+                                }
+                            }
+                        case .Hard :
+                            if stepUser.location.column == stepAI.location.column && stepUser.location.row == stepAI.location.row{
+                                if let node = nodeFromStep(stepAI){
+                                    if node.nodePos.ptWho == ""{
+                                        return stepAI
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    
+    func intersectingShortPathHard(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath]) -> ShortestPathStep?{
+        for pathUser in shortPathsUser{
+            for pathAI in shortPathsAI{
+                for stepUser in pathUser.steps{
+                    for stepAI in pathAI.steps{
+                        if stepUser.location.column == stepAI.location.column && stepUser.location.row == stepAI.location.row{
                             if let node = nodeFromStep(stepAI){
                                 if node.nodePos.ptWho == ""{
                                     return stepAI
@@ -97,11 +146,18 @@ class LineAI {
         }
         return nil
     }
+
     
     //MARK: - FIND PLAYER SHORT PATH
     func calculatePlayerShortPaths() -> [ShortPath]{
         player = .User
         return lowestPaths()
+    }
+    
+    //MARK: - FIND AI SHORT PATH
+    func calculateAIShortPaths() -> [ShortPath]{
+         player = .AI //switch to AI mode
+        return lowestPaths() //fetch shortest paths for AI player "o"
     }
     
     //MARK: - LOWEST PATHS
@@ -173,6 +229,9 @@ class LineAI {
         //Calculate firststep hscore and add to openlist
         let firstStep = ShortestPathStep(node: fromNode)
         let toStep = ShortestPathStep(node: toNode)
+        if fromNode.nodePos.ptWho == team{
+            firstStep.gScore = -1
+        }
         firstStep.hScore = computeHScoreFromLocations(firstStep.location, toLoc: toStep.location)
         insertStepInOpenSteps(firstStep)
         
@@ -189,7 +248,7 @@ class LineAI {
             // If the currentStep is the desired tile coordinate, we are done!
             if currentStep.location.column == toNode.nodePos.column && currentStep.location.row == toNode.nodePos.row{
                 pathFound = true
-                print("Path Found")
+//                print("Path Found")
                 shortestPath = constructShortestPath(currentStep)
                 shortPath.steps = shortestPath
                 break
@@ -204,7 +263,7 @@ class LineAI {
                 }
                 // Compute the cost from the current step to that step
                 let moveCost = costToMoveToStep(step)
-                
+                step.cost = moveCost
                 // Check if the step is already in the open list
                 if !(openSteps.contains{$0 == step}){
                     // Set the current step as the parent

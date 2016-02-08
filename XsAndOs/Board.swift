@@ -609,7 +609,7 @@ class Board: XandOScene {
     }
     
     func performAIMove(){
-        let lineAI = LineAI(grid: grid, difficulty: .Moderate)
+        let lineAI = LineAI(grid: grid, difficulty: .Hard)
         let (coord, node) = lineAI.calculateAIMove()
         guard coord != nil || node != nil else {return}
         let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
