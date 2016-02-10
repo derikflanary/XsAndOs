@@ -20,6 +20,7 @@ let thirdColor = UIColor(red:0.98, green:0.88, blue:0.48, alpha:1.0)
 let boldFontName = "SFUIDisplay-Bold"
 let mainFontName = "SFUIDisplay-Regular"
 let lightFontName = "SFUIDisplay-Light"
+let transition = SKTransition.crossFadeWithDuration(1)
 
 class XandOScene: SKScene {
     

@@ -11,7 +11,7 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
-    var scene : GameScene!
+    var scene : MainScene!
     var skView = SKView()
     
     override func viewDidLoad() {
@@ -25,7 +25,7 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
         
         /* Set the scale mode to scale to fit the window */
-        scene = GameScene(size: skView.bounds.size)
+        scene = MainScene(size: skView.bounds.size)
         scene.scaleMode = .AspectFill
         
         skView.presentScene(scene)

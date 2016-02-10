@@ -39,11 +39,6 @@ class Board: XandOScene {
         case AppendedLine
     }
     
-    enum GameType {
-        case Local
-        case AI
-    }
-    
     enum UserTeam: String {
         case X = "X"
         case O = "O"
@@ -71,7 +66,6 @@ class Board: XandOScene {
     var potentialShapeNode = CAShapeLayer()
     var restartButton = UIButton()
     var lastMove = LastMove.SingleLine
-    var gameType = GameType.AI
     let undoButton = UIButton()
     let backButton = UIButton()
     var nodeAction = SKAction()
@@ -110,6 +104,7 @@ class Board: XandOScene {
     // MARK: - GAME SETUP
     func startGame(){
         gameLayer.position = CGPointMake(0, 0)
+        self.userInteractionEnabled = false
         addChild(gameLayer)
         setUpMainAnimation()
         buildArrayOfNodes()
@@ -152,12 +147,9 @@ class Board: XandOScene {
         turnLabel.runAction(nodeAction)
         self.addChild(turnLabel)
         
-        if gameType == .AI{
+        if aiGame{
             undoButton.removeFromSuperview()
             turnLabel.removeFromParent()
-            if userTeam == .O{
-                performAIMove()
-            }
         }
         isXTurn()
     }
@@ -227,6 +219,7 @@ class Board: XandOScene {
             }
         }
         animateNodes()
+        
     }
     
     func pointForColumn(column: Int, row: Int) -> CGPoint {
@@ -272,6 +265,13 @@ class Board: XandOScene {
     
     func animateNodes(){
         startActionForNodeType(x)
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            self.userInteractionEnabled = true
+            if self.userTeam == .O{
+                self.performAIMove()
+            }
+        }
     }
     
     func startActionForNodeType(type: String){
@@ -628,12 +628,14 @@ class Board: XandOScene {
     
     func performAIMove(){
         guard aiGame else {return}
+        self.userInteractionEnabled = false
         let lineAI = LineAI(grid: grid, difficulty: .Hard, userTeam: userTeam)
         let (coord, node) = lineAI.calculateAIMove()
         guard coord != nil || node != nil else {return}
         let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
         let pointB = pointForColumn(coord!.columnB, row: coord!.rowB)
         let interNode = gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
+        self.userInteractionEnabled = true
         switch userTeam{
         case .X:
             interNode?.nodePos.ptWho = o
@@ -651,9 +653,11 @@ class Board: XandOScene {
 
     
     func animateLine(line: LineShapeLayer, type: LineAnimationOperation.AnimationType){
+        self.userInteractionEnabled = false
         let operationQueue = NSOperationQueue.mainQueue()
         let animationOp = LineAnimationOperation(line: line, type: type)
         animationOp.completionBlock = {
+            self.userInteractionEnabled = true
             self.switchTurns()
         }
         switch type{
@@ -922,7 +926,7 @@ class Board: XandOScene {
     }
     
     func transitionToMainScene(){
-        let mainScene = GameScene(size: self.size)
+        let mainScene = MainScene(size: self.size)
         let transition = SKTransition.fadeWithDuration(2.0)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)

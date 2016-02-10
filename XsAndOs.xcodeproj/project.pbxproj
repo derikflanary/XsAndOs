@@ -102,6 +102,7 @@
 		EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FD5151BF15E4A009191EA /* Nodes.swift */; };
 		EEA08EC11C6A9407002F09A9 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC01C6A9407002F09A9 /* MainScene.swift */; };
 		EEA08EC31C6AED34002F09A9 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC21C6AED34002F09A9 /* CircleButton.swift */; };
+		EEA08EC61C6BD2B0002F09A9 /* SingleSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */; };
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
 		EEF0696E1C64087200CC5288 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF0696D1C64087200CC5288 /* Settings.swift */; };
@@ -263,6 +264,7 @@
 		EE8FD5151BF15E4A009191EA /* Nodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nodes.swift; sourceTree = "<group>"; };
 		EEA08EC01C6A9407002F09A9 /* MainScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
 		EEA08EC21C6AED34002F09A9 /* CircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
+		EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSetupScene.swift; sourceTree = "<group>"; };
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
 		EEF0696D1C64087200CC5288 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 		EE03D3FC1C582EC300078CF6 /* Multiplayer */ = {
 			isa = PBXGroup;
 			children = (
+				EE03D3FD1C582ED300078CF6 /* Play With Friends */,
 				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
 				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
 				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
@@ -551,8 +554,8 @@
 				EEF0696D1C64087200CC5288 /* Settings.swift */,
 				EE03D3FA1C582E9200078CF6 /* Parent Scenes */,
 				EE03D3FB1C582EB300078CF6 /* Main Scene */,
+				EEA08EC41C6BD282002F09A9 /* Single Player */,
 				EE03D3FC1C582EC300078CF6 /* Multiplayer */,
-				EE03D3FD1C582ED300078CF6 /* Play With Friends */,
 				EE2FB4D61C3AED0000C91D68 /* Models */,
 				EE534B7B1C45C6290085E806 /* Controllers */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
@@ -626,6 +629,14 @@
 				EE65F1F21C31CA0D00E51138 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EEA08EC41C6BD282002F09A9 /* Single Player */ = {
+			isa = PBXGroup;
+			children = (
+				EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */,
+			);
+			name = "Single Player";
 			sourceTree = "<group>";
 		};
 		EEE9E3DC1C6002DF0041E0BA /* AI */ = {
@@ -828,6 +839,7 @@
 				EE0379051C3F051100312DF4 /* XandOScene.swift in Sources */,
 				EE03D3111C49B21500078CF6 /* DGActivityIndicatorTripleRingsAnimation.m in Sources */,
 				EE2FB4E21C3BA96000C91D68 /* CurrentGamesScene.swift in Sources */,
+				EEA08EC61C6BD2B0002F09A9 /* SingleSetupScene.swift in Sources */,
 				EE03D2FF1C49B21500078CF6 /* DGActivityIndicatorBallSpinFadeLoader.m in Sources */,
 				EE534B7F1C4819BF0085E806 /* LineShapeLayer.swift in Sources */,
 				EE2FB4DC1C3B3CDA00C91D68 /* PushNotificationController.swift in Sources */,
