@@ -121,7 +121,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
     }
     
     private func transitionToBoardScene(dim : Int, rows : Int){
-        let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows)
+        let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: true)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }

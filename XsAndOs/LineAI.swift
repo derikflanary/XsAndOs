@@ -10,11 +10,6 @@ import Foundation
 
 class LineAI {
     
-    enum Player {
-        case User
-        case AI
-    }
-    
     internal enum DifficultySetting{
         case Easy
         case Moderate
@@ -33,16 +28,16 @@ class LineAI {
     var columns: Int{
         return grid.columns
     }
-    var player = Player.AI
+    var pathTeam : Board.UserTeam
     var team: String {
-        if player == .User{
+        if pathTeam == .X{
             return x
         }else{
             return o
         }
     }
     var otherTeam: String {
-        if player == .User{
+        if pathTeam == .X{
             return o
         }else{
             return x
@@ -51,18 +46,15 @@ class LineAI {
     var difficulty : DifficultySetting
     
     //MARK: - INIT
-    init(grid: Array2D<Node>, difficulty: DifficultySetting){
+    init(grid: Array2D<Node>, difficulty: DifficultySetting, userTeam: Board.UserTeam){
         self.grid = grid
         self.difficulty = difficulty
+        pathTeam = userTeam
     }
     //MARK: - AI SHORT PATH
     func calculateAIMove() -> (Coordinate?, Node?) {
         let shortestPathsUser = calculatePlayerShortPaths() //fetch the shortest paths for the user
-        for path in shortestPathsUser{
-            for step in path.steps{
-                print(step.description)
-            }
-        }
+     
         let shortestPathsAI = calculateAIShortPaths() //fetch shortest paths for AI player "o"
         
         switch difficulty{
@@ -104,7 +96,7 @@ class LineAI {
                                 }
                             }
                         case .Moderate:
-                            if stepUser.location.column == stepAI.location.column{
+                            if stepUser.location.column == stepAI.location.column && stepUser.location.row == stepAI.location.row{
                                 if let node = nodeFromStep(stepAI){
                                     if node.nodePos.ptWho == ""{
                                         return stepAI
@@ -120,7 +112,6 @@ class LineAI {
                                 }
                             }
                         }
-                        
                     }
                 }
             }
@@ -128,35 +119,20 @@ class LineAI {
         return nil
     }
     
-    func intersectingShortPathHard(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath]) -> ShortestPathStep?{
-        for pathUser in shortPathsUser{
-            for pathAI in shortPathsAI{
-                for stepUser in pathUser.steps{
-                    for stepAI in pathAI.steps{
-                        if stepUser.location.column == stepAI.location.column && stepUser.location.row == stepAI.location.row{
-                            if let node = nodeFromStep(stepAI){
-                                if node.nodePos.ptWho == ""{
-                                    return stepAI
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return nil
-    }
-
     
     //MARK: - FIND PLAYER SHORT PATH
     func calculatePlayerShortPaths() -> [ShortPath]{
-        player = .User
         return lowestPaths()
     }
     
     //MARK: - FIND AI SHORT PATH
     func calculateAIShortPaths() -> [ShortPath]{
-         player = .AI //switch to AI mode
+        if pathTeam == .X{
+            pathTeam = .O
+        }else{
+            pathTeam = .X
+        }
+        //switch team mode
         return lowestPaths() //fetch shortest paths for AI player "o"
     }
     
@@ -179,7 +155,7 @@ class LineAI {
 //            print("firstcol:\(firstRow), lastcol:\(lastRow)")
             var fromNode = grid[1,firstRow]!
             var toNode = grid[columns - 2,lastRow]!
-            if player == .User{
+            if pathTeam == .X{
                 fromNode = grid[firstRow, 1]!
                 toNode = grid[lastRow, rows - 2]!
             }
@@ -214,6 +190,7 @@ class LineAI {
                 shortestPaths.append(path)
             }
         }
+        shortestPaths.shuffleInPlace()
         return shortestPaths
     }
     
@@ -337,14 +314,14 @@ class LineAI {
     private func costToMoveToStep(toStep: ShortestPathStep) -> Int{
         
         let node = nodeFromStep(toStep)
-        switch player {
-        case .AI:
+        switch pathTeam {
+        case .O:
             if node?.nodePos.ptWho == o{
                 return 0
             }else{
                 return 1
             }
-        case .User:
+        case .X:
             if node?.nodePos.ptWho == x{
                 return 0
             }else{
@@ -357,14 +334,14 @@ class LineAI {
     private func availableAdjacentSteps(location: Location) -> [Node]{
         var nodes = [Node]()
 
-        switch player {
-        case .AI:
+        switch pathTeam {
+        case .O:
             if location.row % 2 == 0{ //the current step is a vertical line
                 nodes = verticalLineAdjNodes(location: location, nodes: nodes)
             }else{ // current step is horizontal
                 nodes = horizontalLineAdjNodes(location: location, nodes: nodes)
             }
-        case .User:
+        case .X:
             if location.row % 2 == 0{ //the current step is a vertical line
                 nodes = horizontalLineAdjNodes(location: location, nodes: nodes)
             }else{ // current step is horizontal
@@ -437,28 +414,36 @@ class LineAI {
     
     private func randomShortPathToCoordinateAndNode(path: ShortPath) -> (coordinate: Coordinate?, node: Node?){
         var nodeToDraw = Node(column: 0, row: 0, theNodeType: .Intersection)
+        var stepToDraw = ShortestPathStep(node: nodeToDraw)
         for step in path.steps{
             if let node = nodeFromStep(step){
                 if node.nodePos.ptWho == ""{
                     nodeToDraw = node
+                    stepToDraw = step
                     break
                 }
             }
         }
-        if nodeToDraw.nodePos.row! % 2 == 0{ //the current step is a vertical line
-            return (Coordinate(columnA: nodeToDraw.nodePos.column!, rowA: nodeToDraw.nodePos.row! + 1 , columnB: nodeToDraw.nodePos.column!, rowB: nodeToDraw.nodePos.row! - 1, position: nil), nodeToDraw)
-        }else{
-            return (Coordinate(columnA: nodeToDraw.nodePos.column! + 1, rowA: nodeToDraw.nodePos.row! , columnB: nodeToDraw.nodePos.column! - 1, rowB: nodeToDraw.nodePos.row!, position: nil), nodeToDraw)
-        }
+        return stepToCoordinateAndNode(stepToDraw)
     }
 
     private func stepToCoordinateAndNode(step: ShortestPathStep) -> (coordinate: Coordinate?, node: Node?){
         
+        
         if let node = nodeFromStep(step){
-            if node.nodePos.row! % 2 == 0{ //the current step is a vertical line
-                return (Coordinate(columnA: node.nodePos.column!, rowA: node.nodePos.row! + 1 , columnB: node.nodePos.column!, rowB: node.nodePos.row! - 1, position: nil), node)
-            }else{
-                return (Coordinate(columnA: node.nodePos.column! + 1, rowA: node.nodePos.row! , columnB: node.nodePos.column! - 1, rowB: node.nodePos.row!, position: nil), node)
+            switch pathTeam{
+            case .O:
+                if node.nodePos.row! % 2 == 0{ //the current step is a vertical line for O's
+                    return (Coordinate(columnA: node.nodePos.column!, rowA: node.nodePos.row! + 1 , columnB: node.nodePos.column!, rowB: node.nodePos.row! - 1, position: nil), node)
+                }else{ // horizontal line for O's
+                    return (Coordinate(columnA: node.nodePos.column! + 1, rowA: node.nodePos.row! , columnB: node.nodePos.column! - 1, rowB: node.nodePos.row!, position: nil), node)
+                }
+            case .X:
+                if node.nodePos.row! % 2 != 0{ //the current step is a vertical line for X's
+                    return (Coordinate(columnA: node.nodePos.column!, rowA: node.nodePos.row! + 1 , columnB: node.nodePos.column!, rowB: node.nodePos.row! - 1, position: nil), node)
+                }else{ // horizontal line for O's
+                    return (Coordinate(columnA: node.nodePos.column! + 1, rowA: node.nodePos.row! , columnB: node.nodePos.column! - 1, rowB: node.nodePos.row!, position: nil), node)
+                }
             }
         }
         return (nil, nil)
@@ -466,3 +451,27 @@ class LineAI {
 
     
 }
+
+extension CollectionType {
+    /// Return a copy of `self` with its elements shuffled
+    func shuffle() -> [Generator.Element] {
+        var list = Array(self)
+        list.shuffleInPlace()
+        return list
+    }
+}
+
+extension MutableCollectionType where Index == Int {
+    /// Shuffle the elements of `self` in-place.
+    mutating func shuffleInPlace() {
+        // empty and single-element collections don't shuffle
+        if count < 2 { return }
+        
+        for i in 0..<count - 1 {
+            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+            guard i != j else { continue }
+            swap(&self[i], &self[j])
+        }
+    }
+}
+

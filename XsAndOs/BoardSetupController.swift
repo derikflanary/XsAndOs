@@ -67,9 +67,9 @@ class BoardSetupController: NSObject {
         xLines.fetchIfNeededInBackgroundWithBlock { (theXlines: PFObject?,error: NSError?) -> Void in
             oLines.fetchIfNeededInBackgroundWithBlock({ (theOLines: PFObject?,error: NSError?) -> Void in
                 if error != nil{
-                    completion(false, MultiplayerBoard(size: size, theDim: 0, theRows: 0))
+                    completion(false, MultiplayerBoard(size: size, theDim: 0, theRows: 0, userTeam: .X, aiGame: false))
                 }else{
-                    var secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows)
+                    var secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows, userTeam: .X, aiGame: false)
                     
                     secondScene = self.passGameDataToScene(game, secondScene: secondScene)
                     secondScene.xLinesParse = theXlines!["lines"] as! [[[String:Int]]]

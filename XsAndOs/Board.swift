@@ -13,7 +13,6 @@ let bottomPadding : CGFloat = 100
 let x = "X"
 let o = "O"
 
-
 struct PreviousMoveDetails {
     var oldLines = [LineShapeLayer]()
     var previousIntersection : LastIntersectionLocation
@@ -34,7 +33,7 @@ struct RecentCoordinates {
 }
 
 class Board: XandOScene {
-    
+    //MARK: - PROPERTIES
     enum LastMove {
         case SingleLine
         case AppendedLine
@@ -43,6 +42,11 @@ class Board: XandOScene {
     enum GameType {
         case Local
         case AI
+    }
+    
+    enum UserTeam: String {
+        case X = "X"
+        case O = "O"
     }
     
     var rows : Int
@@ -73,6 +77,8 @@ class Board: XandOScene {
     var nodeAction = SKAction()
     var square = CAShapeLayer()
     var winner = false
+    var userTeam = UserTeam.X
+    var aiGame : Bool
     var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
@@ -81,13 +87,17 @@ class Board: XandOScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(size: CGSize, theDim: Int, theRows: Int) {
+    //MARK: INIT
+    init(size: CGSize, theDim: Int, theRows: Int, userTeam: UserTeam, aiGame: Bool) {
         dim = theDim
         grid = Array2D(columns: dim, rows: dim)
         rows = theRows
+        self.aiGame = aiGame
         super.init(size: size)
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
+        self.userTeam = userTeam
+        
     }
     
     override func didMoveToView(view: SKView) {
@@ -97,7 +107,7 @@ class Board: XandOScene {
     }
     
     
-// MARK: - GAME SETUP
+    // MARK: - GAME SETUP
     func startGame(){
         gameLayer.position = CGPointMake(0, 0)
         addChild(gameLayer)
@@ -145,6 +155,9 @@ class Board: XandOScene {
         if gameType == .AI{
             undoButton.removeFromSuperview()
             turnLabel.removeFromParent()
+            if userTeam == .O{
+                performAIMove()
+            }
         }
         isXTurn()
     }
@@ -597,51 +610,43 @@ class Board: XandOScene {
             turnLabel.fontColor = oColor
             stopActionsOnGameLayer(x)
             startActionForNodeType(o)
+            if userTeam == .X{
+                performAIMove()
+            }
             
-            performAIMove()
         }else{
             xTurn = true
             turnLabel.text = x
             turnLabel.fontColor = xColor
             stopActionsOnGameLayer(o)
             startActionForNodeType(x)
+            if userTeam == .O{
+                performAIMove()
+            }
         }
     }
     
     func performAIMove(){
-        let lineAI = LineAI(grid: grid, difficulty: .Hard)
+        guard aiGame else {return}
+        let lineAI = LineAI(grid: grid, difficulty: .Hard, userTeam: userTeam)
         let (coord, node) = lineAI.calculateAIMove()
         guard coord != nil || node != nil else {return}
         let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
         let pointB = pointForColumn(coord!.columnB, row: coord!.rowB)
         let interNode = gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
-        interNode?.nodePos.ptWho = o
-        NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
-            self.drawLineBetweenPoints(pointA, pointB: pointB, type: o)
-        }
-        
-//        switchTurns()
-//        
-//        let aiCalculator = AIMoveCalculator(grid: grid)
-//        aiCalculator.qualityOfService = .Background
-//        
-//        aiCalculator.completionBlock = {
-//            if aiCalculator.cancelled {
-//                return
-//            }
-//            let coord = aiCalculator.coordinate
-//            let node = aiCalculator.node
-//            guard coord != nil || node != nil else {return}
-//            let pointA = self.pointForColumn(coord!.columnA, row: coord!.rowA)
-//            let pointB = self.pointForColumn(coord!.columnB, row: coord!.rowB)
-//            let interNode = self.gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
-//            interNode?.nodePos.ptWho = o
-//            
-//            self.drawLineBetweenPoints(pointA, pointB: pointB, type: o)
-////            self.switchTurns()
-//        }
-//        aiCalculator.start()
-        
+        switch userTeam{
+        case .X:
+            interNode?.nodePos.ptWho = o
+            NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
+                self.drawLineBetweenPoints(pointA, pointB: pointB, type: o)
+            }
+        case .O:
+            interNode?.nodePos.ptWho = x
+            NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
+                self.drawLineBetweenPoints(pointA, pointB: pointB, type: x)
+            }
+
+        }        
     }
 
     
@@ -830,7 +835,7 @@ class Board: XandOScene {
     }
     
     func tranistionToNewBoard(){
-        let secondScene = Board(size: self.size, theDim: dim, theRows: rows)
+        let secondScene = Board(size: self.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: true)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
