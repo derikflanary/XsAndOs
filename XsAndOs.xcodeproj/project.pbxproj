@@ -54,9 +54,6 @@
 		EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */; };
 		EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */; };
 		EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */; };
-		EE03D3F41C56E5A000078CF6 /* expanding.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F11C56E5A000078CF6 /* expanding.caf */; };
-		EE03D3F51C56E5A000078CF6 /* fold.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F21C56E5A000078CF6 /* fold.caf */; };
-		EE03D3F61C56E5A000078CF6 /* selected.caf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3F31C56E5A000078CF6 /* selected.caf */; };
 		EE03D4051C596ED700078CF6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */; };
 		EE03D4071C5987BB00078CF6 /* ShortestPathStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */; };
 		EE03D4091C598A7800078CF6 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D4081C598A7800078CF6 /* Coordinate.swift */; };
@@ -209,9 +206,6 @@
 		EE03D32A1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Regular.otf"; sourceTree = "<group>"; };
 		EE03D32B1C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Semibold.otf"; sourceTree = "<group>"; };
 		EE03D32C1C4EF71B00078CF6 /* SF-UI-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Thin.otf"; sourceTree = "<group>"; };
-		EE03D3F11C56E5A000078CF6 /* expanding.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = expanding.caf; sourceTree = "<group>"; };
-		EE03D3F21C56E5A000078CF6 /* fold.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fold.caf; sourceTree = "<group>"; };
-		EE03D3F31C56E5A000078CF6 /* selected.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = selected.caf; sourceTree = "<group>"; };
 		EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortestPathStep.swift; sourceTree = "<group>"; };
 		EE03D4081C598A7800078CF6 /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
@@ -437,9 +431,6 @@
 		EE03D3F01C56E5A000078CF6 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				EE03D3F11C56E5A000078CF6 /* expanding.caf */,
-				EE03D3F21C56E5A000078CF6 /* fold.caf */,
-				EE03D3F31C56E5A000078CF6 /* selected.caf */,
 			);
 			name = Sounds;
 			path = "../../../../Downloads/ExpandingMenu-master/Pod/Assets/Sounds";
@@ -764,17 +755,14 @@
 				EE03D33B1C4EF71B00078CF6 /* SF-UI-Display-Bold.otf in Resources */,
 				EE5E81831BDEC1410004424F /* GameScene.sks in Resources */,
 				EE03D33E1C4EF71B00078CF6 /* SF-UI-Display-Medium.otf in Resources */,
-				EE03D3F51C56E5A000078CF6 /* fold.caf in Resources */,
 				EE5E818F1BDEC1410004424F /* LaunchScreen.storyboard in Resources */,
 				EE5E818C1BDEC1410004424F /* Assets.xcassets in Resources */,
 				EE03D33A1C4EF71B00078CF6 /* SF-UI-Display-Black.otf in Resources */,
 				EE03D33D1C4EF71B00078CF6 /* SF-UI-Display-Light.otf in Resources */,
 				EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */,
 				EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */,
-				EE03D3F41C56E5A000078CF6 /* expanding.caf in Resources */,
 				EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */,
 				EE03D33F1C4EF71B00078CF6 /* SF-UI-Display-Regular.otf in Resources */,
-				EE03D3F61C56E5A000078CF6 /* selected.caf in Resources */,
 				EE5E818A1BDEC1410004424F /* Main.storyboard in Resources */,
 				EE03D33C1C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf in Resources */,
 			);

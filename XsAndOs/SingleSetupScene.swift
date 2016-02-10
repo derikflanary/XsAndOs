@@ -106,6 +106,11 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
     }
     
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        view?.endEditing(true)
+
+    }
+    
     //MARK: - BUTTON METHODS
     func xPressed(){
         oButton.backgroundColor = flint
@@ -157,8 +162,6 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
             textField.text = "8"
         }
     }
-    
-
 }
 
 class InfoLabel: UILabel{
