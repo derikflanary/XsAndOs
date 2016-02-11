@@ -44,6 +44,12 @@ class Board: XandOScene {
         case O = "O"
     }
     
+    enum Difficulty{
+        case Easy
+        case Moderate
+        case Hard
+    }
+    
     var rows : Int
     var dim : Int
     var nodeX = [Node]()
@@ -73,6 +79,7 @@ class Board: XandOScene {
     var winner = false
     var userTeam = UserTeam.X
     var aiGame : Bool
+    var difficulty : Difficulty
     var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
@@ -87,6 +94,7 @@ class Board: XandOScene {
         grid = Array2D(columns: dim, rows: dim)
         rows = theRows
         self.aiGame = aiGame
+        self.difficulty = .Easy
         super.init(size: size)
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
@@ -94,15 +102,30 @@ class Board: XandOScene {
         
     }
     
+    init(size: CGSize, theDim: Int, theRows: Int, userTeam: UserTeam, aiGame: Bool, difficulty: Difficulty) {
+        dim = theDim
+        grid = Array2D(columns: dim, rows: dim)
+        rows = theRows
+        self.aiGame = aiGame
+        self.difficulty = difficulty
+        super.init(size: size)
+        xIsopin = self.frame.size.width / CGFloat(dim)
+        yIsopin = xIsopin
+        self.userTeam = userTeam
+        
+    }
+
+    
+    
+    
+    
+    // MARK: - GAME SETUP
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         super.didMoveToView(view)
         self.view?.viewWithTag(1000)?.removeFromSuperview()
         startGame()
     }
-    
-    
-    // MARK: - GAME SETUP
     func startGame(){
         gameLayer.position = CGPointMake(0, 0)
         self.userInteractionEnabled = false
@@ -630,7 +653,7 @@ class Board: XandOScene {
     func performAIMove(){
         guard aiGame else {return}
         self.userInteractionEnabled = false
-        let lineAI = LineAI(grid: grid, difficulty: .Hard, userTeam: userTeam)
+        let lineAI = LineAI(grid: grid, difficulty: difficulty, userTeam: userTeam)
         let (coord, node) = lineAI.calculateAIMove()
         guard coord != nil || node != nil else {return}
         let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
@@ -840,7 +863,7 @@ class Board: XandOScene {
     }
     
     func tranistionToNewBoard(){
-        let secondScene = Board(size: self.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: true)
+        let secondScene = Board(size: self.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: true, difficulty: difficulty)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)

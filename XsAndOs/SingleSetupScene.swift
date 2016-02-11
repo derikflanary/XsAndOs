@@ -19,7 +19,12 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     private let oButton = CircleView()
     private let rowsLabel = InfoLabel(frame: CGRectZero)
     private let teamLabel = InfoLabel(frame: CGRectZero)
+    private let difficultyLabel = InfoLabel(frame: CGRectZero)
+    private let easyButton = Button()
+    private let moderateButton = Button()
+    private let hardButton = Button()
     var userTeam = Board.UserTeam.X
+    var difficulty = Board.Difficulty.Moderate
     
     //MARK: - VIEW SETUP
     override func didMoveToView(view: SKView) {
@@ -32,6 +37,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         startButton.center.x = (self.view?.center.x)!
         startButton.setTitle("Start", forState: .Normal)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
+        startButton.backgroundColor = xColor
                 
         sizeField.frame = CGRectMake(0, 0, 50, 50)
         sizeField.backgroundColor = textColor
@@ -59,9 +65,30 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         oButton.clipsToBounds = true
         oButton.addTarget(self, action: "oPressed", forControlEvents: .TouchUpInside)
         
+        easyButton.setImage(UIImage(named: "x1"), forState: .Normal)
+        easyButton.layer.cornerRadius = 25
+        easyButton.clipsToBounds = true
+        easyButton.imageView?.contentMode = .Center
+        easyButton.backgroundColor = flint
+        easyButton.addTarget(self, action: "easyPressed", forControlEvents: .TouchUpInside)
+        
+        moderateButton.setImage(UIImage(named: "xx"), forState: .Normal)
+        moderateButton.layer.cornerRadius = 25
+        moderateButton.clipsToBounds = true
+        moderateButton.imageView?.contentMode = .Center
+        moderateButton.backgroundColor = oColor
+        moderateButton.addTarget(self, action: "moderatePressed", forControlEvents: .TouchUpInside)
+        
+        hardButton.setImage(UIImage(named: "xxx"), forState: .Normal)
+        hardButton.layer.cornerRadius = 25
+        hardButton.clipsToBounds = true
+        hardButton.imageView?.contentMode = .Center
+        hardButton.backgroundColor = flint
+        hardButton.addTarget(self, action: "hardPressed", forControlEvents: .TouchUpInside)
         
         rowsLabel.text = "Rows"
         teamLabel.text = "Team"
+        difficultyLabel.text = "Difficulty"
         
         addAutoContraints()
     }
@@ -75,7 +102,13 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         innerStack.distribution = .FillEqually
         innerStack.spacing = 50
         
-        stackView = UIStackView(arrangedSubviews: [startButton, rowsLabel, sizeField, teamLabel, innerStack])
+        let difficultyStack = UIStackView(arrangedSubviews: [easyButton, moderateButton, hardButton])
+        difficultyStack.axis = .Horizontal
+        difficultyStack.alignment = .Center
+        difficultyStack.distribution = .FillEqually
+        difficultyStack.spacing = 20
+        
+        stackView = UIStackView(arrangedSubviews: [startButton, rowsLabel, sizeField, teamLabel, innerStack, difficultyLabel, difficultyStack])
         stackView.axis = .Vertical
         stackView.alignment = .Center
         stackView.spacing = 21
@@ -86,8 +119,8 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         stackView.leadingAnchor.constraintEqualToAnchor(margins?.leadingAnchor).active = true
         stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
         stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
-        stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -80).active = true
-        stackView.heightAnchor.constraintEqualToConstant(350).active = true
+        stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: 0).active = true
+        stackView.heightAnchor.constraintEqualToAnchor(margins?.heightAnchor, constant: -140).active = true
         
         startButton.heightAnchor.constraintEqualToConstant(50).active = true
         startButton.widthAnchor.constraintGreaterThanOrEqualToAnchor(stackView.widthAnchor).active = true
@@ -97,7 +130,12 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         xButton.heightAnchor.constraintEqualToConstant(80).active = true
         oButton.widthAnchor.constraintEqualToConstant(80).active = true
         oButton.heightAnchor.constraintEqualToConstant(80).active = true
-    
+        easyButton.heightAnchor.constraintEqualToConstant(50).active = true
+        easyButton.widthAnchor.constraintEqualToConstant(100).active = true
+        moderateButton.heightAnchor.constraintEqualToConstant(50).active = true
+        moderateButton.widthAnchor.constraintEqualToConstant(100).active = true
+        hardButton.heightAnchor.constraintEqualToConstant(50).active = true
+        hardButton.widthAnchor.constraintEqualToConstant(100).active = true
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -131,10 +169,33 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         stackView.removeFromSuperview()
     }
 
+    func easyPressed(){
+        easyButton.backgroundColor = oColor
+        moderateButton.backgroundColor = flint
+        hardButton.backgroundColor = flint
+        difficulty = .Easy
+    }
+    
+    func moderatePressed(){
+        easyButton.backgroundColor = flint
+        moderateButton.backgroundColor = oColor
+        hardButton.backgroundColor = flint
+        difficulty = .Moderate
+    }
+    
+    func hardPressed(){
+        easyButton.backgroundColor = flint
+        moderateButton.backgroundColor = flint
+        hardButton.backgroundColor = oColor
+        difficulty = .Hard
+    }
+
+
+
     
     //MARK: - TRANSITIONS
     private func transitionToBoardScene(dim : Int, rows : Int){
-        let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: true)
+        let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: true, difficulty: difficulty)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }

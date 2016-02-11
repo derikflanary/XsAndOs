@@ -42,6 +42,17 @@
 				<key>KitName</key>
 				<string>Crashlytics</string>
 			</dict>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>api-key</key>
+					<string>e849107a6cc9cdaac5fee912b9248c03</string>
+					<key>api-secret</key>
+					<string>24f010864c0ca6c7089eccff4b99de21340e8d76</string>
+				</dict>
+				<key>KitName</key>
+				<string>GameAnalytics</string>
+			</dict>
 		</array>
 	</dict>
 	<key>FacebookAppID</key>

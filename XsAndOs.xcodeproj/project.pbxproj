@@ -104,6 +104,7 @@
 		EEA08ECF1C6C4BAF002F09A9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08ECE1C6C4BAF002F09A9 /* Button.swift */; };
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
+		EEEE5B4A1C6D170B00B181F6 /* GameAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */; };
 		EEF0696E1C64087200CC5288 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF0696D1C64087200CC5288 /* Settings.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
@@ -265,6 +266,7 @@
 		EEA08ECE1C6C4BAF002F09A9 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
+		EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GameAnalytics.framework; sourceTree = SOURCE_ROOT; };
 		EEF0696D1C64087200CC5288 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -275,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE65F2011C31CA5700E51138 /* libsqlite3.tbd in Frameworks */,
+				EEEE5B4A1C6D170B00B181F6 /* GameAnalytics.framework in Frameworks */,
 				EE65F1FF1C31CA4B00E51138 /* libz.tbd in Frameworks */,
 				EE65F1FD1C31CA4000E51138 /* SystemConfiguration.framework in Frameworks */,
 				EE65F1FB1C31CA3700E51138 /* Security.framework in Frameworks */,
@@ -454,9 +457,6 @@
 			children = (
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
 				EEA08EC01C6A9407002F09A9 /* MainScene.swift */,
-				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
-				EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */,
-				EEE9E3DC1C6002DF0041E0BA /* AI */,
 			);
 			name = "Main Scene";
 			sourceTree = "<group>";
@@ -554,6 +554,7 @@
 				EE534B7B1C45C6290085E806 /* Controllers */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE03D3141C4AC9BE00078CF6 /* Confetti */,
+				EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */,
 				EEA08ECD1C6C4186002F09A9 /* Push Notifications */,
 				EE03D3FE1C582EFF00078CF6 /* Facebook */,
 				EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */,
@@ -632,6 +633,9 @@
 			isa = PBXGroup;
 			children = (
 				EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */,
+				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
+				EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */,
+				EEE9E3DC1C6002DF0041E0BA /* AI */,
 			);
 			name = "Single Player";
 			sourceTree = "<group>";

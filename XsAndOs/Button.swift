@@ -19,7 +19,6 @@ class Button: UIButton {
         setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         layer.cornerRadius = 25
         clipsToBounds = true
-        backgroundColor = xColor
 
     }
     
@@ -29,11 +28,9 @@ class Button: UIButton {
         }
         set {
             if newValue {
-                backgroundColor = xColor
                 alpha = 0.9
             }
             else {
-                backgroundColor = xColor
                 alpha = 1.0
             }
             super.highlighted = newValue

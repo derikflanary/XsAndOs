@@ -10,12 +10,6 @@ import Foundation
 
 class LineAI {
     
-    internal enum DifficultySetting{
-        case Easy
-        case Moderate
-        case Hard
-    }
-    
     //MARK: - PROPERTIES
     
     private var openSteps = [ShortestPathStep]()
@@ -43,10 +37,10 @@ class LineAI {
             return x
         }
     }
-    var difficulty : DifficultySetting
+    var difficulty : Board.Difficulty
     
     //MARK: - INIT
-    init(grid: Array2D<Node>, difficulty: DifficultySetting, userTeam: Board.UserTeam){
+    init(grid: Array2D<Node>, difficulty: Board.Difficulty, userTeam: Board.UserTeam){
         self.grid = grid
         self.difficulty = difficulty
         pathTeam = userTeam
@@ -81,7 +75,7 @@ class LineAI {
         }
     }
     
-    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath], difficulty: DifficultySetting) -> ShortestPathStep?{
+    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath], difficulty: Board.Difficulty) -> ShortestPathStep?{
         for pathUser in shortPathsUser{
             for pathAI in shortPathsAI{
                 for stepUser in pathUser.steps{

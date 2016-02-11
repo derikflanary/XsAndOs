@@ -12,6 +12,8 @@ import Bolts
 import ParseFacebookUtilsV4
 import Fabric
 import Crashlytics
+import GameAnalytics
+
 
 
 @UIApplicationMain
@@ -24,8 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("c7fI5i2vHGsajpcH7uDWjie8xLdHGhq6X6D21dBm",
             clientKey: "loGrncuqMAb1KTz99b3l1YIvw7cGwqzYjaAoHdZs")
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-        Fabric.with([Crashlytics.self])
-        
+        Fabric.with([Crashlytics.self, GameAnalytics.self])
+
         if !UIApplication.sharedApplication().isRegisteredForRemoteNotifications(){
             let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
             let application = UIApplication.sharedApplication()
@@ -34,6 +36,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         PFInstallation.currentInstallation().badge = 0
+        
+        // Enable log to output simple details (disable in production)
+        GameAnalytics.setEnabledInfoLog(true)
+        // Enable log to output full event JSON (disable in production)
+        GameAnalytics.setEnabledVerboseLog(true)
+        
+        GameAnalytics.configureAvailableCustomDimensions01([x, o])
+        GameAnalytics.configureAvailableCustomDimensions02(["Easy", "Moderate", "Hard"])
+                
+        // Configure build version
+        GameAnalytics.configureBuild("1.0.0")
+        
+        // initialize GameAnalytics - this method will use app keys injected by Fabric
+        GameAnalytics.initializeWithConfiguredGameKeyAndGameSecret()
+        // to manually specify keys use this method:
+        //GameAnalytics.initializeWithGameKey("[game_key]", gameSecret:"[game_secret]")
+
+
         return true
     }
     

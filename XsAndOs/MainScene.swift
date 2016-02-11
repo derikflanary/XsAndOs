@@ -32,11 +32,13 @@ class MainScene: XandOScene{
         startButton.center.x = (self.view?.center.x)!
         startButton.setTitle("Multiplayer", forState: .Normal)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
+        startButton.backgroundColor = xColor
         self.view?.addSubview(startButton)
         
         singleButton.frame = CGRectMake(20, CGRectGetMinY(startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
         singleButton.setTitle("Single Player", forState: .Normal)
         singleButton.addTarget(self, action: "singlePressed", forControlEvents: .TouchUpInside)
+        singleButton.backgroundColor = xColor
         self.view?.addSubview(singleButton)
     }
     
