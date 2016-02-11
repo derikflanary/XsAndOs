@@ -13,8 +13,8 @@ import ParseFacebookUtilsV4
 
 class MainScene: XandOScene{
     //MARK: - PROPERTIES
-    private let startButton = UIButton()
-    private let singleButton = UIButton()
+    private let startButton = Button()
+    private let singleButton = Button()
     private var circle1 = CircleView()
     private var circle2 = CircleView()
     
@@ -31,48 +31,15 @@ class MainScene: XandOScene{
         startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
         startButton.center.x = (self.view?.center.x)!
         startButton.setTitle("Multiplayer", forState: .Normal)
-        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
-        startButton.setTitleColor(textColor, forState: .Normal)
-        startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
-        startButton.layer.cornerRadius = 25
-        startButton.clipsToBounds = true
-        startButton.backgroundColor = xColor
         self.view?.addSubview(startButton)
         
         singleButton.frame = CGRectMake(20, CGRectGetMinY(startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
         singleButton.setTitle("Single Player", forState: .Normal)
-        singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
-        singleButton.setTitleColor(textColor, forState: .Normal)
-        singleButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         singleButton.addTarget(self, action: "singlePressed", forControlEvents: .TouchUpInside)
-        singleButton.layer.cornerRadius = 25
-        singleButton.clipsToBounds = true
-        singleButton.backgroundColor = xColor
         self.view?.addSubview(singleButton)
-
-        
     }
     
-    private func addAutoContraints(){
-        
-        
-        let margins = self.view?.layoutMarginsGuide
-        singleButton.leadingAnchor.constraintEqualToAnchor(margins?.leadingAnchor).active = true
-        singleButton.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
-        singleButton.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
-        singleButton.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: -120).active = true
-        singleButton.heightAnchor.constraintEqualToConstant(50).active = true
-        
-//        startButton.leadingAnchor.constraintGreaterThanOrEqualToAnchor(singleButton.leadingAnchor).active = true
-//        startButton.trailingAnchor.constraintGreaterThanOrEqualToAnchor(singleButton.trailingAnchor).active = true
-        startButton.widthAnchor.constraintLessThanOrEqualToAnchor(margins?.widthAnchor).active = true
-        startButton.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
-        startButton.topAnchor.constraintEqualToAnchor(singleButton.bottomAnchor, constant: 21).active = true
-        startButton.heightAnchor.constraintEqualToAnchor(singleButton.heightAnchor).active = true
-        
-    }
-
     //MARK: - BUTTON METHODS
     func newGamePressed(){
         if !buttonOpened{

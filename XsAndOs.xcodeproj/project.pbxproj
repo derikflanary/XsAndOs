@@ -100,6 +100,8 @@
 		EEA08EC11C6A9407002F09A9 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC01C6A9407002F09A9 /* MainScene.swift */; };
 		EEA08EC31C6AED34002F09A9 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC21C6AED34002F09A9 /* CircleButton.swift */; };
 		EEA08EC61C6BD2B0002F09A9 /* SingleSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */; };
+		EEA08ECC1C6BFA04002F09A9 /* StarsOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */; };
+		EEA08ECF1C6C4BAF002F09A9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08ECE1C6C4BAF002F09A9 /* Button.swift */; };
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
 		EEF0696E1C64087200CC5288 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF0696D1C64087200CC5288 /* Settings.swift */; };
@@ -259,6 +261,8 @@
 		EEA08EC01C6A9407002F09A9 /* MainScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
 		EEA08EC21C6AED34002F09A9 /* CircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
 		EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSetupScene.swift; sourceTree = "<group>"; };
+		EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarsOverlay.swift; sourceTree = SOURCE_ROOT; };
+		EEA08ECE1C6C4BAF002F09A9 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
 		EEF0696D1C64087200CC5288 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -493,6 +497,7 @@
 				EE534B7E1C4819BF0085E806 /* LineShapeLayer.swift */,
 				EE03D4081C598A7800078CF6 /* Coordinate.swift */,
 				EEA08EC21C6AED34002F09A9 /* CircleButton.swift */,
+				EEA08ECE1C6C4BAF002F09A9 /* Button.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -501,9 +506,7 @@
 			isa = PBXGroup;
 			children = (
 				EE5E81861BDEC1410004424F /* GameViewController.swift */,
-				EE03D3FE1C582EFF00078CF6 /* Facebook */,
 				EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */,
-				EE2FB4DB1C3B3CDA00C91D68 /* PushNotificationController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -551,6 +554,9 @@
 				EE534B7B1C45C6290085E806 /* Controllers */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE03D3141C4AC9BE00078CF6 /* Confetti */,
+				EEA08ECD1C6C4186002F09A9 /* Push Notifications */,
+				EE03D3FE1C582EFF00078CF6 /* Facebook */,
+				EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */,
 				EE03D2AB1C49B21500078CF6 /* DGActivityIndicatorView */,
 				EE534B801C481B8F0085E806 /* Dot Game */,
 				EE03D34F1C4EF72300078CF6 /* Resources */,
@@ -628,6 +634,14 @@
 				EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */,
 			);
 			name = "Single Player";
+			sourceTree = "<group>";
+		};
+		EEA08ECD1C6C4186002F09A9 /* Push Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4DB1C3B3CDA00C91D68 /* PushNotificationController.swift */,
+			);
+			name = "Push Notifications";
 			sourceTree = "<group>";
 		};
 		EEE9E3DC1C6002DF0041E0BA /* AI */ = {
@@ -833,6 +847,7 @@
 				EE2FB4DC1C3B3CDA00C91D68 /* PushNotificationController.swift in Sources */,
 				EE7FDDD81C65325F00B390BC /* LineAnimationOperation.swift in Sources */,
 				EE03D3091C49B21500078CF6 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m in Sources */,
+				EEA08ECC1C6BFA04002F09A9 /* StarsOverlay.swift in Sources */,
 				EE03D2F71C49B21500078CF6 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */,
 				EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */,
 				EE03D3021C49B21500078CF6 /* DGActivityIndicatorBallZigZagDeflectAnimation.m in Sources */,
@@ -854,6 +869,7 @@
 				EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */,
 				EE03D2F21C49B21500078CF6 /* DGActivityIndicatorBallBeatAnimation.m in Sources */,
 				EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */,
+				EEA08ECF1C6C4BAF002F09A9 /* Button.swift in Sources */,
 				EE5E81871BDEC1410004424F /* GameViewController.swift in Sources */,
 				EE03D3101C49B21500078CF6 /* DGActivityIndicatorTriplePulseAnimation.m in Sources */,
 				EE2FB4D51C3AEBF200C91D68 /* XGameController.swift in Sources */,

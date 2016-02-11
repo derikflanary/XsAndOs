@@ -24,6 +24,10 @@ class GameViewController: UIViewController {
         /* Sprite Kit applies additional optimizations to improve rendering performance */
         skView.ignoresSiblingOrder = true
         
+        let overlay = StarsOverlay(frame: (self.view?.bounds)!)
+        overlay.tag = 1000
+        skView.addSubview(overlay)
+        
         /* Set the scale mode to scale to fit the window */
         scene = MainScene(size: skView.bounds.size)
         scene.scaleMode = .AspectFill

@@ -12,7 +12,7 @@ import SpriteKit
 class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
     //MARK: - PROPERTIES
-    private let startButton = UIButton()
+    private let startButton = Button()
     private let sizeField = UITextField()
     private var stackView = UIStackView()
     private let xButton = CircleView()
@@ -31,14 +31,8 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
         startButton.center.x = (self.view?.center.x)!
         startButton.setTitle("Start", forState: .Normal)
-        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
-        startButton.setTitleColor(textColor, forState: .Normal)
-        startButton.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
-        startButton.layer.cornerRadius = 25
-        startButton.clipsToBounds = true
-        startButton.backgroundColor = xColor
-        
+                
         sizeField.frame = CGRectMake(0, 0, 50, 50)
         sizeField.backgroundColor = textColor
         sizeField.textColor = thirdColor

@@ -97,6 +97,7 @@ class Board: XandOScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         super.didMoveToView(view)
+        self.view?.viewWithTag(1000)?.removeFromSuperview()
         startGame()
     }
     
@@ -171,11 +172,11 @@ class Board: XandOScene {
                 let node = Node(column: column, row: theRow, theNodeType: NodeType.Empty)
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
                     node.nodeType = NodeType.O
-                    node.sprite = SKSpriteNode(imageNamed: "oh")
+                    node.sprite = SKSpriteNode(imageNamed: "o")
                     node.sprite?.name = o
                 }else if (theRow + 1) % 2 != 0 && (column + 1) % 2 == 0{
                     node.nodeType = NodeType.X
-                    node.sprite = SKSpriteNode(imageNamed: "ex")
+                    node.sprite = SKSpriteNode(imageNamed: "x")
                     node.sprite?.name = x
                 }else{
                     if theRow == 0 || theRow == dim - 1 || column == 0 || column == dim - 1{
