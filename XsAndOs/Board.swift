@@ -44,10 +44,10 @@ class Board: XandOScene {
     var nextPoint = CGPoint()
     var pointsConnected = false
     var potentialShapeNode = CAShapeLayer()
-    var restartButton = UIButton()
+    var restartButton = Button()
     var lastMove = LastMove.SingleLine
-    let undoButton = UIButton()
-    let backButton = UIButton()
+    let undoButton = Button()
+    let backButton = Button()
     var nodeAction = SKAction()
     var square = CAShapeLayer()
     var winner = false
@@ -88,10 +88,6 @@ class Board: XandOScene {
         self.userTeam = userTeam
         
     }
-
-    
-    
-    
     
     // MARK: - GAME SETUP
     override func didMoveToView(view: SKView) {
@@ -108,29 +104,28 @@ class Board: XandOScene {
         buildArrayOfNodes()
         drawSquare()
         
-        restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 30)
-        restartButton.setTitleColor(thirdColor, forState: .Normal)
+        restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 50)
+        restartButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
         restartButton.setTitle("Restart", forState: UIControlState.Normal)
-        restartButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
+        restartButton.backgroundColor = thirdColor
         restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
         restartButton.tag = 10
         self.view?.addSubview(restartButton)
+        restartButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
         
-        backButton.frame = CGRectMake(10, 20, 50, 30)
-        backButton.setTitle("Main", forState: .Normal)
-        backButton.setTitleColor(textColor, forState: .Normal)
-        backButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
-        backButton.titleLabel?.font = UIFont(name: boldFontName, size: 16)
+        backButton.frame = CGRectMake(10, 20, 50, 50)
+        backButton.backgroundColor = xColor
+        backButton.setImage(UIImage(named: "home"), forState: .Normal)
+        backButton.imageView?.contentMode = .Center
         backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
         backButton.tag = 20
         self.view?.addSubview(backButton)
         
-        undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 30)
-        undoButton.setTitle("Undo", forState: .Normal)
-        undoButton.setTitleColor(textColor, forState: .Normal)
-        undoButton.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: .Highlighted)
-        undoButton.titleLabel?.font = UIFont(name: boldFontName, size: 16)
+        undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 50)
+        undoButton.backgroundColor = oColor
+        undoButton.setImage(UIImage(named: "undo"), forState: .Normal)
+        undoButton.imageView?.contentMode = .Center
         undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
         undoButton.tag = 30
         self.view?.addSubview(undoButton)
@@ -148,6 +143,8 @@ class Board: XandOScene {
         if aiGame{
             undoButton.removeFromSuperview()
             turnLabel.removeFromParent()
+        }else{
+            undoButton.hidden = false
         }
         isXTurn()
     }
@@ -522,12 +519,12 @@ class Board: XandOScene {
             let shapeNode = LineShapeLayer(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
             view?.layer.addSublayer(shapeNode)
             animateLine(shapeNode, type: .Normal)
-//            animateWidth(shapeNode)
             appendLineArrays(shapeNode)
             lastMove = .SingleLine
             previousMoveDetails.newAppendedLine = shapeNode
         }
-        undoButton.hidden = false
+        undoButton.userInteractionEnabled = true
+        undoButton.alpha = 1
     }
     
     func loopThroughCoordinates(lineShapeLayer: LineShapeLayer, var matchedLine: LineShapeLayer, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeLayer, lineDelete: LineShapeLayer){
@@ -764,7 +761,9 @@ class Board: XandOScene {
     
     //MARK: - UNDO MOVE
     func undoLastMove(){
-        undoButton.hidden = true
+        undoButton.alpha = 0.8
+        undoButton.userInteractionEnabled = false
+
         switch lastMove{
         case .SingleLine:
             undoSingleLine()
@@ -932,6 +931,6 @@ class Board: XandOScene {
         let mainScene = MainScene(size: self.size)
         let transition = SKTransition.fadeWithDuration(2.0)
         mainScene.scaleMode = .AspectFill
-        self.scene?.view?.presentScene(mainScene, transition: transition)
+        self.scene?.view?.presentScene(mainScene)
     }
 }

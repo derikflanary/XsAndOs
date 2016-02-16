@@ -15,13 +15,28 @@ class CircleView: UIButton{
         self.clipsToBounds = true
         self.backgroundColor = oColor
         self.titleLabel?.font = UIFont(name: boldFontName, size: 24)
-        self.setTitleColor(textColor, forState: .Normal)
-        self.setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
+        self.setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Normal)
+        self.setTitleColor(UIColor(white: 0.95, alpha: 0.9), forState: .Highlighted)
         
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override var highlighted: Bool {
+        get {
+            return super.highlighted
+        }
+        set {
+            if newValue {
+                alpha = 0.9
+            }
+            else {
+                alpha = 1.0
+            }
+            super.highlighted = newValue
+        }
+    }
+
 }
 

@@ -540,6 +540,12 @@ class MultiplayerBoard: Board {
             finishLoadingMoves()
         }
     }
+    
+    override func transitionToMainScene() {
+        let mainScene = GameScene(size: self.size)
+        mainScene.scaleMode = .AspectFill
+        self.scene?.view?.presentScene(mainScene)
+    }
 }
 
 

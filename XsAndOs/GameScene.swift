@@ -19,6 +19,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
     private let fbLoginbutton = UIButton()
     private let friendButton = UIButton()
     private let currentGamesButton = UIButton()
+    private let backButton = Button()
     var currentGames = [PFObject]()
     private var activityIndicator = UIActivityIndicatorView()
     let transition = SKTransition.crossFadeWithDuration(1)
@@ -77,13 +78,22 @@ class GameScene: XandOScene, UITextFieldDelegate {
         currentGamesButton.highlighted = false
         currentGamesButton.enabled = true
         
+        backButton.frame = CGRectMake(10, 20, 50, 50)
+        backButton.backgroundColor = xColor
+        backButton.setImage(UIImage(named: "home"), forState: .Normal)
+        backButton.imageView?.contentMode = .Center
+        backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
+        backButton.tag = 20
+        self.view?.addSubview(backButton)
+
+        
         if let currentUser = PFUser.currentUser(){
-            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, friendButton, currentGamesButton])
+            stackView = UIStackView(arrangedSubviews: [friendButton, currentGamesButton])
             let myinstallation = PFInstallation.currentInstallation()
             myinstallation.setObject(currentUser.username!, forKey: "ownerUsername")
             myinstallation.saveInBackground()
         }else{
-            stackView = UIStackView(arrangedSubviews: [startButton, label, sizeField, fbLoginbutton, currentGamesButton])
+            stackView = UIStackView(arrangedSubviews: [fbLoginbutton, currentGamesButton])
         }
         stackView.axis = .Vertical
         stackView.spacing = 21
@@ -126,6 +136,19 @@ class GameScene: XandOScene, UITextFieldDelegate {
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
+    func mainPressed(){
+        removeViews()
+        transitionToMainScene()
+    }
+    
+    func transitionToMainScene(){
+        let mainScene = MainScene(size: self.size)
+        let transition = SKTransition.fadeWithDuration(1.0)
+        mainScene.scaleMode = .AspectFill
+        self.scene?.view?.presentScene(mainScene)
+    }
+
+    
     func fbLoginPressed(){
         print("fbLoginPressed")
         FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
@@ -159,7 +182,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
     }
     
     private func transitionToFriendList(){
-        stackView.removeFromSuperview()
+        removeViews()
         let secondScene = FriendListScene()
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
@@ -167,7 +190,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
     }
     
     func transitionToCurrentGames(){
-        stackView.removeFromSuperview()
+        removeViews()
         let secondScene = CurrentGamesScene()
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
@@ -175,6 +198,7 @@ class GameScene: XandOScene, UITextFieldDelegate {
     
     override func removeViews(){
         stackView.removeFromSuperview()
+        backButton.removeFromSuperview()
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {

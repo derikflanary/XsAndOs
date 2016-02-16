@@ -32,20 +32,19 @@ class MainScene: XandOScene{
         startButton.center.x = (self.view?.center.x)!
         startButton.addTarget(self, action: "multiplayerPressed", forControlEvents: .TouchUpInside)
         startButton.backgroundColor = xColor
+        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
+        startButton.alpha = 0
         self.view?.addSubview(startButton)
         
         singleButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, CGRectGetMinY(startButton.frame) - 70, 50, 50)
         singleButton.addTarget(self, action: "singlePressed", forControlEvents: .TouchUpInside)
         singleButton.backgroundColor = xColor
+        singleButton.alpha = 0
+        singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
         self.view?.addSubview(singleButton)
         
-        UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { () -> Void in
-            self.startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
-            self.singleButton.frame = CGRectMake(20, CGRectGetMinY(self.startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
-            }) { (dond) -> Void in
-            self.startButton.setTitle("Multiplayer", forState: .Normal)
-            self.singleButton.setTitle("Single Player", forState: .Normal)
-        }
+        circle1.titleLabel?.font = UIFont(name: boldFontName, size: 36)
+        entryAnimation()
     }
     
     //MARK: - BUTTON METHODS
@@ -71,7 +70,7 @@ class MainScene: XandOScene{
     }
     
     func onlinePressed(){
-        transitionToCurrentGames()
+        transitionToMultiplayerScene()
         print("online pressed")
     }
     
@@ -92,9 +91,9 @@ class MainScene: XandOScene{
         
     }
     
-    func transitionToCurrentGames(){
+    func transitionToMultiplayerScene(){
         removeViews()
-        let secondScene = CurrentGamesScene()
+        let secondScene = GameScene(size: self.size)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
@@ -108,6 +107,18 @@ class MainScene: XandOScene{
     }
     
     //MARK: - ANIMATIONS
+    
+    private func entryAnimation(){
+        UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { () -> Void in
+            self.startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
+            self.singleButton.frame = CGRectMake(20, CGRectGetMinY(self.startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
+            self.startButton.alpha = 1
+            self.singleButton.alpha = 1
+            }) { (dond) -> Void in
+                self.startButton.setTitle("Multiplayer", forState: .Normal)
+                self.singleButton.setTitle("Single Player", forState: .Normal)
+        }
+    }
     
     private func exitAnimation(){
         UIView.animateWithDuration(0.5, animations: { () -> Void in
@@ -127,10 +138,11 @@ class MainScene: XandOScene{
             self.startButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.center.y)! - 80, 50, 50)
             self.startButton.backgroundColor = oColor
             self.startButton.setTitle("", forState: .Normal)
+            self.startButton.alpha = 1
             
             }) { (done) -> Void in
                 self.circle1 = CircleView(frame: self.startButton.frame)
-                self.circle1.setTitle("Local", forState: .Normal)
+                self.circle1.setTitle("Pass & Play", forState: .Normal)
                 self.circle1.addTarget(self, action: "localPressed", forControlEvents: .TouchUpInside)
                 self.view?.addSubview(self.circle1)
                 self.circle2 = CircleView(frame: self.startButton.frame)
@@ -162,6 +174,7 @@ class MainScene: XandOScene{
             self.circle1.frame = self.startButton.frame
             self.circle1.titleLabel?.alpha = 0
             self.startButton.frame = self.startButton.frame
+            self.startButton.alpha = 1
             }) { (done) -> Void in}
         
            UIView.animateWithDuration(0.5, delay: 0.25, usingSpringWithDamping: 0.7, initialSpringVelocity: 5, options: .CurveEaseOut, animations: { () -> Void in

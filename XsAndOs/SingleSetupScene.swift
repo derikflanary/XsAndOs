@@ -23,8 +23,8 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     private var localStackView = UIStackView()
     private var innerStack = UIStackView()
     private var difficultyStack = UIStackView()
-    private let xButton = CircleView()
-    private let oButton = CircleView()
+    private let xButton = Button()
+    private let oButton = Button()
     private let rowsLabel = InfoLabel(frame: CGRectZero)
     private let teamLabel = InfoLabel(frame: CGRectZero)
     private let difficultyLabel = InfoLabel(frame: CGRectZero)
@@ -56,6 +56,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         startButton.center.x = (self.view?.center.x)!
         startButton.setTitle("Start", forState: .Normal)
         startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
+        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
         startButton.backgroundColor = xColor
                 
         sizeField.frame = CGRectMake(0, 0, 50, 50)
@@ -282,20 +283,27 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
             pressedButton.backgroundColor = oColor
             button1.backgroundColor = flint
             button2.backgroundColor = flint
+            pressedButton.alpha = 1
+            button1.alpha = 1
+            button2.alpha = 1
         }
     }
     
     func animateXButtonPress(){
         UIView.animateWithDuration(0.25) { () -> Void in
             self.oButton.backgroundColor = flint
+            self.oButton.alpha = 1
             self.xButton.backgroundColor = xColor
+            self.xButton.alpha = 1
         }
     }
     
     func animateOButtonPress(){
         UIView.animateWithDuration(0.25) { () -> Void in
             self.oButton.backgroundColor = oColor
+            self.oButton.alpha = 1
             self.xButton.backgroundColor = flint
+            self.xButton.alpha = 1
         }
     }
 

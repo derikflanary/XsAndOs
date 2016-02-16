@@ -14,10 +14,9 @@ class Button: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        titleLabel?.font = UIFont(name: boldFontName, size: 36)
         setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Normal)
-        setTitleColor(UIColor(white: 0.2, alpha: 0.6), forState: .Highlighted)
-        layer.cornerRadius = 25
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Highlighted)
+        layer.cornerRadius = self.frame.size.height/2
         clipsToBounds = true
 
     }
