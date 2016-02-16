@@ -31,7 +31,7 @@ class Button: UIButton {
                 alpha = 0.9
             }
             else {
-                alpha = 1.0
+//                alpha = 1.0
             }
             super.highlighted = newValue
         }

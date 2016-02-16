@@ -69,7 +69,6 @@ class StarsOverlay: UIView {
         oparticle.scaleRange = 0.5
         oparticle.scaleSpeed = 0.04
         
-        
         emitter.emitterCells = [particle, oparticle]
     }
     
@@ -97,7 +96,7 @@ class StarsOverlay: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        emitter.emitterPosition = CGPointMake(-50, 300)
+        emitter.emitterPosition = CGPointMake(-50, self.frame.size.height/2)
         emitter.emitterSize = CGSizeMake(10, 10)
     }
 }

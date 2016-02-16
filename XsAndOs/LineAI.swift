@@ -37,10 +37,10 @@ class LineAI {
             return x
         }
     }
-    var difficulty : Board.Difficulty
+    var difficulty : Difficulty
     
     //MARK: - INIT
-    init(grid: Array2D<Node>, difficulty: Board.Difficulty, userTeam: Board.UserTeam){
+    init(grid: Array2D<Node>, difficulty: Difficulty, userTeam: Board.UserTeam){
         self.grid = grid
         self.difficulty = difficulty
         pathTeam = userTeam
@@ -75,7 +75,7 @@ class LineAI {
         }
     }
     
-    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath], difficulty: Board.Difficulty) -> ShortestPathStep?{
+    func intersectingShortPath(shortPathsUser shortPathsUser: [ShortPath], shortPathsAI: [ShortPath], difficulty: Difficulty) -> ShortestPathStep?{
         for pathUser in shortPathsUser{
             for pathAI in shortPathsAI{
                 for stepUser in pathUser.steps{
@@ -146,7 +146,7 @@ class LineAI {
         
         //Every row finds the shortest path to every row
         repeat {
-//            print("firstcol:\(firstRow), lastcol:\(lastRow)")
+
             var fromNode = grid[1,firstRow]!
             var toNode = grid[columns - 2,lastRow]!
             if pathTeam == .X{
@@ -219,12 +219,11 @@ class LineAI {
             // If the currentStep is the desired tile coordinate, we are done!
             if currentStep.location.column == toNode.nodePos.column && currentStep.location.row == toNode.nodePos.row{
                 pathFound = true
-//                print("Path Found")
                 shortestPath = constructShortestPath(currentStep)
                 shortPath.steps = shortestPath
                 break
             }
-//            print("Current step: \(currentStep.description)")
+
             // Get the adjacent tiles coord of the current step
             let adjNodes = availableAdjacentSteps(currentStep.location)
             for node in adjNodes{
@@ -271,7 +270,6 @@ class LineAI {
                         }
                     }
                 }
-//                print(step.description)
             }
         }while openSteps.count > 0
         openSteps.removeAll()
@@ -442,8 +440,6 @@ class LineAI {
         }
         return (nil, nil)
     }
-
-    
 }
 
 extension CollectionType {

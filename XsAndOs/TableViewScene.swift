@@ -38,7 +38,7 @@ class TableViewScene: XandOScene, UITableViewDataSource, UITableViewDelegate {
 
     func cancelPressed(){
         removeViews()
-        let mainScene = GameScene(size: self.size)
+        let mainScene = MainScene(size: self.size)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)

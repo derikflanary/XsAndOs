@@ -28,22 +28,28 @@ class MainScene: XandOScene{
     
     private func layoutViews(){
         
-        startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
+        startButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.center.y)! - 80, 50, 50)
         startButton.center.x = (self.view?.center.x)!
-        startButton.setTitle("Multiplayer", forState: .Normal)
-        startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
+        startButton.addTarget(self, action: "multiplayerPressed", forControlEvents: .TouchUpInside)
         startButton.backgroundColor = xColor
         self.view?.addSubview(startButton)
         
-        singleButton.frame = CGRectMake(20, CGRectGetMinY(startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
-        singleButton.setTitle("Single Player", forState: .Normal)
+        singleButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, CGRectGetMinY(startButton.frame) - 70, 50, 50)
         singleButton.addTarget(self, action: "singlePressed", forControlEvents: .TouchUpInside)
         singleButton.backgroundColor = xColor
         self.view?.addSubview(singleButton)
+        
+        UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { () -> Void in
+            self.startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
+            self.singleButton.frame = CGRectMake(20, CGRectGetMinY(self.startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
+            }) { (dond) -> Void in
+            self.startButton.setTitle("Multiplayer", forState: .Normal)
+            self.singleButton.setTitle("Single Player", forState: .Normal)
+        }
     }
     
     //MARK: - BUTTON METHODS
-    func newGamePressed(){
+    func multiplayerPressed(){
         if !buttonOpened{
             buttonOpened = true
             animateButton()
@@ -55,18 +61,42 @@ class MainScene: XandOScene{
     
     func singlePressed(){
         print("single pressed")
-        let secondScene = SingleSetupScene()
+        exitAnimation()
+//        transitionToSingleGameSetup(.AI)
+    }
+    
+    func localPressed(){
+        print("local pressed")
+        transitionToSingleGameSetup(.Local)
+    }
+    
+    func onlinePressed(){
+        transitionToCurrentGames()
+        print("online pressed")
+    }
+    
+    //MARK: - TRANSITIONS
+    
+    private func transitionToSingleGameSetup(type: SingleSetupScene.GameType){
+        let secondScene = SingleSetupScene(size: self.size, type: type)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
         removeViews()
     }
     
-    func localPressed(){
-        print("local pressed")
+    private func transitionToFriendList(){
+        removeViews()
+        let secondScene = FriendListScene()
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+        
     }
     
-    func onlinePressed(){
-        print("online pressed")
+    func transitionToCurrentGames(){
+        removeViews()
+        let secondScene = CurrentGamesScene()
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
     //MARK: - SCENE CLEANUP
@@ -78,6 +108,17 @@ class MainScene: XandOScene{
     }
     
     //MARK: - ANIMATIONS
+    
+    private func exitAnimation(){
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.startButton.alpha = 0
+            self.singleButton.alpha = 0
+            self.circle1.alpha = 0
+            self.circle2.alpha = 0
+            }) { (done) -> Void in
+            self.transitionToSingleGameSetup(.AI)
+        }
+    }
     
     func animateButton(){
         
@@ -131,7 +172,7 @@ class MainScene: XandOScene{
             }) { (done) -> Void in
                 self.circle1.removeFromSuperview()
                 self.circle2.removeFromSuperview()
-                UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .CurveEaseOut, animations: { () -> Void in
+                UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 5, options: .CurveEaseOut, animations: { () -> Void in
                     self.startButton.widthAnchor.constraintEqualToConstant(50).active = false
                     self.startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
                     self.startButton.backgroundColor = xColor

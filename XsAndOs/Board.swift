@@ -8,29 +8,9 @@
 import Parse 
 import SpriteKit
 
-//var dim = 9
 let bottomPadding : CGFloat = 100
 let x = "X"
 let o = "O"
-
-struct PreviousMoveDetails {
-    var oldLines = [LineShapeLayer]()
-    var previousIntersection : LastIntersectionLocation
-    var moveUnDid = false
-    var newAppendedLine : LineShapeLayer
-}
-
-struct LastIntersectionLocation {
-    var row : Int
-    var col : Int
-}
-
-struct RecentCoordinates {
-    var columnA : Int
-    var rowA : Int
-    var columnB : Int
-    var rowB : Int
-}
 
 class Board: XandOScene {
     //MARK: - PROPERTIES
@@ -42,12 +22,6 @@ class Board: XandOScene {
     enum UserTeam: String {
         case X = "X"
         case O = "O"
-    }
-    
-    enum Difficulty{
-        case Easy
-        case Moderate
-        case Hard
     }
     
     var rows : Int
@@ -331,7 +305,7 @@ class Board: XandOScene {
         return true
     }
     
-//TOUCHING AND DRAWING FUNCTIONS
+//MARK: - TOUCHING AND DRAWING FUNCTIONS
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
@@ -675,7 +649,7 @@ class Board: XandOScene {
         }        
     }
 
-    
+ //MARK: - LINE ANIMATIONS
     func animateLine(line: LineShapeLayer, type: LineAnimationOperation.AnimationType){
         self.userInteractionEnabled = false
         let operationQueue = NSOperationQueue.mainQueue()
@@ -719,7 +693,7 @@ class Board: XandOScene {
     
     
     
-//WINNING FUNCTIONS
+    //MARK: - WINNING FUNCTIONS
     func checkForWinner(line: LineShapeLayer){
         //check each coordinate on the newly appended line to see if it touches both ends of the board
         if line.team == x{
@@ -765,25 +739,30 @@ class Board: XandOScene {
     
     func declareWinner(winningTeam: String){
         winner = true
+        var confetti = false
         let confettiView = SAConfettiView(frame: self.view!.bounds)
-        self.view!.addSubview(confettiView)
-        confettiView.startConfetti()
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-        
-            let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
-            let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-                dispatch_after(delayTime, dispatch_get_main_queue()) {
-                confettiView.stopConfetti()
-                confettiView.removeFromSuperview()
-                self.gameover()
+        if aiGame && winningTeam == userTeam.rawValue{
+            self.view!.addSubview(confettiView)
+            confettiView.startConfetti()
+            confetti = true
+        }
+//        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+        let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                if confetti{
+                    confettiView.stopConfetti()
+                    confettiView.removeFromSuperview()
                 }
-            }
-            alertController.addAction(cancelAction)
-            self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+                self.gameover()
+            })
+        }
+        alertController.addAction(cancelAction)
+        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
         
     }
     
-//UNDO MOVE//
+    //MARK: - UNDO MOVE
     func undoLastMove(){
         undoButton.hidden = true
         switch lastMove{
@@ -850,7 +829,7 @@ class Board: XandOScene {
         }
     }
 
-//RESETTING GAME
+    //MARK: - RESETTING GAME
     
     func gameover(){
         resetBoard()
@@ -869,7 +848,7 @@ class Board: XandOScene {
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
-//SUPPORT FUNCTIONS
+    //MARK: - SUPPORT FUNCTIONS
     
     //Takes a point and returns the column and row for that point
     func calculateColumnsAndRows(pointA: CGPoint, pointB: CGPoint) -> (columnA: Int, rowA: Int, columnB: Int, rowB: Int){
@@ -938,7 +917,7 @@ class Board: XandOScene {
 
     }
     
-//BUTTON FUNCTIONS
+    //MARK: - BUTTON FUNCTIONS
     
     func restartPressed(){
         resetBoard()

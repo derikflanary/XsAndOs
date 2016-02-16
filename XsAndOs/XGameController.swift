@@ -15,7 +15,7 @@ class XGameController: NSObject {
     class Singleton  {
         
         static let sharedInstance = Singleton()
-
+//MARK: - GAME CREATION
         func createNewGame(xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, PFObject?, String, String, String) -> Void){
             let newGame = PFObject(className: "XGame")
             newGame["rows"] = rows
@@ -51,7 +51,7 @@ class XGameController: NSObject {
                 }
             }
         }
-        
+//MARK: - LINE CREATION
         func createXLines(completion: (Bool, PFObject) -> Void){
             let xLines = PFObject(className: "XLines")
             xLines["lines"] = [[[String:Int]]]()
@@ -85,6 +85,7 @@ class XGameController: NSObject {
 
         }
         
+//MARK: - FETCH GAMES
         func fetchGamesForUser(user: PFUser, completion: (Bool, [PFObject]) -> Void){
             let query = PFQuery(className: "XGame")
             query.whereKey("xTeam", equalTo: PFUser.currentUser()!)
@@ -113,6 +114,24 @@ class XGameController: NSObject {
             }
         }
         
+        func fetchGameForId(gameId: String, completion: (Bool, PFObject) -> Void){
+            let query = PFQuery(className: "XGame")
+            query.includeKey("xTeam")
+            query.includeKey("oTeam")
+            query.includeKey("xLines")
+            query.includeKey("oLines")
+            query.getObjectInBackgroundWithId(gameId) { (game: PFObject?,error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                    completion(false, game!)
+                } else if let game = game {
+                    completion(true, game)
+                }
+                
+            }
+        }
+        
+//MARK: - DELETE
         func deleteOldGames(games: [PFObject]){
             for game in games{
                 let finished = game["finished"] as! Bool
@@ -135,7 +154,7 @@ class XGameController: NSObject {
                 }
             }
         }
-        
+//MARK: - UPDATE
         func updateGameOnParse(xTurn: Bool, newLine: [[String: Int]], oldLines: [[[String:Int]]], gameId: String, xId: String, oId: String, lastMove:[[String:Int]], completion: (Bool) -> Void){
             let query = PFQuery(className:"XGame")
             query.getObjectInBackgroundWithId(gameId) {(game: PFObject?, error: NSError?) -> Void in
@@ -216,24 +235,7 @@ class XGameController: NSObject {
                 }
             }
         }
-        
-        func fetchGameForId(gameId: String, completion: (Bool, PFObject) -> Void){
-            let query = PFQuery(className: "XGame")
-            query.includeKey("xTeam")
-            query.includeKey("oTeam")
-            query.includeKey("xLines")
-            query.includeKey("oLines")
-            query.getObjectInBackgroundWithId(gameId) { (game: PFObject?,error: NSError?) -> Void in
-                if error != nil {
-                    print(error)
-                    completion(false, game!)
-                } else if let game = game {
-                    completion(true, game)
-                }
-
-            }
-        }
-        
+//MARK: - DATE FUNCTIONS
         func dayAsString() -> String{
             let date = NSDate()
             let dateFormatter = NSDateFormatter()

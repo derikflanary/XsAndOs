@@ -105,6 +105,10 @@
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
 		EEEE5B4A1C6D170B00B181F6 /* GameAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */; };
+		EEEE5B4D1C6E5F1000B181F6 /* PreviousMoveDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B4C1C6E5F0F00B181F6 /* PreviousMoveDetails.swift */; };
+		EEEE5B4F1C6E5F3000B181F6 /* RecentCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B4E1C6E5F3000B181F6 /* RecentCoordinates.swift */; };
+		EEEE5B511C6E5F6A00B181F6 /* LastIntersectionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B501C6E5F6A00B181F6 /* LastIntersectionLocation.swift */; };
+		EEEE5B531C6E5F9E00B181F6 /* Difficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B521C6E5F9E00B181F6 /* Difficulty.swift */; };
 		EEF0696E1C64087200CC5288 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF0696D1C64087200CC5288 /* Settings.swift */; };
 		EEFD05CC1BEBF6E900D52365 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD05CB1BEBF6E900D52365 /* Board.swift */; };
 /* End PBXBuildFile section */
@@ -267,6 +271,10 @@
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
 		EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GameAnalytics.framework; sourceTree = SOURCE_ROOT; };
+		EEEE5B4C1C6E5F0F00B181F6 /* PreviousMoveDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviousMoveDetails.swift; sourceTree = "<group>"; };
+		EEEE5B4E1C6E5F3000B181F6 /* RecentCoordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentCoordinates.swift; sourceTree = "<group>"; };
+		EEEE5B501C6E5F6A00B181F6 /* LastIntersectionLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastIntersectionLocation.swift; sourceTree = "<group>"; };
+		EEEE5B521C6E5F9E00B181F6 /* Difficulty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
 		EEF0696D1C64087200CC5288 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		EEFD05CB1BEBF6E900D52365 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -422,7 +430,11 @@
 		EE03D34F1C4EF72300078CF6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				EE5E81821BDEC1410004424F /* GameScene.sks */,
+				EE03D3141C4AC9BE00078CF6 /* Confetti */,
+				EE03D2AB1C49B21500078CF6 /* DGActivityIndicatorView */,
 				EE03D3F01C56E5A000078CF6 /* Sounds */,
+				EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */,
 				EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */,
 				EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */,
 				EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */,
@@ -489,17 +501,13 @@
 			name = Facebook;
 			sourceTree = "<group>";
 		};
-		EE2FB4D61C3AED0000C91D68 /* Models */ = {
+		EE2FB4D61C3AED0000C91D68 /* Custom Clases */ = {
 			isa = PBXGroup;
 			children = (
-				EE8FD5151BF15E4A009191EA /* Nodes.swift */,
-				EE8FD5131BF158F0009191EA /* Array2D.swift */,
-				EE534B7E1C4819BF0085E806 /* LineShapeLayer.swift */,
-				EE03D4081C598A7800078CF6 /* Coordinate.swift */,
 				EEA08EC21C6AED34002F09A9 /* CircleButton.swift */,
 				EEA08ECE1C6C4BAF002F09A9 /* Button.swift */,
 			);
-			name = Models;
+			name = "Custom Clases";
 			sourceTree = "<group>";
 		};
 		EE534B7B1C45C6290085E806 /* Controllers */ = {
@@ -545,20 +553,17 @@
 			isa = PBXGroup;
 			children = (
 				EE5E81801BDEC1410004424F /* AppDelegate.swift */,
-				EEF0696D1C64087200CC5288 /* Settings.swift */,
 				EE03D3FA1C582E9200078CF6 /* Parent Scenes */,
 				EE03D3FB1C582EB300078CF6 /* Main Scene */,
 				EEA08EC41C6BD282002F09A9 /* Single Player */,
+				EEEE5B541C738F7400B181F6 /* Board */,
+				EEE9E3DC1C6002DF0041E0BA /* AI */,
 				EE03D3FC1C582EC300078CF6 /* Multiplayer */,
-				EE2FB4D61C3AED0000C91D68 /* Models */,
+				EE2FB4D61C3AED0000C91D68 /* Custom Clases */,
 				EE534B7B1C45C6290085E806 /* Controllers */,
-				EE5E81821BDEC1410004424F /* GameScene.sks */,
-				EE03D3141C4AC9BE00078CF6 /* Confetti */,
-				EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */,
 				EEA08ECD1C6C4186002F09A9 /* Push Notifications */,
 				EE03D3FE1C582EFF00078CF6 /* Facebook */,
-				EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */,
-				EE03D2AB1C49B21500078CF6 /* DGActivityIndicatorView */,
+				EEEE5B551C73901500B181F6 /* Settings */,
 				EE534B801C481B8F0085E806 /* Dot Game */,
 				EE03D34F1C4EF72300078CF6 /* Resources */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
@@ -612,6 +617,7 @@
 		EE65F2031C31CC3300E51138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */,
 				EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */,
 				EE0379071C3F1E1A00312DF4 /* Fabric.framework */,
 				EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */,
@@ -633,9 +639,6 @@
 			isa = PBXGroup;
 			children = (
 				EEA08EC51C6BD2B0002F09A9 /* SingleSetupScene.swift */,
-				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
-				EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */,
-				EEE9E3DC1C6002DF0041E0BA /* AI */,
 			);
 			name = "Single Player";
 			sourceTree = "<group>";
@@ -657,6 +660,39 @@
 				EEE9E3E01C62A3840041E0BA /* ShortPath.swift */,
 			);
 			name = AI;
+			sourceTree = "<group>";
+		};
+		EEEE5B4B1C6E5EF100B181F6 /* Board Models */ = {
+			isa = PBXGroup;
+			children = (
+				EE8FD5151BF15E4A009191EA /* Nodes.swift */,
+				EE8FD5131BF158F0009191EA /* Array2D.swift */,
+				EE534B7E1C4819BF0085E806 /* LineShapeLayer.swift */,
+				EE03D4081C598A7800078CF6 /* Coordinate.swift */,
+				EEEE5B501C6E5F6A00B181F6 /* LastIntersectionLocation.swift */,
+				EEEE5B4C1C6E5F0F00B181F6 /* PreviousMoveDetails.swift */,
+				EEEE5B4E1C6E5F3000B181F6 /* RecentCoordinates.swift */,
+				EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */,
+				EEEE5B521C6E5F9E00B181F6 /* Difficulty.swift */,
+			);
+			name = "Board Models";
+			sourceTree = "<group>";
+		};
+		EEEE5B541C738F7400B181F6 /* Board */ = {
+			isa = PBXGroup;
+			children = (
+				EEFD05CB1BEBF6E900D52365 /* Board.swift */,
+				EEEE5B4B1C6E5EF100B181F6 /* Board Models */,
+			);
+			name = Board;
+			sourceTree = "<group>";
+		};
+		EEEE5B551C73901500B181F6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				EEF0696D1C64087200CC5288 /* Settings.swift */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -828,6 +864,7 @@
 				EE2FB4DA1C3AF28D00C91D68 /* BoardSetupController.swift in Sources */,
 				EE03D3071C49B21500078CF6 /* DGActivityIndicatorLineScalePartyAnimation.m in Sources */,
 				EE03D2F51C49B21500078CF6 /* DGActivityIndicatorBallClipRotatePulseAnimation.m in Sources */,
+				EEEE5B4F1C6E5F3000B181F6 /* RecentCoordinates.swift in Sources */,
 				EE2FB4DE1C3B472C00C91D68 /* MultiplayerBoard.swift in Sources */,
 				EE03D2F31C49B21500078CF6 /* DGActivityIndicatorBallClipRotateAnimation.m in Sources */,
 				EE03D2FB1C49B21500078CF6 /* DGActivityIndicatorBallScaleAnimation.m in Sources */,
@@ -835,12 +872,14 @@
 				EEA08EC31C6AED34002F09A9 /* CircleButton.swift in Sources */,
 				EE03D3121C49B21500078CF6 /* DGActivityIndicatorTwoDotsAnimation.m in Sources */,
 				EE03D30E1C49B21500078CF6 /* DGActivityIndicatorThreeDotsAnimation.m in Sources */,
+				EEEE5B511C6E5F6A00B181F6 /* LastIntersectionLocation.swift in Sources */,
 				EE5E81851BDEC1410004424F /* GameScene.swift in Sources */,
 				EE65F55D1C31F1D700E51138 /* FacebookController.swift in Sources */,
 				EE03D3041C49B21500078CF6 /* DGActivityIndicatorDoubleBounceAnimation.m in Sources */,
 				EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */,
 				EE2FB4E01C3BA7F800C91D68 /* TableViewScene.swift in Sources */,
 				EE03D30A1C49B21500078CF6 /* DGActivityIndicatorNineDotsAnimation.m in Sources */,
+				EEEE5B4D1C6E5F1000B181F6 /* PreviousMoveDetails.swift in Sources */,
 				EE03D30B1C49B21500078CF6 /* DGActivityIndicatorRotatingSandglassAnimation.m in Sources */,
 				EE0379051C3F051100312DF4 /* XandOScene.swift in Sources */,
 				EE03D3111C49B21500078CF6 /* DGActivityIndicatorTripleRingsAnimation.m in Sources */,
@@ -870,6 +909,7 @@
 				EE03D3131C49B21500078CF6 /* DGActivityIndicatorView.m in Sources */,
 				EE03D3241C4AC9BE00078CF6 /* SAConfettiView.swift in Sources */,
 				EE03D30D1C49B21500078CF6 /* DGActivityIndicatorRotatingTrigonAnimation.m in Sources */,
+				EEEE5B531C6E5F9E00B181F6 /* Difficulty.swift in Sources */,
 				EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */,
 				EE03D2F21C49B21500078CF6 /* DGActivityIndicatorBallBeatAnimation.m in Sources */,
 				EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */,
