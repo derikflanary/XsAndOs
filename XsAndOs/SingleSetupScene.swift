@@ -17,7 +17,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     }
     
     //MARK: - PROPERTIES
-    private let startButton = Button()
+    private let startButton = SButton()
     private let sizeField = UITextField()
     private var stackView = UIStackView()
     private var localStackView = UIStackView()

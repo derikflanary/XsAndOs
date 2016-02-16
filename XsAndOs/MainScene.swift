@@ -14,7 +14,7 @@ import ParseFacebookUtilsV4
 class MainScene: XandOScene{
     //MARK: - PROPERTIES
     private let startButton = Button()
-    private let singleButton = Button()
+    private let singleButton = SButton()
     private var circle1 = CircleView()
     private var circle2 = CircleView()
     
@@ -38,6 +38,7 @@ class MainScene: XandOScene{
         
         singleButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, CGRectGetMinY(startButton.frame) - 70, 50, 50)
         singleButton.addTarget(self, action: "singlePressed", forControlEvents: .TouchUpInside)
+        singleButton.addTarget(self, action: "singlePressedCancelled", forControlEvents: .TouchDragExit)
         singleButton.backgroundColor = xColor
         singleButton.alpha = 0
         singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
@@ -61,7 +62,10 @@ class MainScene: XandOScene{
     func singlePressed(){
         print("single pressed")
         exitAnimation()
-//        transitionToSingleGameSetup(.AI)
+    }
+    
+    func singlePressedCancelled(){
+        singleButton.alpha = 1
     }
     
     func localPressed(){

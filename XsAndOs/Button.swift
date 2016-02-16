@@ -18,7 +18,7 @@ class Button: UIButton {
         setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Highlighted)
         layer.cornerRadius = self.frame.size.height/2
         clipsToBounds = true
-
+        
     }
     
     override var highlighted: Bool {
@@ -30,11 +30,29 @@ class Button: UIButton {
                 alpha = 0.9
             }
             else {
-//                alpha = 1.0
+                alpha = 1
             }
             super.highlighted = newValue
         }
     }
 
+}
+
+class SButton: Button {
+    
+    override var highlighted: Bool {
+        get {
+            return super.highlighted
+        }
+        set {
+            if newValue {
+                alpha = 0.9
+            }
+            else {
+                
+            }
+            super.highlighted = newValue
+        }
+    }
     
 }
