@@ -20,7 +20,7 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
         
-        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: textColor, size: 200)
+        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: textColor, size: 100)
         activityIndicator.frame = CGRectMake(view.frame.size.width/2 - 25, view.frame.size.height/2, 50.0, 50.0);
         activityIndicator.center = tableView.center
         self.tableView.addSubview(activityIndicator)

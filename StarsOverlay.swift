@@ -88,8 +88,8 @@ class StarsOverlay: UIView {
     }
     
     func randomizeEmitterPosition() {
-        let sizeWidth = max(bounds.width, bounds.height)
-        let radius = CGFloat(arc4random()) % sizeWidth
+//        let sizeWidth = max(bounds.width, bounds.height)
+//        let radius = CGFloat(arc4random()) % sizeWidth
 //        emitter.emitterSize = CGSize(width: radius, height: radius)
 //        particle.birthRate = 10 + sqrt(Float(radius))
     }

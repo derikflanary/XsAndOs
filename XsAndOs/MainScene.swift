@@ -28,23 +28,23 @@ class MainScene: XandOScene{
     
     private func layoutViews(){
         
-        startButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.center.y)! - 80, 50, 50)
-        startButton.center.x = (self.view?.center.x)!
-        startButton.addTarget(self, action: "multiplayerPressed", forControlEvents: .TouchUpInside)
-        startButton.backgroundColor = xColor
-        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
-        startButton.alpha = 0
-        self.view?.addSubview(startButton)
-        
         singleButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, CGRectGetMinY(startButton.frame) - 70, 50, 50)
         singleButton.addTarget(self, action: "singlePressed", forControlEvents: .TouchUpInside)
         singleButton.addTarget(self, action: "singlePressedCancelled", forControlEvents: .TouchDragExit)
         singleButton.backgroundColor = xColor
         singleButton.alpha = 0
-        singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
+        singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         self.view?.addSubview(singleButton)
+
+        startButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.center.y)! - 80, 50, 50)
+        startButton.center.x = (self.view?.center.x)!
+        startButton.addTarget(self, action: "multiplayerPressed", forControlEvents: .TouchUpInside)
+        startButton.backgroundColor = xColor
+        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
+        startButton.alpha = 0
+        self.view?.addSubview(startButton)
         
-        circle1.titleLabel?.font = UIFont(name: boldFontName, size: 36)
+        circle1.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         entryAnimation()
     }
     

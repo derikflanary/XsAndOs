@@ -929,8 +929,6 @@ class Board: XandOScene {
     
     func transitionToMainScene(){
         let mainScene = MainScene(size: self.size)
-        let transition = SKTransition.fadeWithDuration(2.0)
-        mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene)
     }
 }

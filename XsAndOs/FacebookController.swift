@@ -37,6 +37,16 @@ class FacebookController: NSObject {
                 }
             }
             
+            func logoutOfFacebook(completion: (Bool)-> Void){
+                PFUser.logOutInBackgroundWithBlock { (error) -> Void in
+                    if error == nil{
+                        completion(true)
+                    }else{
+                        completion(false)
+                    }
+                }
+            }
+            
             func fetchFacebookDetailsForUser(user: PFUser, completion: (Bool) -> Void){
                 let userDetails = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"])
                 userDetails.startWithCompletionHandler { (connection, result, error: NSError!) -> Void in
