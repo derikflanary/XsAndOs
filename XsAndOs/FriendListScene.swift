@@ -9,10 +9,12 @@
 import Foundation
 import SpriteKit
 import Parse
+import MessageUI
 
-class FriendListScene: TableViewScene, FBSDKAppInviteDialogDelegate{
+class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     var friends = [[String:String]]()
     var inviteFriends = [[String: String]]()
+    let currentViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
@@ -75,10 +77,6 @@ class FriendListScene: TableViewScene, FBSDKAppInviteDialogDelegate{
 
         }else{
             cell.textLabel?.text = "Invite Friends To Play!"
-//            if inviteFriends.count > 0{
-//                let friend = inviteFriends[indexPath.row] as Dictionary
-//                cell.textLabel?.text = friend["name"]
-//            }
         }
         
         return cell
@@ -93,11 +91,16 @@ class FriendListScene: TableViewScene, FBSDKAppInviteDialogDelegate{
                 self.transitionToSetupScene(opponent)
             })
         }else{
-            let content = FBSDKAppInviteContent()
-            content.appLinkURL = NSURL(string: "https://itunes.apple.com/us/app/provo-ghost-tours-game-cycling/id1031990080?mt=8")
-            FBSDKAppInviteDialog.showFromViewController(self.view?.window?.rootViewController, withContent: content, delegate: self)
+            openMessageVC()
         }
-        
+    }
+    
+    //MARK: - TRANSITIONS
+    private func openMessageVC(){
+        let messageVC = MFMessageComposeViewController()
+        messageVC.body = "Play X's and O's with me! https://itunes.apple.com/us/app/provo-ghost-tours-game-cycling/id1031990080?mt=8"
+        messageVC.messageComposeDelegate = self
+        currentViewController.presentViewController(messageVC, animated: true, completion: nil)
     }
     
     func transitionToSetupScene(opponent: PFUser){
@@ -109,12 +112,21 @@ class FriendListScene: TableViewScene, FBSDKAppInviteDialogDelegate{
         removeViews()
     }
     
-    func appInviteDialog(appInviteDialog: FBSDKAppInviteDialog!, didCompleteWithResults results: [NSObject : AnyObject]!) {
-        print("invite did complete")
-    }
-    
-    func appInviteDialog(appInviteDialog: FBSDKAppInviteDialog!, didFailWithError error: NSError!) {
-        print(error)
+    //MARK: - MESSAGE CONTROLLER DELEGATE
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        switch (result.rawValue) {
+        case MessageComposeResultCancelled.rawValue:
+            print("Message was cancelled")
+            currentViewController.dismissViewControllerAnimated(true, completion: nil)
+        case MessageComposeResultFailed.rawValue:
+            print("Message failed")
+            currentViewController.dismissViewControllerAnimated(true, completion: nil)
+        case MessageComposeResultSent.rawValue:
+            print("Message was sent")
+            currentViewController.dismissViewControllerAnimated(true, completion: nil)
+        default:
+            break;
+        }
     }
     
 }

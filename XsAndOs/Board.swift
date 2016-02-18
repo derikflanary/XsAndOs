@@ -123,7 +123,7 @@ class Board: XandOScene {
         self.view?.addSubview(backButton)
         
         undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 50)
-        undoButton.backgroundColor = oColor
+        undoButton.backgroundColor = flint
         undoButton.setImage(UIImage(named: "undo"), forState: .Normal)
         undoButton.imageView?.contentMode = .Center
         undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
@@ -146,7 +146,7 @@ class Board: XandOScene {
         }else{
             undoButton.hidden = false
         }
-        isXTurn()
+//        isXTurn()
     }
     
     func setUpMainAnimation(){
@@ -263,7 +263,7 @@ class Board: XandOScene {
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) {
             self.userInteractionEnabled = true
-            if self.userTeam == .O{
+            if self.userTeam == .O && self.aiGame{
                 self.performAIMove()
             }
         }
@@ -524,7 +524,7 @@ class Board: XandOScene {
             previousMoveDetails.newAppendedLine = shapeNode
         }
         undoButton.userInteractionEnabled = true
-        undoButton.alpha = 1
+        undoButton.backgroundColor = oColor
     }
     
     func loopThroughCoordinates(lineShapeLayer: LineShapeLayer, var matchedLine: LineShapeLayer, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeLayer, lineDelete: LineShapeLayer){
@@ -761,7 +761,7 @@ class Board: XandOScene {
     
     //MARK: - UNDO MOVE
     func undoLastMove(){
-        undoButton.alpha = 0.8
+        undoButton.backgroundColor = flint
         undoButton.userInteractionEnabled = false
 
         switch lastMove{
@@ -841,7 +841,7 @@ class Board: XandOScene {
     }
     
     func tranistionToNewBoard(){
-        let secondScene = Board(size: self.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: true, difficulty: difficulty)
+        let secondScene = Board(size: self.size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: aiGame, difficulty: difficulty)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)

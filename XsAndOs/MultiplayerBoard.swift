@@ -41,6 +41,7 @@ class MultiplayerBoard: Board {
         super.startGame()
         undoButton.removeFromSuperview()
         restartButton.removeFromSuperview()
+        
         let name = xUser["name"] as! String
         nameLabel = SKLabelNode(text: name)
         nameLabel.position = CGPointMake(self.frame.width/2, turnLabel.position.y - 30)
@@ -81,6 +82,7 @@ class MultiplayerBoard: Board {
             type = "O"
         }
         startActionForNodeType(type)
+        self.userInteractionEnabled = true
     }
     
     func drawLines(){
@@ -240,7 +242,10 @@ class MultiplayerBoard: Board {
         activityIndicator.startAnimating()
         dimView.backgroundColor = UIColor.darkGrayColor()
         dimView.alpha = 0
-        view?.addSubview(dimView)
+        dispatch_async(dispatch_get_main_queue(),{
+            self.view?.addSubview(dimView)
+        })
+        
         UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveEaseOut, animations: { () -> Void in
             dimView.alpha = 0.6
             }) { (done) -> Void in

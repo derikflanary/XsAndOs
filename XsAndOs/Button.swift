@@ -10,8 +10,6 @@ import Foundation
 
 class Button: UIButton {
     
-    var shadowLayer: CAShapeLayer!
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Normal)
@@ -38,8 +36,17 @@ class Button: UIButton {
 
 }
 
-class SButton: Button {
+
+class SButton: UIButton {
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Normal)
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Highlighted)
+        layer.cornerRadius = self.frame.size.height/2
+        clipsToBounds = true
+        
+    }
     override var highlighted: Bool {
         get {
             return super.highlighted
