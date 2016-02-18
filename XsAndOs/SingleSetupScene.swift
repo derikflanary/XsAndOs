@@ -31,6 +31,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     private let easyButton = Button()
     private let moderateButton = Button()
     private let hardButton = Button()
+    private let backButton = Button()
     var userTeam = Board.UserTeam.X
     var difficulty = Difficulty.Moderate
     var type : GameType
@@ -110,6 +111,12 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         teamLabel.text = "Team"
         difficultyLabel.text = "Difficulty"
         
+        backButton.frame = CGRectMake(10, 20, 50, 50)
+        backButton.backgroundColor = xColor
+        backButton.setImage(UIImage(named: "home"), forState: .Normal)
+        backButton.imageView?.contentMode = .Center
+        backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
+        
         switch type{
         case .AI:
             addAIStackViews()
@@ -123,7 +130,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
     private func addLocalStackViews(){
     
-        localStackView = UIStackView(arrangedSubviews: [startButton, rowsLabel, sizeField])
+        localStackView = UIStackView(arrangedSubviews: [backButton, startButton, rowsLabel, sizeField])
         localStackView.axis = .Vertical
         localStackView.alignment = .Center
         localStackView.spacing = 21
@@ -149,7 +156,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         difficultyStack.distribution = .FillEqually
         difficultyStack.spacing = 20
 
-        stackView = UIStackView(arrangedSubviews: [startButton, rowsLabel, sizeField, teamLabel, innerStack, difficultyLabel, difficultyStack])
+        stackView = UIStackView(arrangedSubviews: [backButton, startButton, rowsLabel, sizeField, teamLabel, innerStack, difficultyLabel, difficultyStack])
         stackView.axis = .Vertical
         stackView.alignment = .Center
         stackView.spacing = 21
@@ -167,7 +174,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         localStackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
         localStackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
         localStackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: 0).active = true
-        localStackView.heightAnchor.constraintEqualToConstant(250).active = true
+        localStackView.heightAnchor.constraintEqualToConstant(300).active = true
         addMainAutoContraints()
     }
     
@@ -177,6 +184,8 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         startButton.widthAnchor.constraintGreaterThanOrEqualToAnchor(margins?.widthAnchor).active = true
         sizeField.widthAnchor.constraintEqualToConstant(100).active = true
         sizeField.heightAnchor.constraintEqualToConstant(100).active = true
+        backButton.widthAnchor.constraintEqualToConstant(50).active = true
+        backButton.heightAnchor.constraintEqualToConstant(50).active = true
     }
     
     private func addAITypeAutoContraints(){
@@ -245,6 +254,11 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         animateDifficultyButtonPress(hardButton, button1: easyButton, button2: moderateButton)
         difficulty = .Hard
     }
+    
+    func mainPressed(){
+        removeViews()
+        transitionToMainScene()
+    }
 
     //MARK: - TRANSITIONS
     private func transitionToBoardScene(dim : Int, rows : Int){
@@ -264,12 +278,21 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         }
     }
     
+    func transitionToMainScene(){
+        let mainScene = MainScene(size: self.size)
+        self.scene?.view?.presentScene(mainScene)
+    }
+    
+    //MARK: - CLEAN UP
     override func removeViews() {
         stackView.removeFromSuperview()
         localStackView.removeFromSuperview()
+        backButton.removeFromSuperview()
     }
     
     //MARK: - ANIMATIONS
+    
+
     private func animateInStackView(){
         UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .CurveEaseInOut, animations: { () -> Void in
             self.stackView.alpha = 1

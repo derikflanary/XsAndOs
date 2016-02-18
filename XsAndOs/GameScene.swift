@@ -11,7 +11,8 @@ import Parse
 import ParseFacebookUtilsV4
 
 class GameScene: XandOScene {
-    
+
+    //MARK: - PROPERTIES
     enum ButtonPressed {
         case FBLogIn
         case Friend
@@ -56,7 +57,7 @@ class GameScene: XandOScene {
         currentGamesButton.alpha = 0
         currentGamesButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         
-        backButton.frame = CGRectMake(10, 20, 50, 50)
+        backButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25,CGRectGetMinY(currentGamesButton.frame) - 70 , 50, 50)
         backButton.backgroundColor = xColor
         backButton.setImage(UIImage(named: "home"), forState: .Normal)
         backButton.imageView?.contentMode = .Center
