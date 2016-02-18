@@ -15,11 +15,24 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     var friends = [[String:String]]()
     var inviteFriends = [[String: String]]()
     let currentViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
+    var activityIndicator = DGActivityIndicatorView()
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
+        
+        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: textColor, size: 200)
+        activityIndicator.frame = CGRectMake(view.frame.size.width/2 - 25, view.frame.size.height/2, 50.0, 50.0);
+        activityIndicator.center = tableView.center
+        self.tableView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        fetchData()
+    }
+    
+    func fetchData(){
         guard let currentUser = PFUser.currentUser() else{return}
         FacebookController.Singleton.sharedInstance.fetchFriendsForUser(currentUser) { (success: Bool, friends: [[String:String]], invitables: [[String:String]]) -> Void in
+            self.activityIndicator.stopAnimating()
+            self.activityIndicator.removeFromSuperview()
             if success{
                 dispatch_async(dispatch_get_main_queue(),{
                     self.friends = friends
@@ -38,6 +51,7 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
                 })
             }
         }
+   
     }
     
     func stringArrayFromDictionary(characters: [[String:String]], key: String) -> [String] {
@@ -46,8 +60,9 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
         }
     }
 
-    
+    //MARK: - TABLEVIEW METHODS
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard friends.count > 0 else{return 0}
         if section == 0{
             return friends.count
         }else{
