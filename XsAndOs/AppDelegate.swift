@@ -37,21 +37,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFInstallation.currentInstallation().badge = 0
         
-        // Enable log to output simple details (disable in production)
-        GameAnalytics.setEnabledInfoLog(true)
-        // Enable log to output full event JSON (disable in production)
-        GameAnalytics.setEnabledVerboseLog(true)
-        
-        GameAnalytics.configureAvailableCustomDimensions01([x, o])
-        GameAnalytics.configureAvailableCustomDimensions02(["Easy", "Moderate", "Hard"])
-                
-        // Configure build version
-        GameAnalytics.configureBuild("1.0.0")
-        
-        // initialize GameAnalytics - this method will use app keys injected by Fabric
-        GameAnalytics.initializeWithConfiguredGameKeyAndGameSecret()
-        // to manually specify keys use this method:
-        //GameAnalytics.initializeWithGameKey("[game_key]", gameSecret:"[game_secret]")
+//        // Enable log to output simple details (disable in production)
+//        GameAnalytics.setEnabledInfoLog(true)
+//        // Enable log to output full event JSON (disable in production)
+//        GameAnalytics.setEnabledVerboseLog(true)
+//        
+//        GameAnalytics.configureAvailableCustomDimensions01([x, o])
+//        GameAnalytics.configureAvailableCustomDimensions02(["Easy", "Moderate", "Hard"])
+//                
+//        // Configure build version
+//        GameAnalytics.configureBuild("1.0.0")
+//        
+//        // initialize GameAnalytics - this method will use app keys injected by Fabric
+//        GameAnalytics.initializeWithConfiguredGameKeyAndGameSecret()
+//        // to manually specify keys use this method:
+//        //GameAnalytics.initializeWithGameKey("[game_key]", gameSecret:"[game_secret]")
 
 
         return true

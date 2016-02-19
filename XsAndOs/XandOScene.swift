@@ -21,10 +21,10 @@ let boldFontName = "SFUIDisplay-Bold"
 let mainFontName = "SFUIDisplay-Regular"
 let lightFontName = "SFUIDisplay-Light"
 let transition = SKTransition.crossFadeWithDuration(1)
+let buttonSoundEffect = SoundEffect(fileName: "button")
+
 
 class XandOScene: SKScene {
-    
-    
     
     override func didMoveToView(view: SKView) {
         if let overlay = self.view?.viewWithTag(1000){
@@ -88,5 +88,7 @@ class XandOScene: SKScene {
         let transition = SKTransition.crossFadeWithDuration(2.0)
         self.scene?.view?.presentScene(secondScene, transition: transition)
     }
+    
+
 
 }

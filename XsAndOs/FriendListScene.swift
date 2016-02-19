@@ -84,6 +84,10 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        
+        cell.layer.cornerRadius = 15
+        cell.clipsToBounds = true
+        
         if indexPath.section == 0{
             if friends.count > 0{
                 let friend = friends[indexPath.row] as Dictionary

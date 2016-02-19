@@ -25,7 +25,6 @@ class GameScene: XandOScene {
     private let backButton = Button()
     var currentGames = [PFObject]()
     private var activityIndicator = UIActivityIndicatorView()
-    let transition = SKTransition.crossFadeWithDuration(1)
     
     //MARK: - INIT
     override init(size: CGSize) {
@@ -117,6 +116,7 @@ class GameScene: XandOScene {
             self.fbLoginbutton.alpha = 0
             self.friendButton.alpha = 0
             self.currentGamesButton.alpha = 0
+            self.backButton.alpha = 0
             }) { (done) -> Void in
                 switch buttonPressed{
                 case .FBLogIn:
@@ -143,7 +143,7 @@ class GameScene: XandOScene {
                         self.removeViews()
                         let secondScene = GameScene(size: self.size)
                         secondScene.scaleMode = SKSceneScaleMode.AspectFill
-                        self.scene!.view?.presentScene(secondScene, transition: self.transition)
+                        self.scene!.view?.presentScene(secondScene, transition: transition)
                     })
                 }else{
                     self.failAlert("Logout Failed")

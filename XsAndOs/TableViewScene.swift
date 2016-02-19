@@ -27,10 +27,11 @@ class TableViewScene: XandOScene, UITableViewDataSource, UITableViewDelegate {
         cancelButton.addTarget(self, action: "cancelPressed", forControlEvents: .TouchUpInside)
         self.view?.addSubview(cancelButton)
         
-        tableView = UITableView(frame: CGRectMake(0, 50, self.view!.frame.size.width, self.view!.frame.size.height - 150), style: .Grouped)
+        tableView = UITableView(frame: CGRectMake(10, 50, self.view!.frame.size.width - 20, self.view!.frame.size.height - 150), style: .Grouped)
         tableView.backgroundColor = backgroundColor
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = UIColor.clearColor()
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view!.addSubview(tableView)
         tableView.reloadData()

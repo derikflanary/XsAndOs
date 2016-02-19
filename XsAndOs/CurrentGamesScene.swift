@@ -79,6 +79,7 @@ class CurrentGamesScene: TableViewScene {
             }else{
                 game = finishedGames[indexPath.row] as PFObject
             }
+            
             let xUser = game["xTeam"] as! PFUser
             let name = xUser["name"] as! String
             let oUser = game["oTeam"] as! PFUser
@@ -90,8 +91,13 @@ class CurrentGamesScene: TableViewScene {
             if name == myName && xTurn || oName == myName && !xTurn{
                 usersTurn = true
             }
+            
             cell.textLabel?.textColor = backgroundColor
             cell.detailTextLabel?.textColor = flint
+
+            cell.layer.cornerRadius = 15
+            cell.clipsToBounds = true
+            
             if usersTurn{
                 cell.textLabel?.textColor = oColor
             }
@@ -103,7 +109,7 @@ class CurrentGamesScene: TableViewScene {
             }
             cell.textLabel?.text = text
             cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"
-            cell.contentView.backgroundColor = textColor
+            cell.contentView.backgroundColor = UIColor.whiteColor()
 
         }
         return cell

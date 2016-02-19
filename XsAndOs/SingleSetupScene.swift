@@ -23,6 +23,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     private var localStackView = UIStackView()
     private var innerStack = UIStackView()
     private var difficultyStack = UIStackView()
+    private var rowStack = UIStackView()
     private let xButton = Button()
     private let oButton = Button()
     private let rowsLabel = InfoLabel(frame: CGRectZero)
@@ -218,16 +219,19 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
     //MARK: - BUTTON METHODS
     func xPressed(){
+        buttonSoundEffect.play()
         animateXButtonPress()
         userTeam = .X
     }
     
     func oPressed(){
+        buttonSoundEffect.play()
         animateOButtonPress()
         userTeam = .O
     }
     
     func newGamePressed(){
+        buttonSoundEffect.play()
         var dim : Int
         var rows : Int
         if let r = Int(sizeField.text!){
@@ -241,21 +245,25 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     }
 
     func easyPressed(){
+        buttonSoundEffect.play()
         animateDifficultyButtonPress(easyButton, button1: moderateButton, button2: hardButton)
         difficulty = .Easy
     }
     
     func moderatePressed(){
+        buttonSoundEffect.play()
         animateDifficultyButtonPress(moderateButton, button1: easyButton, button2: hardButton)
         difficulty = .Moderate
     }
     
     func hardPressed(){
+        buttonSoundEffect.play()
         animateDifficultyButtonPress(hardButton, button1: easyButton, button2: moderateButton)
         difficulty = .Hard
     }
     
     func mainPressed(){
+        buttonSoundEffect.play()
         removeViews()
         transitionToMainScene()
     }

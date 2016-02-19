@@ -50,6 +50,7 @@ class MainScene: XandOScene{
     
     //MARK: - BUTTON METHODS
     func multiplayerPressed(){
+        buttonSoundEffect.play()
         if !buttonOpened{
             buttonOpened = true
             animateButton()
@@ -60,7 +61,7 @@ class MainScene: XandOScene{
     }
     
     func singlePressed(){
-        print("single pressed")
+        buttonSoundEffect.play()
         exitAnimation()
     }
     
@@ -70,10 +71,13 @@ class MainScene: XandOScene{
     
     func localPressed(){
         print("local pressed")
+        buttonSoundEffect.play()
         transitionToSingleGameSetup(.Local)
+        
     }
     
     func onlinePressed(){
+        buttonSoundEffect.play()
         transitionToMultiplayerScene()
         print("online pressed")
     }

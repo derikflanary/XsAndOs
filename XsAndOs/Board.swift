@@ -57,6 +57,11 @@ class Board: XandOScene {
     var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
+    let xSound = SoundEffect(fileName: "x")
+    let oSound = SoundEffect(fileName: "o")
+    let cheerSound = SoundEffect(fileName: "cheer")
+    let squareSound = SoundEffect(fileName: "square")
+    let boardSound = SoundEffect(fileName: "board")
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -190,7 +195,7 @@ class Board: XandOScene {
     
     func paintXsnOs(nodes: Set<Node>){
         for node in nodes{
-
+            
             if node.sprite != nil{
                 let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!)
                 let sprite = node.sprite
@@ -214,6 +219,7 @@ class Board: XandOScene {
             }
         }
         animateNodes()
+        
         
     }
     
@@ -248,14 +254,22 @@ class Board: XandOScene {
         square.fillColor = UIColor.clearColor().CGColor
         square.strokeEnd = 0.0
         view?.layer.addSublayer(square)
+        
         let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
         pathAnimation.duration = 1.0
         pathAnimation.fromValue = 0
         pathAnimation.toValue = 1
         pathAnimation.removedOnCompletion = false
         pathAnimation.fillMode = kCAFillModeBoth
+        pathAnimation.delegate = self
         square.addAnimation(pathAnimation, forKey: pathAnimation.keyPath)
+        squareSound.play()
 
+    }
+    
+    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+        boardSound.player.rate = 0.5
+        boardSound.play()
     }
     
     func animateNodes(){
@@ -525,6 +539,11 @@ class Board: XandOScene {
         }
         undoButton.userInteractionEnabled = true
         undoButton.backgroundColor = oColor
+        if type == x{
+            xSound.play()
+        }else{
+            oSound.play()
+        }
     }
     
     func loopThroughCoordinates(lineShapeLayer: LineShapeLayer, var matchedLine: LineShapeLayer, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeLayer, lineDelete: LineShapeLayer){
@@ -739,6 +758,7 @@ class Board: XandOScene {
         var confetti = false
         let confettiView = SAConfettiView(frame: self.view!.bounds)
         if aiGame && winningTeam == userTeam.rawValue{
+            cheerSound.play()
             self.view!.addSubview(confettiView)
             confettiView.startConfetti()
             confetti = true
@@ -761,6 +781,7 @@ class Board: XandOScene {
     
     //MARK: - UNDO MOVE
     func undoLastMove(){
+        buttonSoundEffect.play()
         undoButton.backgroundColor = flint
         undoButton.userInteractionEnabled = false
 
@@ -919,10 +940,12 @@ class Board: XandOScene {
     //MARK: - BUTTON FUNCTIONS
     
     func restartPressed(){
+        buttonSoundEffect.play()
         resetBoard()
     }
     
     func mainPressed(){
+        buttonSoundEffect.play()
         removeViews()
         transitionToMainScene()
     }
