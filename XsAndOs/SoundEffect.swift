@@ -23,8 +23,6 @@ class SoundEffect: NSObject, AVAudioPlayerDelegate {
             player.delegate = self
             player.rate = 2.0
         }catch let error as NSError { print(error.description)}
-        
-        
     }
     
     func loopPlay(){
@@ -36,7 +34,7 @@ class SoundEffect: NSObject, AVAudioPlayerDelegate {
     func play(){
         player.pause()
         player.currentTime = 0.0
-        player.volume = 0.6
+        player.volume = 0.35
         player.play()
     }
 }

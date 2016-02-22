@@ -57,8 +57,6 @@ class Board: XandOScene {
     var recentCoordinates : RecentCoordinates?
     var lastIntersection = LastIntersectionLocation(row: 0, col: 0)
     var previousMoveDetails = PreviousMoveDetails(oldLines: [], previousIntersection: LastIntersectionLocation(row: 0, col: 0), moveUnDid: true, newAppendedLine: LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N"))
-    let xSound = SoundEffect(fileName: "x")
-    let oSound = SoundEffect(fileName: "o")
     let cheerSound = SoundEffect(fileName: "cheer")
     let squareSound = SoundEffect(fileName: "square")
     let boardSound = SoundEffect(fileName: "board")
@@ -500,7 +498,7 @@ class Board: XandOScene {
         newPath.moveToPoint(pointA)
         newPath.addLineToPoint(pointB)
         potentialShapeNode.path = newPath.CGPath
-        potentialShapeNode.strokeColor = UIColor(white: 0.4, alpha: 0.6).CGColor
+        potentialShapeNode.strokeColor = UIColor(white: 0.6, alpha: 0.8).CGColor
         potentialShapeNode.lineWidth = 3
         view?.layer.addSublayer(potentialShapeNode)
     }
@@ -757,7 +755,7 @@ class Board: XandOScene {
         winner = true
         var confetti = false
         let confettiView = SAConfettiView(frame: self.view!.bounds)
-        if aiGame && winningTeam == userTeam.rawValue{
+        if winningTeam == userTeam.rawValue{
             cheerSound.play()
             self.view!.addSubview(confettiView)
             confettiView.startConfetti()

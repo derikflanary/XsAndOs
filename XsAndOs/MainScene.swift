@@ -161,19 +161,23 @@ class MainScene: XandOScene{
                 
                 UIView.animateWithDuration(0.5, delay: 0.0, options: .CurveLinear, animations: { () -> Void in
                     self.circle2.center = CGPointMake(self.startButton.center.x, self.startButton.center.y + 60)
-                    }, completion: nil)
+                    },  completion: { (done) -> Void in
+                    })
                 
                 UIView.animateWithDuration(0.5, delay: 0.25, options: .CurveLinear, animations: { () -> Void in
                     self.circle1.center = CGPointMake(self.startButton.center.x, self.startButton.center.y + 30)
-                    }, completion: nil)
-                
+                    }, completion: { (done) -> Void in
+                    })
+
                 UIView.animateWithDuration(0.75, delay: 0.50, usingSpringWithDamping: 0.6, initialSpringVelocity: 5, options: .CurveEaseIn, animations: { () -> Void in
                     self.circle1.frame = CGRectMake(40, self.startButton.frame.origin.y + 60, (self.view?.frame.size.width)! - 80, 50)
-                    }, completion: { (done) -> Void in})
+                    }, completion: { (done) -> Void in
+                    })
                 
                 UIView.animateWithDuration(0.75, delay: 0.25, usingSpringWithDamping: 0.6, initialSpringVelocity: 5, options: .CurveEaseIn, animations: { () -> Void in
                     self.circle2.frame = CGRectMake(40, self.startButton.frame.origin.y + 120, (self.view?.frame.size.width)! - 80, 50)
-                    }, completion: { (done) -> Void in})
+                    }, completion: { (done) -> Void in
+                    })
         }
     }
 

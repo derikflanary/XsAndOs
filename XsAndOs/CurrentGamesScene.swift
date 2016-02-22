@@ -65,6 +65,34 @@ class CurrentGamesScene: TableViewScene {
         }
     }
     
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView,
+        forSection section: Int) {
+            let header = view as! UITableViewHeaderFooterView
+            header.textLabel?.font = UIFont(name: boldFontName, size: 18)
+            header.textLabel?.textColor = textColor
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 80
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
+        let whiteRoundedView : UIView = UIView(frame: CGRectMake(0, 10, self.tableView.frame.size.width, 80))
+        
+        whiteRoundedView.layer.backgroundColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), [1.0, 1.0, 1.0, 1.0])
+        whiteRoundedView.layer.masksToBounds = false
+        whiteRoundedView.layer.cornerRadius = 10.0
+        whiteRoundedView.layer.shadowOffset = CGSizeMake(-1, 1)
+        whiteRoundedView.layer.shadowOpacity = 0.2
+        
+        cell.contentView.addSubview(whiteRoundedView)
+        cell.contentView.sendSubviewToBack(whiteRoundedView)
+    }
+
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell : UITableViewCell! = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         if (cell != nil)
@@ -72,6 +100,11 @@ class CurrentGamesScene: TableViewScene {
             cell = UITableViewCell(style: UITableViewCellStyle.Subtitle,
                 reuseIdentifier: "cell")
         }
+        
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        cell.backgroundColor = UIColor.clearColor()
+        
         var game = games[indexPath.row]
         if games.count > 0{
             if indexPath.section == 0{
@@ -129,7 +162,12 @@ class CurrentGamesScene: TableViewScene {
     }
 
     func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
-        var secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: false)
+        let xUser = game["xTeam"] as! PFUser
+        var userTeam = Board.UserTeam.O
+        if xUser.objectId == PFUser.currentUser(){
+            userTeam = Board.UserTeam.X
+        }
+        var secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: false)
         secondScene = BoardSetupController().updateNextSceneWithGame(game, secondScene: secondScene)
         let transition = SKTransition.crossFadeWithDuration(1)
         self.scene!.view?.presentScene(secondScene, transition: transition)

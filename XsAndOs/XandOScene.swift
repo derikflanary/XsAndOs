@@ -22,6 +22,8 @@ let mainFontName = "SFUIDisplay-Regular"
 let lightFontName = "SFUIDisplay-Light"
 let transition = SKTransition.crossFadeWithDuration(1)
 let buttonSoundEffect = SoundEffect(fileName: "button")
+let xSound = SoundEffect(fileName: "x")
+let oSound = SoundEffect(fileName: "o")
 
 
 class XandOScene: SKScene {
@@ -85,7 +87,7 @@ class XandOScene: SKScene {
     
     func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
         removeViews()
-        let transition = SKTransition.crossFadeWithDuration(2.0)
+        let transition = SKTransition.crossFadeWithDuration(1.0)
         self.scene?.view?.presentScene(secondScene, transition: transition)
     }
     

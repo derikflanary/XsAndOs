@@ -25,7 +25,6 @@ class MultiplayerBoard: Board {
     var gameFinished = Bool()
     var xObjId = String()
     var oObjId = String()
-    var submitButton = UIButton()
     var moveMade = Bool()
     var recentMove = [[String:Int]]()
     var xLinesParse : [[[String:Int]]] = []
@@ -33,6 +32,7 @@ class MultiplayerBoard: Board {
     var layersToDelete = [LineShapeLayer]()
     var activityIndicator = DGActivityIndicatorView()
     var firstLoad = Bool()
+    var noReload = Bool()
     let dimView = UIView()
     
     override func startGame() {
@@ -58,18 +58,25 @@ class MultiplayerBoard: Board {
         }
         turnLabel.runAction(nodeAction)
         setupBoard()
+        
     }
     
     func setupBoard(){
         if xLinesParse.count > 0 || oLinesParse.count > 0{
-            drawLoadedLines()
+            unLoadLoadedLines()
         }
         if xLines.count > 0 || xLines.count > 0{
             drawLines()
         }
+        if xLines.count == 0 && userTeam.rawValue == o{
+            let receiver = self.receiver()
+            PushNotificationController().pushNotificationNewGame(receiver, gameID: self.gameID)
+        }
         if gameFinished{
             finishedGameMessage()
         }
+        
+        
     }
     
     override func isXTurn() {
@@ -86,14 +93,17 @@ class MultiplayerBoard: Board {
     }
     
     func drawLines(){
+        
         loopThroughLines("X")
         loopThroughLines("O")
         markIntersections("X")
         markIntersections("O")
         if recentMove.count > 0 && firstLoad{
+            noReload = true
             lastMoveLoadAndAnimate()
             firstLoad = false
         }
+        
     }
     
     func loopThroughLines(type: String){
@@ -356,9 +366,11 @@ class MultiplayerBoard: Board {
     }
     
     func finishLoadingMoves(){
-        finishAnimationOnLastMove(layersToDelete.last!)
+        if layersToDelete.count > 0{
+            finishAnimationOnLastMove(layersToDelete.last!)
+        }
         removeLines()
-        drawLoadedLines()
+        unLoadLoadedLines()
         drawLines()
     }
     
@@ -406,8 +418,8 @@ class MultiplayerBoard: Board {
         super.undoLastMove()
     }
     
-//LOADING THE BOARD//
-    func drawLoadedLines(){
+    //MARK: -LOADING THE BOARD
+    func unLoadLoadedLines(){
         loopThroughParseLines("X")
         loopThroughParseLines("O")
     }
@@ -486,9 +498,9 @@ class MultiplayerBoard: Board {
         animateInLastMove(shape)
         layersToDelete.append(shape)
         
-
     }
     
+    //MARK: - LINE ANIMATIONS
     func animateInLastMove(shapeLayer: LineShapeLayer){
         let animation1 = CABasicAnimation(keyPath: "lineWidth")
         animation1.fromValue = 0
@@ -541,11 +553,13 @@ class MultiplayerBoard: Board {
 
     
     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-        if flag{
+        if flag && !noReload{
             finishLoadingMoves()
         }
+        noReload = false
     }
-    
+
+    //MARK: - TRANSITIONS
     override func transitionToMainScene() {
         let mainScene = GameScene(size: self.size)
         mainScene.scaleMode = .AspectFill

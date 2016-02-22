@@ -16,7 +16,7 @@ class XGameController: NSObject {
         
         static let sharedInstance = Singleton()
 //MARK: - GAME CREATION
-        func createNewGame(xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, PFObject?, String, String, String) -> Void){
+        func createNewGame(xTeam xTeam: PFUser, oTeam: PFUser, rows: Int, dim: Int, completion: (Bool, PFObject?, String, String, String) -> Void){
             let newGame = PFObject(className: "XGame")
             newGame["rows"] = rows
             newGame["dim"] = dim

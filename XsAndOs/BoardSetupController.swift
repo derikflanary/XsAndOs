@@ -69,12 +69,18 @@ class BoardSetupController: NSObject {
         let rows = game["rows"] as! Int
         let xLines = game.objectForKey("xLines") as! PFObject
         let oLines = game.objectForKey("oLines") as! PFObject
+        let xUser = game["xTeam"] as! PFUser
+        var userTeam = Board.UserTeam.O
+        if xUser.objectId == PFUser.currentUser(){
+            userTeam = Board.UserTeam.X
+        }
+
         xLines.fetchIfNeededInBackgroundWithBlock { (theXlines: PFObject?,error: NSError?) -> Void in
             oLines.fetchIfNeededInBackgroundWithBlock({ (theOLines: PFObject?,error: NSError?) -> Void in
                 if error != nil{
-                    completion(false, MultiplayerBoard(size: size, theDim: 0, theRows: 0, userTeam: .X, aiGame: false))
+                    completion(false, MultiplayerBoard(size: size, theDim: 0, theRows: 0, userTeam: userTeam, aiGame: false))
                 }else{
-                    var secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows, userTeam: .X, aiGame: false)
+                    var secondScene = MultiplayerBoard(size: size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: false)
                     
                     secondScene = self.passGameDataToScene(game, secondScene: secondScene)
                     secondScene.xLinesParse = theXlines!["lines"] as! [[[String:Int]]]

@@ -131,11 +131,13 @@ class GameScene: XandOScene {
     
     //MARK: BUTTON FUNCTIONS
     func mainPressed(){
+        buttonSoundEffect.play()
         removeViews()
         transitionToMainScene()
     }
     
     func fbLoginPressed(){
+        buttonSoundEffect.play()
         if let currentUser = PFUser.currentUser(){
             FacebookController.Singleton.sharedInstance.logoutOfFacebook({ (success) -> Void in
                 if success{
@@ -172,10 +174,12 @@ class GameScene: XandOScene {
     }
     
     func friendPressed(){
+        buttonSoundEffect.play()
         exitAnimation(.Friend)
     }
     
     func currentGamesPressed(){
+        buttonSoundEffect.play()
         exitAnimation(.CurrentGames)
     }
     

@@ -13,6 +13,7 @@ class GameViewController: UIViewController {
 
     var scene : MainScene!
     var skView = SKView()
+    let backgroundMusic = SoundEffect(fileName: "background")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,8 @@ class GameViewController: UIViewController {
         scene.scaleMode = .AspectFill
         
         skView.presentScene(scene)
+        
+        backgroundMusic.loopPlay()
     }
     
     

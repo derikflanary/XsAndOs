@@ -9,5 +9,6 @@
 import Foundation
 
 class FriendTableViewCell: UITableViewCell {
+    let nameLabel = UILabel()
     
 }

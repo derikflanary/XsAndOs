@@ -94,9 +94,9 @@ class MultiplayerSetupScene: XandOScene, UITextFieldDelegate {
     
     private func transitionToBoardScene(dim : Int, rows : Int){
         
-        XGameController.Singleton.sharedInstance.createNewGame(PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, game, id, xId, oId) -> Void in
+        XGameController.Singleton.sharedInstance.createNewGame(xTeam: PFUser.currentUser()!, oTeam: opponent, rows: rows, dim: dim) { (success, game, id, xId, oId) -> Void in
             if success{
-                let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: .X, aiGame: false)
+                let secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: Board.UserTeam.X, aiGame: false)
                 secondScene.xUser = PFUser.currentUser()!
                 secondScene.oUser = self.opponent
                 secondScene.xTurnLoad = true

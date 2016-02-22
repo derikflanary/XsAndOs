@@ -13,17 +13,16 @@ import Parse
 class TableViewScene: XandOScene, UITableViewDataSource, UITableViewDelegate {
     
     var tableView = UITableView()
-    var cancelButton = UIButton()
+    var cancelButton = Button()
     
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
         self.backgroundColor = backColor
         
-        cancelButton.frame = CGRectMake(0, 20, view.frame.size.width, 30)
+        cancelButton.frame = CGRectMake(self.view!.frame.size.width/2 - 50, 20, 100, 30)
         cancelButton.setTitle("Cancel", forState: .Normal)
-        cancelButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
-        cancelButton.setTitleColor(textColor, forState: .Normal)
-        cancelButton.setTitleColor(UIColor(white: 0.7, alpha: 1.0), forState: .Highlighted)
+        cancelButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
+        cancelButton.backgroundColor = xColor
         cancelButton.addTarget(self, action: "cancelPressed", forControlEvents: .TouchUpInside)
         self.view?.addSubview(cancelButton)
         
