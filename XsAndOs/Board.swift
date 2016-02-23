@@ -386,8 +386,12 @@ class Board: XandOScene {
                     nextPoint = location
                     drawPotentialLineBetweenPoints(startPoint, pointB: nextPoint, type: "")
                 }
-            }else{
+            }else if touchedNode == selectedNode{
+                pointsConnected = false
+                potentialShapeNode.removeFromSuperlayer()
                 return
+            }else{
+                
             }
         }
     }
@@ -395,6 +399,11 @@ class Board: XandOScene {
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         guard isCurrentUserTurn() else{return}
         potentialShapeNode.removeFromSuperlayer()
+        guard pointsConnected == true else{
+            resetSelectedNode()
+            touchedLocations.removeAll()
+            return
+        }
         pointsConnected = false
         startPoint = CGPointZero
         for theTouch: AnyObject in touches{

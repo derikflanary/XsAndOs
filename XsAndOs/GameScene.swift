@@ -155,6 +155,9 @@ class GameScene: XandOScene {
             FacebookController.Singleton.sharedInstance.loginToFacebook { (success, friendList) -> Void in
                 if success{
                     //update the UI here
+                    if !UIApplication.sharedApplication().isRegisteredForRemoteNotifications(){
+                        self.showPNAlert()
+                    }
                     if let currentUser = PFUser.currentUser(){
                         let myinstallation = PFInstallation.currentInstallation()
                         myinstallation.setObject(currentUser.username!, forKey: "ownerUsername")
@@ -171,6 +174,18 @@ class GameScene: XandOScene {
                 }
             }
         }
+    }
+    
+    private func showPNAlert(){
+        let alertController = UIAlertController(title: "Attention Please", message: "You are about to be asked to allow push notifications. By doing so your online experience will include live updating so you can play without refreshing the game. Make your decision carefully.", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
+            let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
+            let application = UIApplication.sharedApplication()
+            application.registerUserNotificationSettings(settings)
+            application.registerForRemoteNotifications()
+        }
+        alertController.addAction(cancelAction)
+        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func friendPressed(){

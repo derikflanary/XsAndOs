@@ -27,13 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             clientKey: "loGrncuqMAb1KTz99b3l1YIvw7cGwqzYjaAoHdZs")
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         Fabric.with([Crashlytics.self, GameAnalytics.self])
-
-        if !UIApplication.sharedApplication().isRegisteredForRemoteNotifications(){
-            let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
-            let application = UIApplication.sharedApplication()
-            application.registerUserNotificationSettings(settings)
-            application.registerForRemoteNotifications()
-        }
         
         PFInstallation.currentInstallation().badge = 0
         
