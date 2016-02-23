@@ -57,6 +57,7 @@
 		EE03D4051C596ED700078CF6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */; };
 		EE03D4071C5987BB00078CF6 /* ShortestPathStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */; };
 		EE03D4091C598A7800078CF6 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D4081C598A7800078CF6 /* Coordinate.swift */; };
+		EE2403141C7D1FBE00849652 /* Chartboost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2403131C7D1FBE00849652 /* Chartboost.framework */; };
 		EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */; };
 		EE2FB4D51C3AEBF200C91D68 /* XGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */; };
 		EE2FB4D81C3AED2E00C91D68 /* MultiplayerSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */; };
@@ -224,6 +225,7 @@
 		EE03D4041C596ED700078CF6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		EE03D4061C5987BB00078CF6 /* ShortestPathStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortestPathStep.swift; sourceTree = "<group>"; };
 		EE03D4081C598A7800078CF6 /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		EE2403131C7D1FBE00849652 /* Chartboost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Chartboost.framework; sourceTree = "<group>"; };
 		EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendListScene.swift; sourceTree = "<group>"; };
 		EE2FB4D41C3AEBF200C91D68 /* XGameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XGameController.swift; sourceTree = "<group>"; };
 		EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplayerSetupScene.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE2403141C7D1FBE00849652 /* Chartboost.framework in Frameworks */,
 				EE65F2011C31CA5700E51138 /* libsqlite3.tbd in Frameworks */,
 				EEEE5B4A1C6D170B00B181F6 /* GameAnalytics.framework in Frameworks */,
 				EE65F1FF1C31CA4B00E51138 /* libz.tbd in Frameworks */,
@@ -446,6 +449,7 @@
 		EE03D34F1C4EF72300078CF6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				EE2403131C7D1FBE00849652 /* Chartboost.framework */,
 				EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
 				EE03D3141C4AC9BE00078CF6 /* Confetti */,
@@ -1109,6 +1113,7 @@
 					"$(PROJECT_DIR)/FacebookSDK/",
 					"$(PROJECT_DIR)/FacebookSDK/FacebookSDKs-iOS-20151111",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/XsAndOs",
 				);
 				INFOPLIST_FILE = XsAndOs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1133,6 +1138,7 @@
 					"$(PROJECT_DIR)/FacebookSDK/",
 					"$(PROJECT_DIR)/FacebookSDK/FacebookSDKs-iOS-20151111",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/XsAndOs",
 				);
 				INFOPLIST_FILE = XsAndOs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

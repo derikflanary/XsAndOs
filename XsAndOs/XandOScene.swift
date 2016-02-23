@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 import Parse
+import StoreKit
 
 let textColor = UIColor(red: 0.78, green: 0.81, blue: 0.83, alpha: 1.0)
 let oColor = UIColor(red: 0.54, green: 0.75, blue: 0.93, alpha: 1.0)
@@ -60,7 +61,7 @@ class XandOScene: SKScene {
         let alertController = UIAlertController(title:title, message: "load game?", preferredStyle: .Alert)
         let okayAction = UIAlertAction(title: "Okay", style: .Default) { (action) in
             let game = notification.userInfo!["game"] as! PFObject
-            BoardSetupController().setupGame(game, size: self.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
+            BoardSetupController().setupGame(game, size: self.view!.frame.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
                 if success{
                     self.transitiontoLoadedBoard(secondScene)
                     PFInstallation.currentInstallation().badge = 0
@@ -73,22 +74,10 @@ class XandOScene: SKScene {
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    dynamic func directGameNotification(notification: NSNotification){
-        let game = notification.userInfo!["game"] as! PFObject
-        BoardSetupController().setupGame(game, size: (self.view?.frame.size)!, completion: { (success, secondScene: MultiplayerBoard) -> Void in
-            if success{
-                dispatch_async(dispatch_get_main_queue(),{
-                    self.transitiontoLoadedBoard(secondScene)
-                    PFInstallation.currentInstallation().badge = 0
-                })
-            }
-        })
-    }
-    
     func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
         removeViews()
         let transition = SKTransition.crossFadeWithDuration(1.0)
-        self.scene?.view?.presentScene(secondScene, transition: transition)
+        self.view?.presentScene(secondScene, transition: transition)
     }
     
 

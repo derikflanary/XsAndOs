@@ -14,10 +14,8 @@ import Fabric
 import Crashlytics
 import GameAnalytics
 
-
-
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
 
     var window: UIWindow?
 
@@ -26,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("c7fI5i2vHGsajpcH7uDWjie8xLdHGhq6X6D21dBm",
             clientKey: "loGrncuqMAb1KTz99b3l1YIvw7cGwqzYjaAoHdZs")
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-        Fabric.with([Crashlytics.self, GameAnalytics.self])
+//        Fabric.with([Crashlytics.self, GameAnalytics.self])
         
         PFInstallation.currentInstallation().badge = 0
         
@@ -36,6 +34,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSUserDefaults.standardUserDefaults().setValue("on", forKey: "sound")
         }
         
+        Chartboost.startWithAppId("56cce719c909a65118b69870", appSignature: "459d2d89d8eb862c0d5f6e77cd2d4168b71d9ec7", delegate: self)
+        Chartboost.setShouldRequestInterstitialsInFirstSession(false)
+
 //        // Enable log to output simple details (disable in production)
 //        GameAnalytics.setEnabledInfoLog(true)
 //        // Enable log to output full event JSON (disable in production)
@@ -139,6 +140,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    //MARK: - ADS
+    func didInitialize(status: Bool) {
+        print("chartboost did init")
+    }
+    
+    func shouldDisplayInterstitial(location: String!) -> Bool {
+        print("about to show ad at \(location)")
+        return true
+    }
+    
+    func didDisplayInterstitial(location: String!) {
+        print("ad displayed")
+    }
+    
+    func didDismissInterstitial(location: String!) {
+        print("dissmissed app")
+    }
+    
+    func didFailToLoadInterstitial(location: String!, withError error: CBLoadError) {
+        switch error{
+        case CBLoadError.InternetUnavailable:
+            print("Failed to load Interstitial, no Internet connection !")
+
+        case .Internal:
+            print("Failed to load Interstitial, internal error !")
+
+        case .NetworkFailure:
+            print("Failed to load Interstitial, network error !")
+
+        case .WrongOrientation:
+            print("Failed to load Interstitial, wrong orientation !")
+
+        case .TooManyConnections:
+            print("Failed to load Interstitial, too many connections !")
+
+        case .FirstSessionInterstitialsDisabled:
+            print("Failed to load Interstitial, first session !")
+            
+        case .NoAdFound:
+            print("Failed to load Interstitial, no ad found !")
+
+        case .SessionNotStarted :
+            print("Failed to load Interstitial, session not started !")
+            
+        case .NoLocationFound :
+            print("Failed to load Interstitial, missing location parameter !")
+
+        case .PrefetchingIncomplete:
+            print("Failed to load Interstitial, prefetching still in progress !")
+
+        case .ImpressionAlreadyVisible:
+            print("Failed to load Interstitial, impression already visible !")
+
+        default:
+            print("Failed to load Interstitial, unknown error !")
+        }
+
+    }
 
 }
 

@@ -218,6 +218,7 @@ class MultiplayerBoard: Board {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage(self.dimView)
                     self.moveMade = false
+                    Chartboost.showInterstitial(CBLocationGameScreen)
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
@@ -318,6 +319,7 @@ class MultiplayerBoard: Board {
         PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
         gameFinished = true
         unDimBackground(self.dimView)
+        Chartboost.showInterstitial(CBLocationGameOver)
     }
     
     func finishedGameMessage(){

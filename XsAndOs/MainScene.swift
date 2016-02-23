@@ -60,6 +60,7 @@ class MainScene: XandOScene{
         
         circle1.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         entryAnimation()
+        Chartboost.showInterstitial(CBLocationMainMenu)
     }
     
     //MARK: - BUTTON METHODS

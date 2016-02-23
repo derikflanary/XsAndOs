@@ -859,6 +859,7 @@ class Board: XandOScene {
     //MARK: - RESETTING GAME
     
     func gameover(){
+        Chartboost.showInterstitial(CBLocationGameOver)
         resetBoard()
     }
     
