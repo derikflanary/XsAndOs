@@ -17,6 +17,9 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "soundTurnedOn", name:"SoundOn", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "soundTurnedOff", name:"SoundOff", object: nil)
         skView = self.view as! SKView
         // Configure the view.
         skView.showsFPS = true
@@ -35,7 +38,21 @@ class GameViewController: UIViewController {
         
         skView.presentScene(scene)
         
+        let status = NSUserDefaults.standardUserDefaults().valueForKey("sound") as! String
+        if status == "on"{
+            backgroundMusic.loopPlay()
+        }
+        
+    }
+    
+    func soundTurnedOn(){
         backgroundMusic.loopPlay()
+        print("sound on")
+    }
+    
+    func soundTurnedOff(){
+        backgroundMusic.stop()
+        print("sound off")
     }
     
     

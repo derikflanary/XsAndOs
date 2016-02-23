@@ -37,6 +37,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFInstallation.currentInstallation().badge = 0
         
+        let notFirstLaunch = NSUserDefaults.standardUserDefaults().boolForKey("FirstLaunch")
+        if !notFirstLaunch {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
+            NSUserDefaults.standardUserDefaults().setValue("on", forKey: "sound")
+        }
+        
 //        // Enable log to output simple details (disable in production)
 //        GameAnalytics.setEnabledInfoLog(true)
 //        // Enable log to output full event JSON (disable in production)

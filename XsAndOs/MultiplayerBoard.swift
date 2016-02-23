@@ -324,7 +324,7 @@ class MultiplayerBoard: Board {
     func finishedGameMessage(){
         let alertController = UIAlertController(title: "Game Finished", message: "This game is over. Start a new game with your friends!", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-            self.mainPressed()
+//            self.mainPressed()
         }
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)

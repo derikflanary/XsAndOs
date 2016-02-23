@@ -32,9 +32,19 @@ class SoundEffect: NSObject, AVAudioPlayerDelegate {
     }
     
     func play(){
+        let status = NSUserDefaults.standardUserDefaults().valueForKey("sound") as! String
+        guard status == "on" else {return}
         player.pause()
         player.currentTime = 0.0
-        player.volume = 0.35
+        player.volume = 0.15
         player.play()
+    }
+    
+    func mute(){
+        player.volume = 0.0
+    }
+    
+    func stop(){
+        player.stop()
     }
 }

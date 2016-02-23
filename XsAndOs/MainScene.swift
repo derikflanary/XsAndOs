@@ -17,6 +17,7 @@ class MainScene: XandOScene{
     private let singleButton = SButton()
     private var circle1 = CircleView()
     private var circle2 = CircleView()
+    private let muteButton = Button()
     
     var buttonOpened = false
     
@@ -43,6 +44,19 @@ class MainScene: XandOScene{
         startButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         startButton.alpha = 0
         self.view?.addSubview(startButton)
+        
+        muteButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.frame.size.height)! - 100, 25, 25)
+        muteButton.addTarget(self, action: "mutePressed", forControlEvents: .TouchUpInside)
+        muteButton.alpha = 0
+        muteButton.backgroundColor = oColor
+        let status = NSUserDefaults.standardUserDefaults().valueForKey("sound") as! String
+        if status == "off"{
+            muteButton.setImage(UIImage(named: "mute"), forState: .Normal)
+        }else{
+            muteButton.setImage(UIImage(named: "sound"), forState: .Normal)
+        }
+        
+        self.view?.addSubview(muteButton)
         
         circle1.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         entryAnimation()
@@ -82,6 +96,19 @@ class MainScene: XandOScene{
         print("online pressed")
     }
     
+    func mutePressed(){
+        let status = NSUserDefaults.standardUserDefaults().valueForKey("sound") as! String
+        if status == "off"{
+            NSUserDefaults.standardUserDefaults().setObject("on", forKey: "sound")
+            NSNotificationCenter.defaultCenter().postNotificationName("SoundOn", object: nil)
+            muteButton.setImage(UIImage(named: "sound"), forState: .Normal)
+        }else{
+            NSUserDefaults.standardUserDefaults().setObject("off", forKey: "sound")
+            NSNotificationCenter.defaultCenter().postNotificationName("SoundOff", object: nil)
+            muteButton.setImage(UIImage(named: "mute"), forState: .Normal)
+        }
+    }
+    
     //MARK: - TRANSITIONS
     
     private func transitionToSingleGameSetup(type: SingleSetupScene.GameType){
@@ -112,6 +139,7 @@ class MainScene: XandOScene{
         singleButton.removeFromSuperview()
         circle1.removeFromSuperview()
         circle2.removeFromSuperview()
+        muteButton.removeFromSuperview()
     }
     
     //MARK: - ANIMATIONS
@@ -122,6 +150,8 @@ class MainScene: XandOScene{
             self.singleButton.frame = CGRectMake(20, CGRectGetMinY(self.startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
             self.startButton.alpha = 1
             self.singleButton.alpha = 1
+            self.muteButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.frame.size.height)! - 100, 50, 50)
+            self.muteButton.alpha = 1
             }) { (dond) -> Void in
                 self.startButton.setTitle("Multiplayer", forState: .Normal)
                 self.singleButton.setTitle("Single Player", forState: .Normal)
@@ -134,6 +164,7 @@ class MainScene: XandOScene{
             self.singleButton.alpha = 0
             self.circle1.alpha = 0
             self.circle2.alpha = 0
+            self.muteButton.alpha = 0
             }) { (done) -> Void in
             self.transitionToSingleGameSetup(.AI)
         }
