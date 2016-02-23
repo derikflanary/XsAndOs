@@ -143,7 +143,6 @@ class MainScene: XandOScene{
     }
     
     //MARK: - ANIMATIONS
-    
     private func entryAnimation(){
         UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { () -> Void in
             self.startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)

@@ -25,7 +25,7 @@ class GameTableViewCell: UITableViewCell {
         contentView.addSubview(xLabel)
         
         oLabel.textColor = oColor
-        oLabel.font = UIFont(name: mainFontName, size: 24)
+        oLabel.font = UIFont(name: boldFontName, size: 24)
         oLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(oLabel)
         
@@ -36,6 +36,7 @@ class GameTableViewCell: UITableViewCell {
         
         sizeLabel.textColor = flint
         sizeLabel.font = UIFont(name: lightFontName, size: 16)
+        sizeLabel.textAlignment = .Right
         sizeLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(sizeLabel)
         
@@ -53,12 +54,12 @@ class GameTableViewCell: UITableViewCell {
         dateLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor).active = true
         dateLabel.widthAnchor.constraintEqualToConstant(200).active = true
         dateLabel.heightAnchor.constraintEqualToConstant(20).active = true
-        dateLabel.topAnchor.constraintEqualToAnchor(oLabel.bottomAnchor, constant: 5).active = true
+        dateLabel.topAnchor.constraintEqualToAnchor(oLabel.bottomAnchor, constant: 0).active = true
         
         sizeLabel.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor).active = true
-        sizeLabel.widthAnchor.constraintEqualToConstant(20).active = true
+        sizeLabel.widthAnchor.constraintEqualToConstant(40).active = true
         sizeLabel.heightAnchor.constraintEqualToConstant(20).active = true
-        sizeLabel.topAnchor.constraintEqualToAnchor(dateLabel.topAnchor).active = true
+        sizeLabel.topAnchor.constraintEqualToAnchor(dateLabel.topAnchor, constant: 0).active = true
     
     }
 

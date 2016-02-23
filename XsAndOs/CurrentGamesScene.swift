@@ -38,7 +38,7 @@ class CurrentGamesScene: TableViewScene {
                             self.currentGames.append(game)
                         }
                     }
-                    self.tableView.reloadData()
+                    self.animateTable()
                 })
             }
         }
@@ -146,7 +146,32 @@ class CurrentGamesScene: TableViewScene {
         transitionToBoardScene(dim!, rows: rows!, game: game)
         removeViews()
     }
+    
+    //MARK: - TABLEVIEW ANIMATION
+    func animateTable() {
+        tableView.reloadData()
+        
+        let cells = tableView.visibleCells
+        let tableHeight: CGFloat = tableView.bounds.size.height
+        
+        for i in cells {
+            let cell: GameTableViewCell = i as! GameTableViewCell
+            cell.transform = CGAffineTransformMakeTranslation(0, tableHeight)
+        }
+        
+        var index = 0
+        
+        for a in cells {
+            let cell: GameTableViewCell = a as! GameTableViewCell
+            UIView.animateWithDuration(1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseOut, animations: {
+                cell.transform = CGAffineTransformMakeTranslation(0, 0);
+                }, completion: nil)
+            
+            index += 1
+        }
+    }
 
+    //MARK: - TRANSITIONS
     func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
         let xUser = game["xTeam"] as! PFUser
         var userTeam = Board.UserTeam.O
@@ -159,10 +184,9 @@ class CurrentGamesScene: TableViewScene {
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
-    func daysBetweenDate(startDate: NSDate, endDate: NSDate) -> String
-    {
+    //MARK: - DATE FUNCTIONS
+    func daysBetweenDate(startDate: NSDate, endDate: NSDate) -> String{
         let calendar = NSCalendar.currentCalendar()
-        
         let components = calendar.components([.Day, .Hour], fromDate: startDate, toDate: endDate, options: [])
         let days = components.day
         let hours = components.hour
