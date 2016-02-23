@@ -96,7 +96,7 @@ class StarsOverlay: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        emitter.emitterPosition = CGPointMake(-50, self.frame.size.height/2)
+        emitter.emitterPosition = CGPointMake(-50, self.frame.size.height/2 + 80)
         emitter.emitterSize = CGSizeMake(10, 10)
     }
 }

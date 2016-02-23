@@ -239,9 +239,18 @@ class XGameController: NSObject {
         func dayAsString() -> String{
             let date = NSDate()
             let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "MMM d" //format style. Browse online to get a format that fits your needs.
+            dateFormatter.dateFormat = "yyyy-MM-dd" //format style. Browse online to get a format that fits your needs.
             let dateString = dateFormatter.stringFromDate(date)
             return dateString
+        }
+        
+        func daysBetweenDate(startDate: NSDate, endDate: NSDate) -> Int
+        {
+            let calendar = NSCalendar.currentCalendar()
+            
+            let components = calendar.components([.Day], fromDate: startDate, toDate: endDate, options: [])
+            
+            return components.day
         }
     }
 }

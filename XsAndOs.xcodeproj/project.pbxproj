@@ -109,7 +109,6 @@
 		EEEE5B511C6E5F6A00B181F6 /* LastIntersectionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B501C6E5F6A00B181F6 /* LastIntersectionLocation.swift */; };
 		EEEE5B531C6E5F9E00B181F6 /* Difficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B521C6E5F9E00B181F6 /* Difficulty.swift */; };
 		EEEE5B911C768F0400B181F6 /* GameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B901C768F0400B181F6 /* GameTableViewCell.swift */; };
-		EEEE5B931C768F3300B181F6 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B921C768F3300B181F6 /* FriendCell.swift */; };
 		EEEE5B971C77B5A300B181F6 /* SoundEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEE5B961C77B5A300B181F6 /* SoundEffect.swift */; };
 		EEEE5BB11C77C3A200B181F6 /* button.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EEEE5BB01C77C3A200B181F6 /* button.mp3 */; };
 		EEEE5BB31C77D2C000B181F6 /* cheer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EEEE5BB21C77D2C000B181F6 /* cheer.mp3 */; };
@@ -284,7 +283,6 @@
 		EEEE5B501C6E5F6A00B181F6 /* LastIntersectionLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastIntersectionLocation.swift; sourceTree = "<group>"; };
 		EEEE5B521C6E5F9E00B181F6 /* Difficulty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
 		EEEE5B901C768F0400B181F6 /* GameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameTableViewCell.swift; sourceTree = "<group>"; };
-		EEEE5B921C768F3300B181F6 /* FriendCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		EEEE5B961C77B5A300B181F6 /* SoundEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundEffect.swift; sourceTree = "<group>"; };
 		EEEE5BB01C77C3A200B181F6 /* button.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button.mp3; path = XsAndOs/button.mp3; sourceTree = SOURCE_ROOT; };
 		EEEE5BB21C77D2C000B181F6 /* cheer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = cheer.mp3; path = XsAndOs/cheer.mp3; sourceTree = SOURCE_ROOT; };
@@ -498,8 +496,6 @@
 				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
 				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
 				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
-				EEEE5B901C768F0400B181F6 /* GameTableViewCell.swift */,
-				EEEE5B921C768F3300B181F6 /* FriendCell.swift */,
 			);
 			name = Multiplayer;
 			sourceTree = "<group>";
@@ -508,6 +504,7 @@
 			isa = PBXGroup;
 			children = (
 				EE2FB4E11C3BA96000C91D68 /* CurrentGamesScene.swift */,
+				EEEE5B901C768F0400B181F6 /* GameTableViewCell.swift */,
 				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
 			);
 			name = "Play With Friends";
@@ -943,7 +940,6 @@
 				EE03D2F91C49B21500078CF6 /* DGActivityIndicatorBallPulseSyncAnimation.m in Sources */,
 				EE03D3131C49B21500078CF6 /* DGActivityIndicatorView.m in Sources */,
 				EE03D3241C4AC9BE00078CF6 /* SAConfettiView.swift in Sources */,
-				EEEE5B931C768F3300B181F6 /* FriendCell.swift in Sources */,
 				EE03D30D1C49B21500078CF6 /* DGActivityIndicatorRotatingTrigonAnimation.m in Sources */,
 				EEEE5B531C6E5F9E00B181F6 /* Difficulty.swift in Sources */,
 				EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */,

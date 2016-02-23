@@ -73,14 +73,14 @@ class CurrentGamesScene: TableViewScene {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 80
+        return 100
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         cell.contentView.backgroundColor = UIColor.clearColor()
         
-        let whiteRoundedView : UIView = UIView(frame: CGRectMake(0, 10, self.tableView.frame.size.width, 80))
+        let whiteRoundedView : UIView = UIView(frame: CGRectMake(0, 10, self.tableView.frame.size.width, 100))
         
         whiteRoundedView.layer.backgroundColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), [1.0, 1.0, 1.0, 1.0])
         whiteRoundedView.layer.masksToBounds = false
@@ -90,16 +90,12 @@ class CurrentGamesScene: TableViewScene {
         
         cell.contentView.addSubview(whiteRoundedView)
         cell.contentView.sendSubviewToBack(whiteRoundedView)
+        
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-        if (cell != nil)
-        {
-            cell = UITableViewCell(style: UITableViewCellStyle.Subtitle,
-                reuseIdentifier: "cell")
-        }
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("GameCell") as! GameTableViewCell
         
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
@@ -125,25 +121,15 @@ class CurrentGamesScene: TableViewScene {
                 usersTurn = true
             }
             
-            cell.textLabel?.textColor = backgroundColor
-            cell.detailTextLabel?.textColor = flint
-
-            cell.layer.cornerRadius = 15
-            cell.clipsToBounds = true
+            cell.xLabel.text = "X:\(name)"
+            cell.oLabel.text = "O:\(oName)"
+            cell.sizeLabel.text = "\(game["rows"])x\(game["rows"])"
+            cell.dateLabel.text = daysBetweenDate(game.createdAt! as NSDate, endDate: NSDate())
             
             if usersTurn{
-                cell.textLabel?.textColor = oColor
+                cell.addTurnLabel()
             }
-            
-            let finishedGame = game["finished"] as! Bool
-            let text = "X:\(name)  |  O:\(oName)"
-            if finishedGame{
-                cell.textLabel?.textColor = xColor
-            }
-            cell.textLabel?.text = text
-            cell!.detailTextLabel?.text = "\(game["startDate"])   \(game["rows"])x\(game["rows"])"
-            cell.contentView.backgroundColor = UIColor.whiteColor()
-
+            cell.animateTurnView()
         }
         return cell
     }
@@ -171,5 +157,29 @@ class CurrentGamesScene: TableViewScene {
         secondScene = BoardSetupController().updateNextSceneWithGame(game, secondScene: secondScene)
         let transition = SKTransition.crossFadeWithDuration(1)
         self.scene!.view?.presentScene(secondScene, transition: transition)
+    }
+    
+    func daysBetweenDate(startDate: NSDate, endDate: NSDate) -> String
+    {
+        let calendar = NSCalendar.currentCalendar()
+        
+        let components = calendar.components([.Day, .Hour], fromDate: startDate, toDate: endDate, options: [])
+        let days = components.day
+        let hours = components.hour
+
+        let timeSince : String?
+        if days == 1 {
+            timeSince = "\(days) day ago"
+        }else if days > 1{
+            timeSince = "\(days) days ago"
+        }else if hours > 1{
+            timeSince = "\(hours) hours ago"
+        }else if hours == 1{
+            timeSince = "\(hours) hour ago"
+        }else{
+            timeSince = "less than an hour ago"
+        }
+        return timeSince!
+
     }
 }

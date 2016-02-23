@@ -344,7 +344,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     private func transitionToBoardScene(dim : Int, rows : Int){
         var aiGame = false
         if type == .AI{
-            aiGame = false
+            aiGame = true
         }
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.stackView.alpha = 0

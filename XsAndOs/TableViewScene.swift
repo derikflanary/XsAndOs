@@ -32,13 +32,15 @@ class TableViewScene: XandOScene, UITableViewDataSource, UITableViewDelegate {
         tableView.delegate = self
         tableView.backgroundColor = UIColor.clearColor()
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.registerClass(GameTableViewCell.self, forCellReuseIdentifier: "GameCell")
+        tableView.separatorStyle = .None
         self.view!.addSubview(tableView)
         tableView.reloadData()
     }
 
     func cancelPressed(){
         removeViews()
-        let mainScene = MainScene(size: self.size)
+        let mainScene = GameScene(size: self.size)
         let transition = SKTransition.crossFadeWithDuration(0.75)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene, transition: transition)
