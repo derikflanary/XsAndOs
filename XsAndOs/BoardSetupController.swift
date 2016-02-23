@@ -71,7 +71,7 @@ class BoardSetupController: NSObject {
         let oLines = game.objectForKey("oLines") as! PFObject
         let xUser = game["xTeam"] as! PFUser
         var userTeam = Board.UserTeam.O
-        if xUser.objectId == PFUser.currentUser(){
+        if xUser.objectId == PFUser.currentUser()?.objectId{
             userTeam = Board.UserTeam.X
         }
 

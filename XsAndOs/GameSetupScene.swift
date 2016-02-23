@@ -330,7 +330,11 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     func mainPressed(){
         buttonSoundEffect.play()
         removeViews()
-        transitionToMainScene()
+        if type == .Online{
+            transitionsToOnlineScene()
+        }else{
+            transitionToMainScene()
+        }
     }
     
     func rowButtonPressed(sender: Button){
@@ -389,6 +393,11 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
     func transitionToMainScene(){
         let mainScene = MainScene(size: self.size)
+        self.scene?.view?.presentScene(mainScene)
+    }
+    
+    func transitionsToOnlineScene(){
+        let mainScene = GameScene(size: self.size)
         self.scene?.view?.presentScene(mainScene)
     }
     

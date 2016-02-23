@@ -175,7 +175,7 @@ class CurrentGamesScene: TableViewScene {
     func transitionToBoardScene(dim : Int, rows : Int, game: PFObject){
         let xUser = game["xTeam"] as! PFUser
         var userTeam = Board.UserTeam.O
-        if xUser.objectId == PFUser.currentUser(){
+        if xUser.objectId == PFUser.currentUser()?.objectId{
             userTeam = Board.UserTeam.X
         }
         var secondScene = MultiplayerBoard(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: false)

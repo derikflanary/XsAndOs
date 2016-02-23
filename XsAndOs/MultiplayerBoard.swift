@@ -318,14 +318,11 @@ class MultiplayerBoard: Board {
         PushNotificationController().pushNotificationGameFinished(receiver, gameID: self.gameID)
         gameFinished = true
         unDimBackground(self.dimView)
-        mainPressed()
     }
     
     func finishedGameMessage(){
         let alertController = UIAlertController(title: "Game Finished", message: "This game is over. Start a new game with your friends!", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-//            self.mainPressed()
-        }
+        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in}
         alertController.addAction(cancelAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
