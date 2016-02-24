@@ -318,6 +318,7 @@ class Board: XandOScene {
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
+        guard !winner else {return}
         guard isCurrentUserTurn() else{return}
         for touch in touches {
             let location = touch.locationInNode(self.gameLayer)

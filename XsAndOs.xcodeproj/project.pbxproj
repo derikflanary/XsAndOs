@@ -496,10 +496,9 @@
 			isa = PBXGroup;
 			children = (
 				EE5E81841BDEC1410004424F /* GameScene.swift */,
-				EE03D3FD1C582ED300078CF6 /* Play With Friends */,
-				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
 				EE2FB4DD1C3B472C00C91D68 /* MultiplayerBoard.swift */,
-				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
+				EE03D3FD1C582ED300078CF6 /* Play With Friends */,
+				EE2403151C7D2A4300849652 /* Board Setup */,
 			);
 			name = Multiplayer;
 			sourceTree = "<group>";
@@ -507,9 +506,8 @@
 		EE03D3FD1C582ED300078CF6 /* Play With Friends */ = {
 			isa = PBXGroup;
 			children = (
-				EE2FB4E11C3BA96000C91D68 /* CurrentGamesScene.swift */,
-				EEEE5B901C768F0400B181F6 /* GameTableViewCell.swift */,
-				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
+				EE2403161C7D2A4F00849652 /* CurrentGames */,
+				EE2403171C7D2A5600849652 /* Play with Friends */,
 			);
 			name = "Play With Friends";
 			sourceTree = "<group>";
@@ -520,6 +518,32 @@
 				EE65F55C1C31F1D700E51138 /* FacebookController.swift */,
 			);
 			name = Facebook;
+			sourceTree = "<group>";
+		};
+		EE2403151C7D2A4300849652 /* Board Setup */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4D71C3AED2E00C91D68 /* MultiplayerSetupScene.swift */,
+				EE2FB4D91C3AF28D00C91D68 /* BoardSetupController.swift */,
+			);
+			name = "Board Setup";
+			sourceTree = "<group>";
+		};
+		EE2403161C7D2A4F00849652 /* CurrentGames */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4E11C3BA96000C91D68 /* CurrentGamesScene.swift */,
+				EEEE5B901C768F0400B181F6 /* GameTableViewCell.swift */,
+			);
+			name = CurrentGames;
+			sourceTree = "<group>";
+		};
+		EE2403171C7D2A5600849652 /* Play with Friends */ = {
+			isa = PBXGroup;
+			children = (
+				EE2FB4D21C38D5A600C91D68 /* FriendListScene.swift */,
+			);
+			name = "Play with Friends";
 			sourceTree = "<group>";
 		};
 		EE2FB4D61C3AED0000C91D68 /* Custom Clases */ = {
