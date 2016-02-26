@@ -860,7 +860,10 @@ class Board: XandOScene {
     //MARK: - RESETTING GAME
     
     func gameover(){
-        Chartboost.showInterstitial(CBLocationGameOver)
+        if !NSUserDefaults.standardUserDefaults().boolForKey("adsRemoved"){
+            Chartboost.showInterstitial(CBLocationGameOver)
+        }
+        
         resetBoard()
     }
     

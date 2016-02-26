@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
         
         Chartboost.startWithAppId("56cce719c909a65118b69870", appSignature: "459d2d89d8eb862c0d5f6e77cd2d4168b71d9ec7", delegate: self)
         Chartboost.setShouldRequestInterstitialsInFirstSession(false)
-
+        
 //        // Enable log to output simple details (disable in production)
 //        GameAnalytics.setEnabledInfoLog(true)
 //        // Enable log to output full event JSON (disable in production)

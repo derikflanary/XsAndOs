@@ -18,8 +18,10 @@ class MainScene: XandOScene{
     private var circle1 = CircleView()
     private var circle2 = CircleView()
     private let muteButton = Button()
-    private var pageControl:PageControl!
+    private let noAdsButton = Button()
+    private var pageControl: PageControl!
     private let exitButton = Button()
+    private var products = [SKProduct]()
     
     var buttonOpened = false
     
@@ -65,12 +67,27 @@ class MainScene: XandOScene{
         }else{
             muteButton.setImage(UIImage(named: "sound"), forState: .Normal)
         }
-        
         self.view?.addSubview(muteButton)
         
+        if !NSUserDefaults.standardUserDefaults().boolForKey("adsRemoved"){
+            noAdsButton.frame = CGRectMake((self.view?.frame.size.width)!/2 + 25, (self.view?.frame.size.height)! - 100, 25, 25)
+            noAdsButton.addTarget(self, action: "noAdsPressed", forControlEvents: .TouchUpInside)
+            noAdsButton.alpha = 0
+            noAdsButton.backgroundColor = oColor
+            noAdsButton.enabled = false
+            noAdsButton.setImage(UIImage(named:"noAds"), forState: .Normal)
+            self.view?.addSubview(noAdsButton)
+            
+            requestProducts()
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "productPurchased:", name: IAPHelperProductPurchasedNotification, object: nil)
+            
+            Chartboost.showInterstitial(CBLocationMainMenu)
+        }
+        
         circle1.titleLabel?.font = UIFont(name: boldFontName, size: 32)
+        
         entryAnimation()
-        Chartboost.showInterstitial(CBLocationMainMenu)
     }
     
     //MARK: - BUTTON METHODS
@@ -120,9 +137,15 @@ class MainScene: XandOScene{
         }
     }
     
+    func noAdsPressed(){
+        let product = products[0]
+        XOProducts.store.purchaseProduct(product)
+    }
+    
     func exitPressed(){
         buttonSoundEffect.play()
         pageControl.willMoveFromView(view!)
+        self.view?.removeGestureRecognizer(pageControl.panGestureRecognizer)
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             self.exitButton.alpha = 0
         }) { (done) -> Void in
@@ -178,8 +201,16 @@ class MainScene: XandOScene{
             self.singleButton.frame = CGRectMake(20, CGRectGetMinY(self.startButton.frame) - 70, (self.view?.bounds.size.width)! - 40, 50)
             self.startButton.alpha = 1
             self.singleButton.alpha = 1
-            self.muteButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.frame.size.height)! - 100, 50, 50)
             self.muteButton.alpha = 1
+            
+            if !NSUserDefaults.standardUserDefaults().boolForKey("adsRemoved"){
+                self.noAdsButton.frame = CGRectMake((self.view?.frame.size.width)!/2 + 25, (self.view?.frame.size.height)! - 100, 50, 50)
+                self.noAdsButton.alpha = 1
+                self.muteButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 75, (self.view?.frame.size.height)! - 100, 50, 50)
+            }else{
+                self.muteButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 25, (self.view?.frame.size.height)! - 100, 50, 50)
+            }
+            
             }) { (dond) -> Void in
                 self.startButton.setTitle("Multiplayer", forState: .Normal)
                 self.singleButton.setTitle("Single Player", forState: .Normal)
@@ -267,18 +298,6 @@ class MainScene: XandOScene{
     
     //MARK: - TOUCHES
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        for touch in touches {
-            
-            if pageControl.handleTouch(touch) {
-                //no op
-            }
-            else {
-                //handle touch
-            }
-        }
-    }
-    
     //MARK: - TUTORIAL
     private func displayTutorial() {
         self.view?.viewWithTag(1000)?.removeFromSuperview()
@@ -323,9 +342,26 @@ class MainScene: XandOScene{
         }
     }
 
-    override func willMoveFromView(view: SKView) {
-//        pageControl.willMoveFromView(view)
+    //MARK: - PURCHASING
+    
+    private func requestProducts() {
+        
+        XOProducts.store.requestProductsWithCompletionHandler { success, products in
+            if products.count > 0{
+                self.products = products
+                self.noAdsButton.enabled = true
+                print(products)
+            }
+        }
     }
+    
+    // When a product is purchased, this notification fires, redraw the correct row
+    func productPurchased(notification: NSNotification) {
+        
+//        let productIdentifier = notification.object as! String
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "adsRemoved")
+    }
+    
     
 }
 

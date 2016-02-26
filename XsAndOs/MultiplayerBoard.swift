@@ -218,7 +218,10 @@ class MultiplayerBoard: Board {
                 dispatch_async(dispatch_get_main_queue(),{
                     self.gameSavedMessage(self.dimView)
                     self.moveMade = false
-                    Chartboost.showInterstitial(CBLocationGameScreen)
+                    if !NSUserDefaults.standardUserDefaults().boolForKey("adsRemoved"){
+                        Chartboost.showInterstitial(CBLocationGameScreen)
+                    }
+                
                 })
             }else{
                 self.backButton.userInteractionEnabled = true
