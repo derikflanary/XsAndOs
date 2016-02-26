@@ -15,8 +15,15 @@ class CurrentGamesScene: TableViewScene {
     var games = [PFObject]()
     var finishedGames = [PFObject]()
     var currentGames = [PFObject]()
+    var activityIndicator = DGActivityIndicatorView()
     
     override func didMoveToView(view: SKView) {
+        
+        activityIndicator = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType .BallZigZagDeflect, tintColor: textColor, size: 100)
+        activityIndicator.frame = CGRectMake(view.frame.size.width/2 - 25, view.frame.size.height/2, 50.0, 50.0);
+        activityIndicator.center = tableView.center
+        self.tableView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
         
         checkCurrentGames()
         
@@ -26,7 +33,11 @@ class CurrentGamesScene: TableViewScene {
     
     func checkCurrentGames(){
         XGameController.Singleton.sharedInstance.fetchGamesForUser(PFUser.currentUser()!) { (success, games) -> Void in
+
+            self.activityIndicator.stopAnimating()
+            
             guard success else{return}
+            
             if games.count > 0{
                 dispatch_async(dispatch_get_main_queue(),{
                     self.games = games

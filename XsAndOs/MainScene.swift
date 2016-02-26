@@ -18,14 +18,24 @@ class MainScene: XandOScene{
     private var circle1 = CircleView()
     private var circle2 = CircleView()
     private let muteButton = Button()
+    private var pageControl:PageControl!
+    private let exitButton = Button()
     
     var buttonOpened = false
     
     //MARK: - VIEW SETUP
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
-        layoutViews()
+        
+        if !NSUserDefaults.standardUserDefaults().boolForKey("Tutorial"){
+            displayTutorial()
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "Tutorial")
+        }else{
+            layoutViews()
+        }
+
     }
+    
     
     private func layoutViews(){
         
@@ -110,6 +120,18 @@ class MainScene: XandOScene{
         }
     }
     
+    func exitPressed(){
+        buttonSoundEffect.play()
+        pageControl.willMoveFromView(view!)
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.exitButton.alpha = 0
+        }) { (done) -> Void in
+            self.transitionToMainScene()
+            self.exitButton.removeFromSuperview()
+            self.removeAllChildren()
+        }
+    }
+    
     //MARK: - TRANSITIONS
     
     private func transitionToSingleGameSetup(type: SingleSetupScene.GameType){
@@ -130,6 +152,12 @@ class MainScene: XandOScene{
     func transitionToMultiplayerScene(){
         removeViews()
         let secondScene = GameScene(size: self.size)
+        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view?.presentScene(secondScene, transition: transition)
+    }
+    
+    func transitionToMainScene(){
+        let secondScene = MainScene(size: self.size)
         secondScene.scaleMode = SKSceneScaleMode.AspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
@@ -235,6 +263,68 @@ class MainScene: XandOScene{
                     self.startButton.setTitle("Multiplayer", forState: .Normal)
                     }) { (done) -> Void in}
                 }
+    }
+    
+    //MARK: - TOUCHES
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            
+            if pageControl.handleTouch(touch) {
+                //no op
+            }
+            else {
+                //handle touch
+            }
+        }
+    }
+    
+    //MARK: - TUTORIAL
+    private func displayTutorial() {
+        self.view?.viewWithTag(1000)?.removeFromSuperview()
+        pageControl = PageControl(scene: self)
+        addContent()
+        pageControl.enable(4)
+        
+    }
+    
+    private func addContent() {
+        
+        exitButton.frame = CGRectMake(20, (self.view?.bounds.height)! - 60, (self.view?.bounds.size.width)! - 40, 50)
+        exitButton.addTarget(self, action: "exitPressed", forControlEvents: .TouchUpInside)
+        exitButton.backgroundColor = xColor
+        exitButton.setTitle("Let's Play", forState: .Normal)
+        exitButton.alpha = 0
+        exitButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
+        self.view?.addSubview(exitButton)
+        UIView.animateWithDuration(0.5) { () -> Void in
+            self.exitButton.alpha = 1.0
+        }
+        for i in 0...3{
+            var labelnode = SKLabelNode()
+            labelnode.fontName = mainFontName
+            labelnode.fontSize = 14
+            var node = SKSpriteNode()
+            if i == 0{
+                labelnode = SKLabelNode(text: "Welcome to X's and O's!")
+                
+            }else if i == 1 || i == 2{
+                node = SKSpriteNode(imageNamed: "page\(i)")
+            }else{
+                labelnode = SKLabelNode(text: "Have fun!")
+            }
+            
+            let x = self.size.width / 2.0 + self.size.width * CGFloat(i)
+            let y = self.size.height / 2.0 + 50
+            node.position = CGPoint(x:x, y:y)
+            labelnode.position = CGPoint(x: x, y: y)
+            pageControl.addChild(node)
+            pageControl.addChild(labelnode)
+        }
+    }
+
+    override func willMoveFromView(view: SKView) {
+//        pageControl.willMoveFromView(view)
     }
     
 }
