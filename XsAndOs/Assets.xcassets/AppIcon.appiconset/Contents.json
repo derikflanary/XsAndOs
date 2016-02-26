@@ -28,7 +28,7 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "Icon-Small-60@2x.png",
+      "filename" : "Icon-60@2x.png",
       "scale" : "2x"
     },
     {
@@ -78,9 +78,8 @@
       "scale" : "2x"
     },
     {
-      "size" : "60x60",
       "idiom" : "car",
-      "filename" : "Icon-60@2x.png",
+      "size" : "60x60",
       "scale" : "2x"
     },
     {
@@ -146,6 +145,13 @@
       "size" : "512x512",
       "idiom" : "mac",
       "filename" : "iTunesArtwork.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "60x60",
+      "idiom" : "iphone",
+      "filename" : "Icon-Small-60@2x.png",
+      "unassigned" : true,
       "scale" : "2x"
     },
     {

@@ -552,13 +552,13 @@
 			name = "Play with Friends";
 			sourceTree = "<group>";
 		};
-		EE2FB4D61C3AED0000C91D68 /* Custom Clases */ = {
+		EE2FB4D61C3AED0000C91D68 /* Custom UI */ = {
 			isa = PBXGroup;
 			children = (
 				EEA08EC21C6AED34002F09A9 /* CircleButton.swift */,
 				EEA08ECE1C6C4BAF002F09A9 /* Button.swift */,
 			);
-			name = "Custom Clases";
+			name = "Custom UI";
 			sourceTree = "<group>";
 		};
 		EE534B7B1C45C6290085E806 /* Controllers */ = {
@@ -602,13 +602,13 @@
 				EEEE5B541C738F7400B181F6 /* Board */,
 				EEE9E3DC1C6002DF0041E0BA /* AI */,
 				EE03D3FC1C582EC300078CF6 /* Multiplayer */,
-				EE2FB4D61C3AED0000C91D68 /* Custom Clases */,
 				EE534B7B1C45C6290085E806 /* Controllers */,
 				EE87E0611C7FC1BA00CA059E /* Tutorial */,
 				EEA08ECD1C6C4186002F09A9 /* Push Notifications */,
 				EE87E06A1C80BD1F00CA059E /* In App Purchases */,
 				EE03D3FE1C582EFF00078CF6 /* Facebook */,
 				EEEE5B551C73901500B181F6 /* Settings */,
+				EE2FB4D61C3AED0000C91D68 /* Custom UI */,
 				EE03D34F1C4EF72300078CF6 /* Resources */,
 				EE5E81881BDEC1410004424F /* Main.storyboard */,
 				EE5E818B1BDEC1410004424F /* Assets.xcassets */,
