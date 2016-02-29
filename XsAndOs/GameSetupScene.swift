@@ -162,6 +162,9 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         rowStack.alignment = .Center
         rowStack.distribution = .EqualSpacing
         rowStack.spacing = 21
+        if UIScreen.mainScreen().bounds.width == 320{
+            rowStack.spacing = 8
+        }
         
     }
     
@@ -197,6 +200,9 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         stackView.axis = .Vertical
         stackView.alignment = .Center
         stackView.spacing = 21
+        if UIScreen.mainScreen().bounds.width == 320{
+            stackView.spacing = 11
+        }
         stackView.distribution = .EqualSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.alpha = 0
@@ -251,12 +257,17 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
         stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
         stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: 0).active = true
-        stackView.heightAnchor.constraintEqualToAnchor(margins?.heightAnchor, constant: -140).active = true
-
-        xButton.widthAnchor.constraintEqualToConstant(80).active = true
-        xButton.heightAnchor.constraintEqualToConstant(80).active = true
-        oButton.widthAnchor.constraintEqualToConstant(80).active = true
-        oButton.heightAnchor.constraintEqualToConstant(80).active = true
+        stackView.heightAnchor.constraintEqualToAnchor(margins?.heightAnchor, constant: -100).active = true
+        
+        var width : CGFloat = 80
+        if UIScreen.mainScreen().bounds.width == 320{
+            width = 60
+        }
+        xButton.widthAnchor.constraintEqualToConstant(width).active = true
+        xButton.heightAnchor.constraintEqualToConstant(width).active = true
+        oButton.widthAnchor.constraintEqualToConstant(width).active = true
+        oButton.heightAnchor.constraintEqualToConstant(width).active = true
+        
         easyButton.heightAnchor.constraintEqualToConstant(50).active = true
         easyButton.widthAnchor.constraintEqualToConstant(100).active = true
         moderateButton.heightAnchor.constraintEqualToConstant(50).active = true

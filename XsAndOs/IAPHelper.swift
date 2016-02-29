@@ -35,7 +35,7 @@ public class IAPHelper : NSObject  {
   /// MARK: - User facing API
   
   /// Initialize the helper.  Pass in the set of ProductIdentifiers supported by the app.
-  public init(productIdentifiers: Set<ProductIdentifier>) {
+  public init(productIdentifiers: Set<String>) {
     
     self.productIdentifiers = productIdentifiers
     
@@ -52,13 +52,17 @@ public class IAPHelper : NSObject  {
     super.init()
     SKPaymentQueue.defaultQueue().addTransactionObserver(self)
   }
+    
   
   /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
   public func requestProductsWithCompletionHandler(handler: RequestProductsCompletionHandler) {
-    completionHandler = handler
-    productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
-    productsRequest?.delegate = self
-    productsRequest?.start()
+    if (SKPaymentQueue.canMakePayments()) {
+        completionHandler = handler
+        productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
+        productsRequest?.delegate = self
+        productsRequest?.start()
+    }
+    
   }
   
   /// Initiates purchase of a product.
@@ -90,6 +94,7 @@ public class IAPHelper : NSObject  {
 extension IAPHelper: SKProductsRequestDelegate {
   public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
     print("Loaded list of products...")
+    print(response.products)
     let products = response.products 
     completionHandler?(success: true, products: products)
     clearRequest()
@@ -155,7 +160,7 @@ extension IAPHelper: SKPaymentTransactionObserver {
   // Helper: Saves the fact that the product has been purchased and posts a notification.
   private func provideContentForProductIdentifier(productIdentifier: String) {
     purchasedProductIdentifiers.insert(productIdentifier)
-    NSUserDefaults.standardUserDefaults().setBool(true, forKey: productIdentifier)
+    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "removeAds")
     NSNotificationCenter.defaultCenter().postNotificationName(IAPHelperProductPurchasedNotification, object: productIdentifier)
   }
   

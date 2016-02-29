@@ -146,7 +146,7 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     //MARK: - TRANSITIONS
     private func openMessageVC(){
         let messageVC = MFMessageComposeViewController()
-        messageVC.body = "Play X's and O's with me! https://itunes.apple.com/us/app/provo-ghost-tours-game-cycling/id1031990080?mt=8"
+        messageVC.body = "Play X's and O's with me! https://launchkit.io/websites/TuUEQiL_mig/"
         messageVC.messageComposeDelegate = self
         currentViewController.presentViewController(messageVC, animated: true, completion: nil)
     }

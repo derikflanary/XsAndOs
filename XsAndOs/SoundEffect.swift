@@ -36,7 +36,7 @@ class SoundEffect: NSObject, AVAudioPlayerDelegate {
         guard status == "on" else {return}
         player.pause()
         player.currentTime = 0.0
-        player.volume = 0.15
+        player.volume = 0.25
         player.play()
     }
     

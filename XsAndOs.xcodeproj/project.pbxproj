@@ -105,6 +105,7 @@
 		EEA08EC61C6BD2B0002F09A9 /* GameSetupScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08EC51C6BD2B0002F09A9 /* GameSetupScene.swift */; };
 		EEA08ECC1C6BFA04002F09A9 /* StarsOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */; };
 		EEA08ECF1C6C4BAF002F09A9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA08ECE1C6C4BAF002F09A9 /* Button.swift */; };
+		EEC4F1FA1C83AD6900F3E07E /* lose.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EEC4F1F91C83AD6900F3E07E /* lose.mp3 */; };
 		EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3DD1C60043C0041E0BA /* LineAI.swift */; };
 		EEE9E3E11C62A3840041E0BA /* ShortPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE9E3E01C62A3840041E0BA /* ShortPath.swift */; };
 		EEEE5B4A1C6D170B00B181F6 /* GameAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */; };
@@ -283,6 +284,7 @@
 		EEA08EC51C6BD2B0002F09A9 /* GameSetupScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSetupScene.swift; sourceTree = "<group>"; };
 		EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarsOverlay.swift; sourceTree = SOURCE_ROOT; };
 		EEA08ECE1C6C4BAF002F09A9 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		EEC4F1F91C83AD6900F3E07E /* lose.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = lose.mp3; path = XsAndOs/lose.mp3; sourceTree = SOURCE_ROOT; };
 		EEE9E3DD1C60043C0041E0BA /* LineAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAI.swift; sourceTree = "<group>"; };
 		EEE9E3E01C62A3840041E0BA /* ShortPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShortPath.swift; sourceTree = "<group>"; };
 		EEEE5B491C6D170B00B181F6 /* GameAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GameAnalytics.framework; sourceTree = SOURCE_ROOT; };
@@ -469,6 +471,7 @@
 		EE03D3F01C56E5A000078CF6 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				EEC4F1F91C83AD6900F3E07E /* lose.mp3 */,
 				EEEE5BBD1C7B788D00B181F6 /* background.mp3 */,
 				EEEE5BB91C77D92700B181F6 /* board.mp3 */,
 				EEEE5BBA1C77D92700B181F6 /* square.mp3 */,
@@ -849,6 +852,9 @@
 							com.apple.InAppPurchase = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 						};
 					};
 					EE5E81941BDEC1410004424F = {
@@ -897,6 +903,7 @@
 				EE03D33A1C4EF71B00078CF6 /* SF-UI-Display-Black.otf in Resources */,
 				EEEE5BB71C77D83000B181F6 /* o.mp3 in Resources */,
 				EEEE5BB31C77D2C000B181F6 /* cheer.mp3 in Resources */,
+				EEC4F1FA1C83AD6900F3E07E /* lose.mp3 in Resources */,
 				EEEE5BB81C77D83000B181F6 /* x.mp3 in Resources */,
 				EE03D33D1C4EF71B00078CF6 /* SF-UI-Display-Light.otf in Resources */,
 				EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */,
@@ -1162,6 +1169,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.11.0",
@@ -1175,6 +1183,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.derikflanary.XsAndOs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "XsAndOs/XsAndOs-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1187,6 +1196,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.11.0",
@@ -1200,6 +1210,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.derikflanary.XsAndOs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "XsAndOs/XsAndOs-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

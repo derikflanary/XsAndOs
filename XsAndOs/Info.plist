@@ -29,7 +29,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>24</string>
+	<string>26</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -58,7 +58,7 @@
 	<key>FacebookAppID</key>
 	<string>1060810063971187</string>
 	<key>FacebookDisplayName</key>
-	<string>X&apos;s And O&apos;s</string>
+	<string>X's And O's</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

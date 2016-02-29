@@ -20,7 +20,7 @@ public enum XOProducts {
     public static let RemoveAds = Prefix + "removeAds"
     
     // All of the products assembled into a set of product identifiers.
-    private static let productIdentifiers: Set<ProductIdentifier> = ["com.derikflanary.XsAndOs.removeAds"]
+    private static let productIdentifiers: Set<String> = ["removeAds"]
 
     
     /// Static instance of IAPHelper that for rage products.

@@ -14,7 +14,7 @@ import ParseFacebookUtilsV4
 class MainScene: XandOScene{
     //MARK: - PROPERTIES
     private let startButton = Button()
-    private let singleButton = SButton()
+    private let singleButton = Button()
     private var circle1 = CircleView()
     private var circle2 = CircleView()
     private let muteButton = Button()
@@ -104,7 +104,7 @@ class MainScene: XandOScene{
     
     func singlePressed(){
         buttonSoundEffect.play()
-        exitAnimation()
+        exitAnimation(type: .AI)
     }
     
     func singlePressedCancelled(){
@@ -114,9 +114,10 @@ class MainScene: XandOScene{
     func localPressed(){
         print("local pressed")
         buttonSoundEffect.play()
-        transitionToSingleGameSetup(.Local)
+        exitAnimation(type: .Local)
         
     }
+    
     
     func onlinePressed(){
         buttonSoundEffect.play()
@@ -192,6 +193,7 @@ class MainScene: XandOScene{
         circle1.removeFromSuperview()
         circle2.removeFromSuperview()
         muteButton.removeFromSuperview()
+        noAdsButton.removeFromSuperview()
     }
     
     //MARK: - ANIMATIONS
@@ -217,15 +219,16 @@ class MainScene: XandOScene{
         }
     }
     
-    private func exitAnimation(){
+    private func exitAnimation(type type: SingleSetupScene.GameType ){
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             self.startButton.alpha = 0
             self.singleButton.alpha = 0
             self.circle1.alpha = 0
             self.circle2.alpha = 0
             self.muteButton.alpha = 0
+            self.noAdsButton.alpha = 0
             }) { (done) -> Void in
-            self.transitionToSingleGameSetup(.AI)
+            self.transitionToSingleGameSetup(type)
         }
     }
     
@@ -360,6 +363,8 @@ class MainScene: XandOScene{
         
 //        let productIdentifier = notification.object as! String
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "adsRemoved")
+        removeViews()
+        transitionToMainScene()
     }
     
     

@@ -60,6 +60,7 @@ class Board: XandOScene {
     let cheerSound = SoundEffect(fileName: "cheer")
     let squareSound = SoundEffect(fileName: "square")
     let boardSound = SoundEffect(fileName: "board")
+    let loseSound = SoundEffect(fileName: "lose")
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -770,6 +771,8 @@ class Board: XandOScene {
             self.view!.addSubview(confettiView)
             confettiView.startConfetti()
             confetti = true
+        }else{
+            loseSound.play()
         }
 //        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
         let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
@@ -946,7 +949,6 @@ class Board: XandOScene {
         for shape in oLines{
             shape.removeFromSuperlayer()
         }
-
     }
     
     //MARK: - BUTTON FUNCTIONS
