@@ -140,7 +140,22 @@ class MainScene: XandOScene{
     
     func noAdsPressed(){
         let product = products[0]
-        XOProducts.store.purchaseProduct(product)
+
+        let alertController = UIAlertController(title: "", message: "Remove Ads Forever?", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            
+        }
+        let yesAction = UIAlertAction(title: "Yes", style: .Default) { (action) -> Void in
+            XOProducts.store.purchaseProduct(product)
+        }
+        let restoreAction = UIAlertAction(title: "Restore Purchase", style: .Default) { (action) -> Void in
+            XOProducts.store.restoreCompletedTransactions()
+        }
+        alertController.addAction(yesAction)
+        alertController.addAction(restoreAction)
+        alertController.addAction(cancelAction)
+        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+
     }
     
     func exitPressed(){

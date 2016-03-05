@@ -137,10 +137,10 @@ class CurrentGamesScene: TableViewScene {
             cell.sizeLabel.text = "\(game["rows"])x\(game["rows"])"
             cell.dateLabel.text = daysBetweenDate(game.createdAt! as NSDate, endDate: NSDate())
             
-            if usersTurn{
+            if usersTurn && indexPath.section == 0{
                 cell.addTurnLabel()
+                cell.animateTurnView()
             }
-            cell.animateTurnView()
         }
         return cell
     }
