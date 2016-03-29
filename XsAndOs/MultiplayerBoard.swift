@@ -329,6 +329,15 @@ class MultiplayerBoard: Board {
         let alertController = UIAlertController(title: "Game Finished", message: "This game is over. Start a new game with your friends!", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in}
         alertController.addAction(cancelAction)
+        let replayAction = UIAlertAction(title: "Play Again", style: .Default) { (action) -> Void in
+            if self.xUser.username == PFUser.currentUser()?.username{
+                self.transitionToSetupScene(self.oUser)
+            }else{
+                self.transitionToSetupScene(self.xUser)
+            }
+
+        }
+        alertController.addAction(replayAction)
         self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
     }
     
@@ -523,15 +532,15 @@ class MultiplayerBoard: Board {
         animation2.duration = 0.5
         animation2.autoreverses = true
         animation2.repeatCount = 5
-        animation2.fillMode = kCAFillModeForwards // keep to value after finishing
-        animation2.removedOnCompletion = true // don't remove after finishing
+        animation2.fillMode = kCAFillModeForwards
+        animation2.removedOnCompletion = true
         shapeLayer.addAnimation(animation2, forKey: animation2.keyPath)
 
     }
     func animationOnLastMove(shapeLayer: LineShapeLayer){
         let animation2 = CABasicAnimation(keyPath: "lineWidth")
         animation2.fromValue = 4
-        animation2.toValue = 7
+        animation2.toValue = 10
         animation2.duration = 0.5
         animation2.autoreverses = true
         animation2.beginTime = CACurrentMediaTime() + 2.5
@@ -566,6 +575,15 @@ class MultiplayerBoard: Board {
         let mainScene = GameScene(size: self.size)
         mainScene.scaleMode = .AspectFill
         self.scene?.view?.presentScene(mainScene)
+    }
+    
+    func transitionToSetupScene(opponent: PFUser){
+        let nextScene = SingleSetupScene(size: self.size, type: SingleSetupScene.GameType.Online)
+        nextScene.opponent = opponent
+        let transition = SKTransition.crossFadeWithDuration(0.75)
+        nextScene.scaleMode = .AspectFill
+        self.scene?.view?.presentScene(nextScene, transition: transition)
+        removeViews()
     }
 }
 

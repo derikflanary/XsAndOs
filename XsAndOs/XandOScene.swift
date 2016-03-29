@@ -35,7 +35,6 @@ class XandOScene: SKScene {
             let overlay = StarsOverlay(frame: (self.view?.bounds)!)
             overlay.tag = 1000
             self.view?.addSubview(overlay)
-            print("added overlay")
         }
         
         backgroundColor = backColor

@@ -78,6 +78,10 @@ class GameScene: XandOScene {
             let myinstallation = PFInstallation.currentInstallation()
             myinstallation.setObject(currentUser.username!, forKey: "ownerUsername")
             myinstallation.saveInBackground()
+            
+            if !UIApplication.sharedApplication().isRegisteredForRemoteNotifications(){
+                self.showPNAlert()
+            }
         }else{
             self.view?.addSubview(fbLoginbutton)
             fbEntryAnimation()

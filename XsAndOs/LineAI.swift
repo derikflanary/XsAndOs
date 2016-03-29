@@ -195,8 +195,8 @@ class LineAI {
         var shortPath = ShortPath(steps: shortestPath)
     
         // If either intersection is occupied by x then no path
-        guard fromNode.nodePos.ptWho != otherTeam else {print("x"); return shortPath}
-        guard toNode.nodePos.ptWho != otherTeam else {print("x"); return shortPath}
+        guard fromNode.nodePos.ptWho != otherTeam else {return shortPath}
+        guard toNode.nodePos.ptWho != otherTeam else {return shortPath}
         //Calculate firststep hscore and add to openlist
         let firstStep = ShortestPathStep(node: fromNode)
         let toStep = ShortestPathStep(node: toNode)

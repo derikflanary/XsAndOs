@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
         Parse.setApplicationId("c7fI5i2vHGsajpcH7uDWjie8xLdHGhq6X6D21dBm",
             clientKey: "loGrncuqMAb1KTz99b3l1YIvw7cGwqzYjaAoHdZs")
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-//        Fabric.with([Crashlytics.self, GameAnalytics.self])
+        Fabric.with([Crashlytics.self, GameAnalytics.self])
         
         PFInstallation.currentInstallation().badge = 0
         
@@ -36,23 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
         
         Chartboost.startWithAppId("56cce719c909a65118b69870", appSignature: "459d2d89d8eb862c0d5f6e77cd2d4168b71d9ec7", delegate: self)
         Chartboost.setShouldRequestInterstitialsInFirstSession(false)
-        
-//        // Enable log to output simple details (disable in production)
-//        GameAnalytics.setEnabledInfoLog(true)
-//        // Enable log to output full event JSON (disable in production)
-//        GameAnalytics.setEnabledVerboseLog(true)
-//        
-//        GameAnalytics.configureAvailableCustomDimensions01([x, o])
-//        GameAnalytics.configureAvailableCustomDimensions02(["Easy", "Moderate", "Hard"])
-//                
-//        // Configure build version
-//        GameAnalytics.configureBuild("1.0.0")
-//        
-//        // initialize GameAnalytics - this method will use app keys injected by Fabric
-//        GameAnalytics.initializeWithConfiguredGameKeyAndGameSecret()
-//        // to manually specify keys use this method:
-//        //GameAnalytics.initializeWithGameKey("[game_key]", gameSecret:"[game_secret]")
-
 
         return true
     }

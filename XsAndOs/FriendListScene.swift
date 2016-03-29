@@ -13,7 +13,6 @@ import MessageUI
 
 class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     var friends = [[String:String]]()
-    var inviteFriends = [[String: String]]()
     let currentViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
     var activityIndicator = DGActivityIndicatorView()
     
@@ -30,23 +29,13 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     
     func fetchData(){
         guard let currentUser = PFUser.currentUser() else{return}
-        FacebookController.Singleton.sharedInstance.fetchFriendsForUser(currentUser) { (success: Bool, friends: [[String:String]], invitables: [[String:String]]) -> Void in
+        FacebookController.Singleton.sharedInstance.fetchFriendsForUser(currentUser) { (success: Bool, friends: [[String:String]]) -> Void in
             self.activityIndicator.stopAnimating()
             self.activityIndicator.removeFromSuperview()
             if success{
                 dispatch_async(dispatch_get_main_queue(),{
                     self.friends = friends
-                    self.inviteFriends = invitables
-                    var vNames = self.stringArrayFromDictionary(invitables, key: "name")
-                    let fNames = self.stringArrayFromDictionary(friends, key: "name")
                     
-                    for name in fNames{
-                        if let x = vNames.indexOf(name){
-                            vNames.removeAtIndex(x)
-                            self.inviteFriends.removeAtIndex(x)
-                        }
-                    }
-                    print(self.inviteFriends)
                     self.animateTable()
                 })
             }
@@ -126,7 +115,6 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
         }else{
             cell.textLabel?.text = "Invite Friends To Play!"
         }
-        
         return cell
     }
     
@@ -146,7 +134,7 @@ class FriendListScene: TableViewScene, MFMessageComposeViewControllerDelegate{
     //MARK: - TRANSITIONS
     private func openMessageVC(){
         let messageVC = MFMessageComposeViewController()
-        messageVC.body = "Play X's and O's with me! https://launchkit.io/websites/TuUEQiL_mig/"
+        messageVC.body = "Play X's and O's with me! https://itunes.apple.com/us/app/xs-os-2-player-strategy-game/id1068007420?mt=8"
         messageVC.messageComposeDelegate = self
         currentViewController.presentViewController(messageVC, animated: true, completion: nil)
     }

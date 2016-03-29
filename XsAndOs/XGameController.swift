@@ -85,7 +85,9 @@ class XGameController: NSObject {
 
         }
         
+        
 //MARK: - FETCH GAMES
+        
         func fetchGamesForUser(user: PFUser, completion: (Bool, [PFObject]) -> Void){
             let query = PFQuery(className: "XGame")
             query.whereKey("xTeam", equalTo: PFUser.currentUser()!)
