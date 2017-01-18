@@ -12,16 +12,16 @@ class Button: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Normal)
-        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Highlighted)
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControlState())
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: .highlighted)
         layer.cornerRadius = self.frame.size.height/2
         clipsToBounds = true
         
     }
     
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         get {
-            return super.highlighted
+            return super.isHighlighted
         }
         set {
             if newValue {
@@ -30,7 +30,7 @@ class Button: UIButton {
             else {
                 alpha = 1
             }
-            super.highlighted = newValue
+            super.isHighlighted = newValue
         }
     }
 
@@ -41,15 +41,15 @@ class SButton: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Normal)
-        setTitleColor(UIColor(white: 0.95, alpha: 1.0), forState: .Highlighted)
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControlState())
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: .highlighted)
         layer.cornerRadius = self.frame.size.height/2
         clipsToBounds = true
         
     }
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         get {
-            return super.highlighted
+            return super.isHighlighted
         }
         set {
             if newValue {
@@ -58,7 +58,7 @@ class SButton: UIButton {
             else {
                 
             }
-            super.highlighted = newValue
+            super.isHighlighted = newValue
         }
     }
     

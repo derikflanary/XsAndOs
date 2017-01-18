@@ -5,7 +5,6 @@
 
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import "DGActivityIndicatorView.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import <Chartboost/Chartboost.h>
 #import <CommonCrypto/CommonDigest.h>

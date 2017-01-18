@@ -36,30 +36,30 @@ class GameTableViewCell: UITableViewCell {
         
         sizeLabel.textColor = flint
         sizeLabel.font = UIFont(name: lightFontName, size: 16)
-        sizeLabel.textAlignment = .Right
+        sizeLabel.textAlignment = .right
         sizeLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(sizeLabel)
         
         let margins = self.layoutMarginsGuide
-        xLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor).active = true
-        xLabel.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor).active = true
-        xLabel.heightAnchor.constraintEqualToConstant(25).active = true
-        xLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 5).active = true
+        xLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        xLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        xLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        xLabel.topAnchor.constraint(equalTo: margins.topAnchor, constant: 5).isActive = true
         
-        oLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor).active = true
-        oLabel.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor).active = true
-        oLabel.heightAnchor.constraintEqualToConstant(25).active = true
-        oLabel.topAnchor.constraintEqualToAnchor(xLabel.bottomAnchor, constant: 10).active = true
+        oLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        oLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        oLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        oLabel.topAnchor.constraint(equalTo: xLabel.bottomAnchor, constant: 10).isActive = true
         
-        dateLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor).active = true
-        dateLabel.widthAnchor.constraintEqualToConstant(200).active = true
-        dateLabel.heightAnchor.constraintEqualToConstant(20).active = true
-        dateLabel.topAnchor.constraintEqualToAnchor(oLabel.bottomAnchor, constant: 0).active = true
+        dateLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        dateLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        dateLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        dateLabel.topAnchor.constraint(equalTo: oLabel.bottomAnchor, constant: 0).isActive = true
         
-        sizeLabel.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor).active = true
-        sizeLabel.widthAnchor.constraintEqualToConstant(40).active = true
-        sizeLabel.heightAnchor.constraintEqualToConstant(20).active = true
-        sizeLabel.topAnchor.constraintEqualToAnchor(dateLabel.topAnchor, constant: 0).active = true
+        sizeLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        sizeLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        sizeLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        sizeLabel.topAnchor.constraint(equalTo: dateLabel.topAnchor, constant: 0).isActive = true
     
     }
 
@@ -74,32 +74,32 @@ class GameTableViewCell: UITableViewCell {
     
     func addTurnLabel(){
         
-        let turnView = UIView(frame: CGRectMake(300, 25, 50, 50))
+        let turnView = UIView(frame: CGRect(x: 300, y: 25, width: 50, height: 50))
         turnView.backgroundColor = xColor
         turnView.layer.cornerRadius = 25.0
         turnView.clipsToBounds = true
         turnView.translatesAutoresizingMaskIntoConstraints = false
         
         let turnLabel = UILabel(frame: turnView.bounds)
-        turnLabel.textAlignment = .Center
+        turnLabel.textAlignment = .center
         turnLabel.text = "YOUR TURN"
         turnLabel.font = UIFont(name: boldFontName, size: 8)
-        turnLabel.textColor = UIColor.whiteColor()
+        turnLabel.textColor = UIColor.white
 
         contentView.addSubview(turnView)
         turnView.addSubview(turnLabel)
         
         let margins = self.layoutMarginsGuide
-        turnView.trailingAnchor.constraintEqualToAnchor(sizeLabel.trailingAnchor).active = true
-        turnView.widthAnchor.constraintEqualToConstant(50).active = true
-        turnView.heightAnchor.constraintEqualToConstant(50).active = true
-        turnView.bottomAnchor.constraintEqualToAnchor(margins.bottomAnchor, constant: -20).active = true
+        turnView.trailingAnchor.constraint(equalTo: sizeLabel.trailingAnchor).isActive = true
+        turnView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        turnView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        turnView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -20).isActive = true
 
     }
     
     func animateTurnView(){
-        UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 20, options: .CurveEaseOut, animations: { () -> Void in
-            self.shadowView.frame = CGRectMake(300, 25, 50, 50)
+        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 20, options: .curveEaseOut, animations: { () -> Void in
+            self.shadowView.frame = CGRect(x: 300, y: 25, width: 50, height: 50)
             self.layoutIfNeeded()
             }) { (done) -> Void in
                 

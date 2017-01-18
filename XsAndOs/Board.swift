@@ -15,8 +15,8 @@ let o = "O"
 class Board: XandOScene {
     //MARK: - PROPERTIES
     enum LastMove {
-        case SingleLine
-        case AppendedLine
+        case singleLine
+        case appendedLine
     }
     
     enum UserTeam: String {
@@ -45,7 +45,7 @@ class Board: XandOScene {
     var pointsConnected = false
     var potentialShapeNode = CAShapeLayer()
     var restartButton = Button()
-    var lastMove = LastMove.SingleLine
+    var lastMove = LastMove.singleLine
     let undoButton = Button()
     let backButton = Button()
     var nodeAction = SKAction()
@@ -72,7 +72,7 @@ class Board: XandOScene {
         grid = Array2D(columns: dim, rows: dim)
         rows = theRows
         self.aiGame = aiGame
-        self.difficulty = .Easy
+        self.difficulty = .easy
         super.init(size: size)
         xIsopin = self.frame.size.width / CGFloat(dim)
         yIsopin = xIsopin
@@ -94,70 +94,70 @@ class Board: XandOScene {
     }
     
     // MARK: - GAME SETUP
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         /* Setup your scene here */
-        super.didMoveToView(view)
+        super.didMove(to: view)
         self.view?.viewWithTag(1000)?.removeFromSuperview()
         startGame()
     }
     func startGame(){
-        gameLayer.position = CGPointMake(0, 0)
-        self.userInteractionEnabled = false
+        gameLayer.position = CGPoint(x: 0, y: 0)
+        self.isUserInteractionEnabled = false
         addChild(gameLayer)
         setUpMainAnimation()
         buildArrayOfNodes()
         drawSquare()
         
-        restartButton.frame = CGRectMake((self.view?.frame.size.width)!/2 - 50, 20, 100, 50)
-        restartButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        restartButton.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
-        restartButton.setTitle("Restart", forState: UIControlState.Normal)
+        restartButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 50, y: 20, width: 100, height: 50)
+        restartButton.setTitleColor(UIColor.white, for: UIControlState())
+        restartButton.setTitleColor(UIColor.lightText, for: .highlighted)
+        restartButton.setTitle("Restart", for: UIControlState())
         restartButton.backgroundColor = thirdColor
-        restartButton.addTarget(self, action: "restartPressed", forControlEvents: .TouchUpInside)
+        restartButton.addTarget(self, action: #selector(Board.restartPressed), for: .touchUpInside)
         restartButton.tag = 10
         self.view?.addSubview(restartButton)
         restartButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
         
-        backButton.frame = CGRectMake(10, 20, 50, 50)
+        backButton.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
         backButton.backgroundColor = xColor
-        backButton.setImage(UIImage(named: "home"), forState: .Normal)
-        backButton.imageView?.contentMode = .Center
-        backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
+        backButton.setImage(UIImage(named: "home"), for: UIControlState())
+        backButton.imageView?.contentMode = .center
+        backButton.addTarget(self, action: #selector(Board.mainPressed), for: .touchUpInside)
         backButton.tag = 20
         self.view?.addSubview(backButton)
         
-        undoButton.frame = CGRectMake((self.view?.frame.size.width)! - 60, 20, 50, 50)
+        undoButton.frame = CGRect(x: (self.view?.frame.size.width)! - 60, y: 20, width: 50, height: 50)
         undoButton.backgroundColor = flint
-        undoButton.setImage(UIImage(named: "undo"), forState: .Normal)
-        undoButton.imageView?.contentMode = .Center
-        undoButton.addTarget(self, action: "undoLastMove", forControlEvents: .TouchUpInside)
+        undoButton.setImage(UIImage(named: "undo"), for: UIControlState())
+        undoButton.imageView?.contentMode = .center
+        undoButton.addTarget(self, action: #selector(Board.undoLastMove), for: .touchUpInside)
         undoButton.tag = 30
         self.view?.addSubview(undoButton)
-        undoButton.hidden = true
+        undoButton.isHidden = true
         
         turnLabel = SKLabelNode(text: x)
-        turnLabel.position = CGPointMake(self.frame.width/2, yIsopin! * CGFloat(dim) + 150)
+        turnLabel.position = CGPoint(x: self.frame.width/2, y: yIsopin! * CGFloat(dim) + 150)
         turnLabel.fontColor = xColor
         turnLabel.fontName = mainFontName
         turnLabel.fontSize = 40
         turnLabel.zPosition = 3
-        turnLabel.runAction(nodeAction)
+        turnLabel.run(nodeAction)
         self.addChild(turnLabel)
         
         if aiGame{
             undoButton.removeFromSuperview()
             turnLabel.removeFromParent()
         }else{
-            undoButton.hidden = false
+            undoButton.isHidden = false
         }
 //        isXTurn()
     }
     
     func setUpMainAnimation(){
-        let fadeOut = SKAction.scaleTo(1.10, duration: 0.5)
-        let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
+        let fadeOut = SKAction.scale(to: 1.10, duration: 0.5)
+        let fadeIn = SKAction.scale(to: 1.0, duration: 0.5)
         let pulse = SKAction.sequence([fadeOut, fadeIn])
-        let pulseForever = SKAction.repeatActionForever(pulse)
+        let pulseForever = SKAction.repeatForever(pulse)
         nodeAction = pulseForever
     }
     
@@ -167,20 +167,20 @@ class Board: XandOScene {
         
         for theRow in 0...dim - 1{
             for column in 0...dim - 1 {
-                let node = Node(column: column, row: theRow, theNodeType: NodeType.Empty)
+                let node = Node(column: column, row: theRow, theNodeType: NodeType.empty)
                 if (theRow + 1) % 2 == 0 && (column + 1) % 2 != 0{  //if row is even and column is odd
-                    node.nodeType = NodeType.O
-                    node.sprite = SKSpriteNode(imageNamed: "o")
+                    node.nodeType = NodeType.o
+                    node.sprite = SKSpriteNode(imageNamed: "O")
                     node.sprite?.name = o
                 }else if (theRow + 1) % 2 != 0 && (column + 1) % 2 == 0{
-                    node.nodeType = NodeType.X
-                    node.sprite = SKSpriteNode(imageNamed: "x")
+                    node.nodeType = NodeType.x
+                    node.sprite = SKSpriteNode(imageNamed: "X")
                     node.sprite?.name = x
                 }else{
                     if theRow == 0 || theRow == dim - 1 || column == 0 || column == dim - 1{
-                        node.nodeType = NodeType.Empty
+                        node.nodeType = NodeType.empty
                     }else{
-                        node.nodeType = NodeType.Intersection
+                        node.nodeType = NodeType.intersection
                     }
                 }
                 grid[column, theRow] = node
@@ -192,26 +192,26 @@ class Board: XandOScene {
         paintXsnOs(set)
     }
     
-    func paintXsnOs(nodes: Set<Node>){
+    func paintXsnOs(_ nodes: Set<Node>){
         for node in nodes{
             
             if node.sprite != nil{
                 let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!)
                 let sprite = node.sprite
-                sprite?.color = SKColor.redColor()
+                sprite?.color = SKColor.red
                 sprite?.position = position
                 if dim > 11{
-                    sprite?.size = CGSizeMake(xIsopin!/1.1, yIsopin!/1.1)
+                    sprite?.size = CGSize(width: xIsopin!/1.1, height: yIsopin!/1.1)
                 }else{
-                    sprite?.size = CGSizeMake(xIsopin!/1.3, yIsopin!/1.3)
+                    sprite?.size = CGSize(width: xIsopin!/1.3, height: yIsopin!/1.3)
                 }
-                sprite?.anchorPoint = CGPointMake(0.5, 0.5)
+                sprite?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
                 sprite?.zPosition = 2
                 sprite?.setScale(0.0)
                 gameLayer.addChild(sprite!)
-                let fadeOut = SKAction.scaleTo(1.3, duration: 0.5)
-                let fadeIn = SKAction.scaleTo(1.0, duration: 0.5)
-                sprite?.runAction(SKAction.sequence([fadeOut, fadeIn]))
+                let fadeOut = SKAction.scale(to: 1.3, duration: 0.5)
+                let fadeIn = SKAction.scale(to: 1.0, duration: 0.5)
+                sprite?.run(SKAction.sequence([fadeOut, fadeIn]))
             }else{
                 let position = pointForColumn(node.nodePos.column!, row: node.nodePos.row!)
                 node.position = position
@@ -222,7 +222,7 @@ class Board: XandOScene {
         
     }
     
-    func pointForColumn(column: Int, row: Int) -> CGPoint {
+    func pointForColumn(_ column: Int, row: Int) -> CGPoint {
         return CGPoint(
             x: CGFloat(column) * xIsopin! + xIsopin!/2,
             y: CGFloat(row) * yIsopin! + bottomPadding)
@@ -230,27 +230,27 @@ class Board: XandOScene {
     
     func drawSquare(){
         var point = pointForColumn(1, row: dim - 1)
-        point = convertPointToView(point)
+        point = self.convertPoint(toView: point)
         
         let x = xIsopin!
         let y = point.y + xIsopin!/2
         let width = (self.view?.frame.size.width)! - (xIsopin! * 2)
         let height = width
-        let a = CGPointMake(x, y)
-        let b = CGPointMake(x + width, y)
-        let c = CGPointMake(x + width, y + height)
-        let d = CGPointMake(x, y + height)
+        let a = CGPoint(x: x, y: y)
+        let b = CGPoint(x: x + width, y: y)
+        let c = CGPoint(x: x + width, y: y + height)
+        let d = CGPoint(x: x, y: y + height)
         
         let squarePath = UIBezierPath()
-        squarePath.moveToPoint(a)
-        squarePath.addLineToPoint(b)
-        squarePath.addLineToPoint(c)
-        squarePath.addLineToPoint(d)
-        squarePath.addLineToPoint(a)
+        squarePath.move(to: a)
+        squarePath.addLine(to: b)
+        squarePath.addLine(to: c)
+        squarePath.addLine(to: d)
+        squarePath.addLine(to: a)
         square = CAShapeLayer()
-        square.path = squarePath.CGPath
-        square.strokeColor = flint.CGColor
-        square.fillColor = UIColor.clearColor().CGColor
+        square.path = squarePath.cgPath
+        square.strokeColor = flint.cgColor
+        square.fillColor = UIColor.clear.cgColor
         square.strokeEnd = 0.0
         view?.layer.addSublayer(square)
         
@@ -258,43 +258,38 @@ class Board: XandOScene {
         pathAnimation.duration = 1.0
         pathAnimation.fromValue = 0
         pathAnimation.toValue = 1
-        pathAnimation.removedOnCompletion = false
+        pathAnimation.isRemovedOnCompletion = false
         pathAnimation.fillMode = kCAFillModeBoth
         pathAnimation.delegate = self
-        square.addAnimation(pathAnimation, forKey: pathAnimation.keyPath)
+        square.add(pathAnimation, forKey: pathAnimation.keyPath)
         squareSound.play()
 
     }
     
-    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-        boardSound.player.rate = 0.5
-        boardSound.play()
-    }
-    
     func animateNodes(){
         startActionForNodeType(x)
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
-            self.userInteractionEnabled = true
+        let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delayTime) {
+            self.isUserInteractionEnabled = true
             if self.userTeam == .O && self.aiGame{
                 self.performAIMove()
             }
         }
     }
     
-    func startActionForNodeType(type: String){
-        gameLayer.enumerateChildNodesWithName(type, usingBlock: {
+    func startActionForNodeType(_ type: String){
+        gameLayer.enumerateChildNodes(withName: type, using: {
             node, stop in
-            node.runAction(self.nodeAction)
+            node.run(self.nodeAction)
             // do something with node or stop
         })
     }
     
-    func stopActionsOnGameLayer(type: String){
-        gameLayer.enumerateChildNodesWithName(type, usingBlock: {
+    func stopActionsOnGameLayer(_ type: String){
+        gameLayer.enumerateChildNodes(withName: type, using: {
             node, stop in
             node.removeAllActions()
-            node.runAction(SKAction.scaleTo(1.0, duration: 0.5))
+            node.run(SKAction.scale(to: 1.0, duration: 0.5))
             // do something with node or stop
         })
     }
@@ -317,13 +312,13 @@ class Board: XandOScene {
     
 //MARK: - TOUCHING AND DRAWING FUNCTIONS
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         /* Called when a touch begins */
         guard !winner else {return}
         guard isCurrentUserTurn() else{return}
         for touch in touches {
-            let location = touch.locationInNode(self.gameLayer)
-            let touchedNode = self.nodeAtPoint(location)
+            let location = touch.location(in: self.gameLayer)
+            let touchedNode = self.atPoint(location)
             
             if touchedNode.name == x || touchedNode.name == o{
                 
@@ -358,14 +353,14 @@ class Board: XandOScene {
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard isCurrentUserTurn() else{return}
         for touch: AnyObject in touches{
-            touchedLocations.append(touch.locationInNode(self.gameLayer))
-            let location = touch.locationInNode(self.gameLayer)
-            let touchedNode = self.nodeAtPoint(location)
+            touchedLocations.append(touch.location(in: self.gameLayer))
+            let location = touch.location(in: self.gameLayer)
+            let touchedNode = self.atPoint(location)
             
-            if !pointsConnected && startPoint != CGPointZero{
+            if !pointsConnected && startPoint != CGPoint.zero{
                 if touchedNode.name == x && xTurn && touchedNode != selectedNode{
                     if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: ""){
                         nextPoint = touchedNode.position
@@ -398,7 +393,7 @@ class Board: XandOScene {
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard isCurrentUserTurn() else{return}
         potentialShapeNode.removeFromSuperlayer()
         guard pointsConnected == true else{
@@ -407,12 +402,12 @@ class Board: XandOScene {
             return
         }
         pointsConnected = false
-        startPoint = CGPointZero
+        startPoint = CGPoint.zero
         for theTouch: AnyObject in touches{
-            touchedLocations.append(theTouch.locationInNode(self.gameLayer))
+            touchedLocations.append(theTouch.location(in: self.gameLayer))
         }
         for location: CGPoint in touchedLocations {
-            let touchedNode = self.nodeAtPoint(location)
+            let touchedNode = self.atPoint(location)
             if selectedNode.name == x && touchedNode.name == x{
                 guard xTurn else{touchedLocations.removeAll(); return}
                 if isPotentialMatchingNode(selectedNode, secondSprite: touchedNode, type: x){
@@ -435,18 +430,18 @@ class Board: XandOScene {
         touchedLocations.removeAll()
     }
     
-    private func cleanUpMove(){
+    fileprivate func cleanUpMove(){
 //        switchTurns()
         resetSelectedNode()
         touchedLocations.removeAll()
     }
     
-    private func resetSelectedNode(){
+    fileprivate func resetSelectedNode(){
         selectedNode.setScale(1.0)
         selectedNode = SKSpriteNode()
     }
     
-    func isPotentialMatchingNode(firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
+    func isPotentialMatchingNode(_ firstSprite: SKSpriteNode, secondSprite: SKNode, type: String) -> Bool{
         let (column, row, column2, row2) = convertSpritesToPoints(firstSprite, secondSprite: secondSprite)
         if column == column2 || column - column2 == -2 || column - column2 == 2{
             if row == row2 && column != column2 || row - row2 == -2 || row - row2 == 2 {
@@ -473,7 +468,7 @@ class Board: XandOScene {
                         }
                     }
                     let intersection = gridItem(column: interCol, row: interRow)
-                    if intersection?.nodeType == NodeType.Intersection && intersection?.nodePos.ptWho == ""{
+                    if intersection?.nodeType == NodeType.intersection && intersection?.nodePos.ptWho == ""{
                         intersection?.nodePos.ptWho = type
                         lastIntersection = LastIntersectionLocation(row: interRow, col: interCol)
                         previousMoveDetails.previousIntersection = lastIntersection
@@ -487,7 +482,7 @@ class Board: XandOScene {
         return false
     }
     
-    func convertSpritesToPoints(firstSprite: SKSpriteNode, secondSprite: SKNode) -> (column: Float, row: Float, column2: Float, row2: Float){
+    func convertSpritesToPoints(_ firstSprite: SKSpriteNode, secondSprite: SKNode) -> (column: Float, row: Float, column2: Float, row2: Float){
         var (success, column, row) = convertPoint(firstSprite.position)
         if success {
             column = round(column)
@@ -501,33 +496,35 @@ class Board: XandOScene {
         return(column, row, column2, row2)
     }
     
-    func drawPotentialLineBetweenPoints(var pointA: CGPoint, var pointB: CGPoint, type: String){
+    func drawPotentialLineBetweenPoints(_ pointA: CGPoint, pointB: CGPoint, type: String){
+        var pointA = pointA, pointB = pointB
         potentialShapeNode.removeFromSuperlayer()
-        pointA = convertPointToView(pointA)
-        pointB = convertPointToView(pointB)
+        pointA = self.convertPoint(toView: pointA)
+        pointB = self.convertPoint(toView: pointB)
         let newPath = UIBezierPath()
-        newPath.moveToPoint(pointA)
-        newPath.addLineToPoint(pointB)
-        potentialShapeNode.path = newPath.CGPath
-        potentialShapeNode.strokeColor = UIColor(white: 0.6, alpha: 0.8).CGColor
+        newPath.move(to: pointA)
+        newPath.addLine(to: pointB)
+        potentialShapeNode.path = newPath.cgPath
+        potentialShapeNode.strokeColor = UIColor(white: 0.6, alpha: 0.8).cgColor
         potentialShapeNode.lineWidth = 3
         view?.layer.addSublayer(potentialShapeNode)
     }
     
-    func drawLineBetweenPoints(var pointA: CGPoint,var pointB: CGPoint, type: String){
+    func drawLineBetweenPoints(_ pointA: CGPoint,pointB: CGPoint, type: String){
+        var pointA = pointA, pointB = pointB
         let (columnA, rowA, columnB, rowB) = calculateColumnsAndRows(pointA, pointB: pointB)
         recentCoordinates = RecentCoordinates(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB)
         var match = false
         var matchedLine = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
-        pointA = convertPointToView(pointA)
-        pointB = convertPointToView(pointB)
+        pointA = self.convertPoint(toView: pointA)
+        pointB = self.convertPoint(toView: pointB)
         let path = matchedLine.createPath(pointA: pointA, pointB: pointB)
         
         var lineArray = xLines
-        var strokeColor = xColor.CGColor
+        var strokeColor = xColor.cgColor
         if type == o{
             lineArray = oLines
-            strokeColor = oColor.CGColor
+            strokeColor = oColor.cgColor
         }
         
         var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
@@ -541,12 +538,12 @@ class Board: XandOScene {
         if !match{
             let shapeNode = LineShapeLayer(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: type, path: path, color: strokeColor)
             view?.layer.addSublayer(shapeNode)
-            animateLine(shapeNode, type: .Normal)
+            animateLine(shapeNode, type: .normal)
             appendLineArrays(shapeNode)
-            lastMove = .SingleLine
+            lastMove = .singleLine
             previousMoveDetails.newAppendedLine = shapeNode
         }
-        undoButton.userInteractionEnabled = true
+        undoButton.isUserInteractionEnabled = true
         undoButton.backgroundColor = oColor
         if type == x{
             xSound.play()
@@ -555,7 +552,8 @@ class Board: XandOScene {
         }
     }
     
-    func loopThroughCoordinates(lineShapeLayer: LineShapeLayer, var matchedLine: LineShapeLayer, path: CGPathRef, columnA: Int, rowA: Int, columnB: Int, rowB: Int, var match: Bool) -> (match:Bool, matchedLine: LineShapeLayer, lineDelete: LineShapeLayer){
+    func loopThroughCoordinates(_ lineShapeLayer: LineShapeLayer, matchedLine: LineShapeLayer, path: CGPath, columnA: Int, rowA: Int, columnB: Int, rowB: Int, match: Bool) -> (match:Bool, matchedLine: LineShapeLayer, lineDelete: LineShapeLayer){
+        var matchedLine = matchedLine, match = match
         var lineToDelete = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         
         for coordinate in lineShapeLayer.coordinates{
@@ -573,11 +571,11 @@ class Board: XandOScene {
                     //If the first coordinate matches, add the path to the line and then if will keep looking if the other coordinate on the path matches another line and if so it will add this line to that line.
                     match = true
                     createLineCopy(lineShapeLayer)
-                    lastMove = .AppendedLine
+                    lastMove = .appendedLine
                     matchedLine = lineShapeLayer
                     let tempLine = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N", path: path, color: matchedLine.strokeColor!)
                     view?.layer.addSublayer(tempLine)
-                    animateLine(tempLine, type: .Delete)
+                    animateLine(tempLine, type: .delete)
 //                    animateWidthThenDelete(tempLine)
                     matchedLine.appendPath(path)
                     matchedLine.addCoordinate(columnA, rowA: rowA, columnB: columnB, rowB: rowB)
@@ -590,7 +588,7 @@ class Board: XandOScene {
         return (match, matchedLine, lineToDelete)
     }
     
-    func appendLineArrays(shapeNode : LineShapeLayer){
+    func appendLineArrays(_ shapeNode : LineShapeLayer){
         if shapeNode.team == x{
             xLines.append(shapeNode)
         }else{
@@ -598,27 +596,27 @@ class Board: XandOScene {
         }
     }
     
-    func deleteLineFromArrays(lineToDelete: LineShapeLayer){
+    func deleteLineFromArrays(_ lineToDelete: LineShapeLayer){
         if lineToDelete.team == x{
-            if let index = xLines.indexOf(lineToDelete){
-                xLines.removeAtIndex(index)
+            if let index = xLines.index(of: lineToDelete){
+                xLines.remove(at: index)
             }
         }else if lineToDelete.team == o{
-            if let index = oLines.indexOf(lineToDelete){
-                oLines.removeAtIndex(index)
+            if let index = oLines.index(of: lineToDelete){
+                oLines.remove(at: index)
             }
         }
         lineToDelete.removeFromSuperlayer()
     }
     
-    func createLineAtPoints(pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
-        let ref = CGPathCreateMutable()
-        CGPathMoveToPoint(ref, nil, pointA.x, pointA.y)
-        CGPathAddLineToPoint(ref, nil, pointB.x, pointB.y)
+    func createLineAtPoints(_ pointA: CGPoint, pointB: CGPoint) -> CGPath{
+        let ref = CGMutablePath()
+        ref.move(to: CGPoint(x: pointA.x, y: pointA.y))
+        ref.addLine(to: CGPoint(x: pointB.x, y: pointB.y))
         return ref
     }
     
-    func createLineCopy(lineShapeLayer: LineShapeLayer) -> LineShapeLayer{
+    func createLineCopy(_ lineShapeLayer: LineShapeLayer) -> LineShapeLayer{
         let line = LineShapeLayer(columnA: 0, rowA: 0, columnB: 0, rowB: 0, team: "N")
         line.copyLineValues(lineShapeLayer)
         previousMoveDetails.oldLines.append(line)
@@ -651,23 +649,23 @@ class Board: XandOScene {
     
     func performAIMove(){
         guard aiGame else {return}
-        self.userInteractionEnabled = false
+        self.isUserInteractionEnabled = false
         let lineAI = LineAI(grid: grid, difficulty: difficulty, userTeam: userTeam)
         let (coord, node) = lineAI.calculateAIMove()
         guard coord != nil || node != nil else {return}
         let pointA = pointForColumn(coord!.columnA, row: coord!.rowA)
         let pointB = pointForColumn(coord!.columnB, row: coord!.rowB)
         let interNode = gridItem(column: (node?.nodePos.column)!, row: (node?.nodePos.row)!)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
         switch userTeam{
         case .X:
             interNode?.nodePos.ptWho = o
-            NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
+            OperationQueue.main.addOperation { () -> Void in
                 self.drawLineBetweenPoints(pointA, pointB: pointB, type: o)
             }
         case .O:
             interNode?.nodePos.ptWho = x
-            NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
+            OperationQueue.main.addOperation { () -> Void in
                 self.drawLineBetweenPoints(pointA, pointB: pointB, type: x)
             }
 
@@ -675,34 +673,34 @@ class Board: XandOScene {
     }
 
  //MARK: - LINE ANIMATIONS
-    func animateLine(line: LineShapeLayer, type: LineAnimationOperation.AnimationType){
-        self.userInteractionEnabled = false
-        let operationQueue = NSOperationQueue.mainQueue()
+    func animateLine(_ line: LineShapeLayer, type: LineAnimationOperation.AnimationType){
+        self.isUserInteractionEnabled = false
+        let operationQueue = OperationQueue.main
         let animationOp = LineAnimationOperation(line: line, type: type)
         animationOp.completionBlock = {
-            self.userInteractionEnabled = true
+            self.isUserInteractionEnabled = true
             self.switchTurns()
         }
         switch type{
-        case .Normal:
+        case .normal:
             operationQueue.addOperation(animationOp)
-        case .Delete:
+        case .delete:
             operationQueue.addOperation(animationOp)
         }
     }
     
-    func animateWidth(line: LineShapeLayer){
+    func animateWidth(_ line: LineShapeLayer){
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
         animation.duration = 0.25
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
         animation.autoreverses = true
         animation.fillMode = kCAFillModeBoth // keep to value after finishing
-        animation.removedOnCompletion = false // don't remove after finishing
-        line.addAnimation(animation, forKey: animation.keyPath)
+        animation.isRemovedOnCompletion = false // don't remove after finishing
+        line.add(animation, forKey: animation.keyPath)
     }
     
-    func animateWidthThenDelete(line: LineShapeLayer){
+    func animateWidthThenDelete(_ line: LineShapeLayer){
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
         animation.duration = 0.25
@@ -710,8 +708,8 @@ class Board: XandOScene {
         animation.autoreverses = true
         animation.delegate = line
         animation.fillMode = kCAFillModeBoth // keep to value after finishing
-        animation.removedOnCompletion = false // don't remove after finishing
-        line.addAnimation(animation, forKey: animation.keyPath)
+        animation.isRemovedOnCompletion = false // don't remove after finishing
+        line.add(animation, forKey: animation.keyPath)
     }
 
     
@@ -719,7 +717,7 @@ class Board: XandOScene {
     
     
     //MARK: - WINNING FUNCTIONS
-    func checkForWinner(line: LineShapeLayer){
+    func checkForWinner(_ line: LineShapeLayer){
         //check each coordinate on the newly appended line to see if it touches both ends of the board
         if line.team == x{
             loopCoordinatesForXWinner(line)
@@ -728,7 +726,7 @@ class Board: XandOScene {
         }
     }
     
-    func loopCoordinatesForXWinner(line: LineShapeLayer){
+    func loopCoordinatesForXWinner(_ line: LineShapeLayer){
         var edgeOne = false
         var edgeTwo = false
         for coordinate in line.coordinates{
@@ -745,7 +743,7 @@ class Board: XandOScene {
         }
     }
     
-    func loopCoordinatesForOWinner(line: LineShapeLayer){
+    func loopCoordinatesForOWinner(_ line: LineShapeLayer){
         var edgeOne = false
         var edgeTwo = false
         for coordinate in line.coordinates{
@@ -762,7 +760,7 @@ class Board: XandOScene {
         }
     }
     
-    func declareWinner(winningTeam: String){
+    func declareWinner(_ winningTeam: String){
         winner = true
         var confetti = false
         let confettiView = SAConfettiView(frame: self.view!.bounds)
@@ -775,9 +773,9 @@ class Board: XandOScene {
             loseSound.play()
         }
 //        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-        let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Okay", style: .Cancel) { (action) in
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+        let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Okay", style: .cancel) { (action) in
+            OperationQueue.main.addOperation({ () -> Void in
                 if confetti{
                     confettiView.stopConfetti()
                     confettiView.removeFromSuperview()
@@ -786,7 +784,7 @@ class Board: XandOScene {
             })
         }
         alertController.addAction(cancelAction)
-        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+        self.view?.window?.rootViewController?.present(alertController, animated: true, completion: nil)
         
     }
     
@@ -794,13 +792,13 @@ class Board: XandOScene {
     func undoLastMove(){
         buttonSoundEffect.play()
         undoButton.backgroundColor = flint
-        undoButton.userInteractionEnabled = false
+        undoButton.isUserInteractionEnabled = false
 
         switch lastMove{
-        case .SingleLine:
+        case .singleLine:
             undoSingleLine()
             break
-        case .AppendedLine:
+        case .appendedLine:
             undoAppendedLine()
             break
         }
@@ -817,7 +815,7 @@ class Board: XandOScene {
         switchTurns()
     }
     
-    private func removeLastLineFromArray(){
+    fileprivate func removeLastLineFromArray(){
         if xTurn{
             oLines.removeLast()
         }else{
@@ -825,7 +823,7 @@ class Board: XandOScene {
         }
     }
     
-    private func resetIntersection(){
+    fileprivate func resetIntersection(){
         let intersection = gridItem(column: lastIntersection.col, row: lastIntersection.row)
         intersection?.nodePos.ptWho = ""
     }
@@ -833,10 +831,10 @@ class Board: XandOScene {
     func undoAppendedLine(){
         guard !previousMoveDetails.moveUnDid else{return}
         var lineArray = lineArrayForLastMove()
-        let index = lineArray.indexOf(previousMoveDetails.newAppendedLine)
+        let index = lineArray.index(of: previousMoveDetails.newAppendedLine)
         let lineToRemove = lineArray[index!]
         lineToRemove.removeFromSuperlayer()
-        lineArray.removeAtIndex(index!)
+        lineArray.remove(at: index!)
         for line in previousMoveDetails.oldLines{
             lineArray.append(line)
             view?.layer.addSublayer(line)
@@ -852,7 +850,7 @@ class Board: XandOScene {
         switchTurns()
     }
     
-    private func lineArrayForLastMove() -> [LineShapeLayer]{
+    fileprivate func lineArrayForLastMove() -> [LineShapeLayer]{
         if xTurn{
             return oLines
         }else{
@@ -863,7 +861,7 @@ class Board: XandOScene {
     //MARK: - RESETTING GAME
     
     func gameover(){
-        if !NSUserDefaults.standardUserDefaults().boolForKey("adsRemoved"){
+        if !UserDefaults.standard.bool(forKey: "adsRemoved"){
             Chartboost.showInterstitial(CBLocationGameOver)
         }
         
@@ -878,15 +876,15 @@ class Board: XandOScene {
     
     func tranistionToNewBoard(){
         let secondScene = Board(size: self.size, theDim: dim, theRows: rows, userTeam: userTeam, aiGame: aiGame, difficulty: difficulty)
-        let transition = SKTransition.crossFadeWithDuration(0.75)
-        secondScene.scaleMode = SKSceneScaleMode.AspectFill
+        let transition = SKTransition.crossFade(withDuration: 0.75)
+        secondScene.scaleMode = SKSceneScaleMode.aspectFill
         self.scene!.view?.presentScene(secondScene, transition: transition)
     }
     
     //MARK: - SUPPORT FUNCTIONS
     
     //Takes a point and returns the column and row for that point
-    func calculateColumnsAndRows(pointA: CGPoint, pointB: CGPoint) -> (columnA: Int, rowA: Int, columnB: Int, rowB: Int){
+    func calculateColumnsAndRows(_ pointA: CGPoint, pointB: CGPoint) -> (columnA: Int, rowA: Int, columnB: Int, rowB: Int){
         var columnA : Int = 0
         var rowA : Int = 0
         var columnB : Int = 0
@@ -909,7 +907,7 @@ class Board: XandOScene {
         return (columnA, rowA, columnB, rowB)
     }
     
-    func convertPoint(point: CGPoint) -> (success: Bool, column: Float, row: Float) {
+    func convertPoint(_ point: CGPoint) -> (success: Bool, column: Float, row: Float) {
         if point.x >= 0 && point.x < CGFloat(dim) * xIsopin! &&
             point.y >= 0 && point.y < CGFloat(dim) * yIsopin! + bottomPadding {
                 return (true, Float((point.x - (xIsopin!/2)) / xIsopin!), Float((point.y - bottomPadding) / yIsopin!))
@@ -918,13 +916,13 @@ class Board: XandOScene {
         }
     }
     
-    func gridItem(column column: Int, row: Int) -> Node? {
+    func gridItem(column: Int, row: Int) -> Node? {
         assert(column >= 0 && column <= dim)
         assert(row >= 0 && row <= dim)
         return grid[column, row]
     }
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         /* Called before each frame is rendered */
     }
     
@@ -968,4 +966,13 @@ class Board: XandOScene {
         let mainScene = MainScene(size: self.size)
         self.scene?.view?.presentScene(mainScene)
     }
+}
+
+extension Board: CAAnimationDelegate {
+
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        boardSound.player.rate = 0.5
+        boardSound.play()
+    }
+
 }

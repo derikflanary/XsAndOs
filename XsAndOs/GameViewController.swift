@@ -18,8 +18,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "soundTurnedOn", name:"SoundOn", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "soundTurnedOff", name:"SoundOff", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.soundTurnedOn), name:NSNotification.Name(rawValue: "SoundOn"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.soundTurnedOff), name:NSNotification.Name(rawValue: "SoundOff"), object: nil)
         skView = self.view as! SKView
         
         /* Sprite Kit applies additional optimizations to improve rendering performance */
@@ -31,11 +31,11 @@ class GameViewController: UIViewController {
         
         /* Set the scale mode to scale to fit the window */
         scene = MainScene(size: skView.bounds.size)
-        scene.scaleMode = .AspectFill
+        scene.scaleMode = .aspectFill
         
         skView.presentScene(scene)
         
-        let status = NSUserDefaults.standardUserDefaults().valueForKey("sound") as! String
+        let status = UserDefaults.standard.value(forKey: "sound") as! String
         if status == "on"{
             backgroundMusic.loopPlay()
         }
@@ -53,15 +53,15 @@ class GameViewController: UIViewController {
     }
     
     
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate : Bool {
         return false
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return .AllButUpsideDown
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
         } else {
-            return .All
+            return .all
         }
     }
 
@@ -70,7 +70,7 @@ class GameViewController: UIViewController {
         // Release any cached data, images, etc that aren't in use.
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 }

@@ -11,7 +11,7 @@ import Foundation
 import SpriteKit
 
 enum NodeType {
-    case Unknown, Empty, Intersection, X, O, Dot
+    case unknown, empty, intersection, x, o, dot
 }
 
 struct Point
@@ -25,7 +25,7 @@ struct Point
 
 class Node: Hashable  {
     
-    var nodePos = Point(column: 0, row: 0, ptClr: SKColor.redColor(), ptWho: "")
+    var nodePos = Point(column: 0, row: 0, ptClr: SKColor.red, ptWho: "")
     var nodeType : NodeType
     var sprite : SKSpriteNode?
     var position : CGPoint?

@@ -10,7 +10,7 @@ import UIKit
 
 class StarsOverlay: UIView {
 
-    override class func layerClass() -> AnyClass {
+    override class var layerClass : AnyClass {
         return CAEmitterLayer.self
     }
     
@@ -24,12 +24,12 @@ class StarsOverlay: UIView {
         self.setup()
     }
     
-    private var emitter: CAEmitterLayer {
+    fileprivate var emitter: CAEmitterLayer {
         return layer as! CAEmitterLayer
     }
     
-    private var particle: CAEmitterCell!
-    private var oparticle: CAEmitterCell!
+    fileprivate var particle: CAEmitterCell!
+    fileprivate var oparticle: CAEmitterCell!
     
     func setup() {
         emitter.emitterMode = kCAEmitterLayerOutline
@@ -39,7 +39,7 @@ class StarsOverlay: UIView {
         
         particle = CAEmitterCell()
         
-        particle.contents = UIImage(named: "x")!.CGImage
+        particle.contents = UIImage(named: "X")!.cgImage
         particle.birthRate = 1.0
         
         particle.lifetime = 20
@@ -55,7 +55,7 @@ class StarsOverlay: UIView {
         
         oparticle = CAEmitterCell()
         
-        oparticle.contents = UIImage(named: "o")!.CGImage
+        oparticle.contents = UIImage(named: "O")!.cgImage
         oparticle.birthRate = 0.5
         
         oparticle.lifetime = 60
@@ -72,14 +72,14 @@ class StarsOverlay: UIView {
         emitter.emitterCells = [particle, oparticle]
     }
     
-    var emitterTimer: NSTimer?
+    var emitterTimer: Timer?
     
     override func didMoveToWindow() {
         super.didMoveToWindow()
         
         if self.window != nil {
             if emitterTimer == nil {
-                emitterTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "randomizeEmitterPosition", userInfo: nil, repeats: true)
+                emitterTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(StarsOverlay.randomizeEmitterPosition), userInfo: nil, repeats: true)
             }
         } else if emitterTimer != nil {
             emitterTimer?.invalidate()
@@ -96,7 +96,7 @@ class StarsOverlay: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        emitter.emitterPosition = CGPointMake(-50, self.frame.size.height/2 + 80)
-        emitter.emitterSize = CGSizeMake(10, 10)
+        emitter.emitterPosition = CGPoint(x: -50, y: self.frame.size.height/2 + 80)
+        emitter.emitterSize = CGSize(width: 10, height: 10)
     }
 }

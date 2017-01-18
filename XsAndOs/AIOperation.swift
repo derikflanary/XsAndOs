@@ -9,7 +9,7 @@
 import Foundation
 
 
-class AIMoveCalculator: NSOperation {
+class AIMoveCalculator: Operation {
     
 //    private let lineAI: LineAI
     var node : Node?
@@ -23,7 +23,7 @@ class AIMoveCalculator: NSOperation {
         //3
     override func main() {
         //4
-        guard !self.cancelled else {return}
+        guard !self.isCancelled else {return}
 //        let (coord, node) = lineAI.calculateAIMove()
 //        self.node = node
 //        self.coordinate = coord

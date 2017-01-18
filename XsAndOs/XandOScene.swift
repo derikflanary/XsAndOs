@@ -21,7 +21,7 @@ let thirdColor = UIColor(red:0.98, green:0.88, blue:0.48, alpha:1.0)
 let boldFontName = "SFUIDisplay-Bold"
 let mainFontName = "SFUIDisplay-Regular"
 let lightFontName = "SFUIDisplay-Light"
-let transition = SKTransition.crossFadeWithDuration(1)
+let transition = SKTransition.crossFade(withDuration: 1)
 let buttonSoundEffect = SoundEffect(fileName: "button")
 let xSound = SoundEffect(fileName: "x")
 let oSound = SoundEffect(fileName: "o")
@@ -29,7 +29,7 @@ let oSound = SoundEffect(fileName: "o")
 
 class XandOScene: SKScene {
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         if let overlay = self.view?.viewWithTag(1000){
         }else{
             let overlay = StarsOverlay(frame: (self.view?.bounds)!)
@@ -38,8 +38,8 @@ class XandOScene: SKScene {
         }
         
         backgroundColor = backColor
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "receivedGameNotification:", name:"LoadGame", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "directGameNotification:", name:"LoadGameDirect", object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(XandOScene.receivedGameNotification(_:)), name:NSNotification.Name(rawValue: "LoadGame"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: "directGameNotification:", name:NSNotification.Name(rawValue: "LoadGameDirect"), object: nil)
 
     }
     
@@ -47,37 +47,37 @@ class XandOScene: SKScene {
         
     }
     
-    //Push Notification For Loaded Game//
-    dynamic func receivedGameNotification(notification: NSNotification){
-        print("notification received")
-        var title = "Your turn"
-        if let newGame = notification.userInfo!["newGame"]{
-            if newGame as! String == "Y"{
-                title = "You were invited to a new game"
-            }
-        }
-        
-        let alertController = UIAlertController(title:title, message: "load game?", preferredStyle: .Alert)
-        let okayAction = UIAlertAction(title: "Okay", style: .Default) { (action) in
-            let game = notification.userInfo!["game"] as! PFObject
-            BoardSetupController().setupGame(game, size: self.view!.frame.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
-                if success{
-                    self.transitiontoLoadedBoard(secondScene)
-                    PFInstallation.currentInstallation().badge = 0
-                }
-            })
-        }
-        let cancelAction = UIAlertAction(title: "No", style: .Cancel) { (action) -> Void in}
-        alertController.addAction(cancelAction)
-        alertController.addAction(okayAction)
-        self.view?.window?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-    func transitiontoLoadedBoard(secondScene: MultiplayerBoard){
-        removeViews()
-        let transition = SKTransition.crossFadeWithDuration(1.0)
-        self.view?.presentScene(secondScene, transition: transition)
-    }
+//    //Push Notification For Loaded Game//
+//    dynamic func receivedGameNotification(_ notification: Notification){
+//        print("notification received")
+//        var title = "Your turn"
+//        if let newGame = notification.userInfo!["newGame"]{
+//            if newGame as! String == "Y"{
+//                title = "You were invited to a new game"
+//            }
+//        }
+//        
+//        let alertController = UIAlertController(title:title, message: "load game?", preferredStyle: .alert)
+//        let okayAction = UIAlertAction(title: "Okay", style: .default) { (action) in
+//            let game = notification.userInfo!["game"] as! PFObject
+//            BoardSetupController().setupGame(game, size: self.view!.frame.size, completion: { (success, secondScene: MultiplayerBoard) -> Void in
+//                if success{
+//                    self.transitiontoLoadedBoard(secondScene)
+//                    PFInstallation.current().badge = 0
+//                }
+//            })
+//        }
+//        let cancelAction = UIAlertAction(title: "No", style: .cancel) { (action) -> Void in}
+//        alertController.addAction(cancelAction)
+//        alertController.addAction(okayAction)
+//        self.view?.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+//    }
+//    
+//    func transitiontoLoadedBoard(_ secondScene: MultiplayerBoard){
+//        removeViews()
+//        let transition = SKTransition.crossFade(withDuration: 1.0)
+//        self.view?.presentScene(secondScene, transition: transition)
+//    }
     
 
 

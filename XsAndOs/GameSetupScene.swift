@@ -9,38 +9,62 @@
 import Foundation
 import SpriteKit
 import Parse
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
     enum GameType {
-        case AI
-        case Local
-        case Online
+        case ai
+        case local
+        case online
     }
     
     //MARK: - PROPERTIES
-    private let startButton = SButton()
-    private let sizeField = UITextField()
-    private var stackView = UIStackView()
-    private var localStackView = UIStackView()
-    private var innerStack = UIStackView()
-    private var difficultyStack = UIStackView()
-    private var rowStack = UIStackView()
-    private let xButton = Button()
-    private let oButton = Button()
-    private let rowsLabel = InfoLabel(frame: CGRectZero)
-    private let teamLabel = InfoLabel(frame: CGRectZero)
-    private let difficultyLabel = InfoLabel(frame: CGRectZero)
-    private let opponentLabel = InfoLabel(frame: CGRectZero)
-    private let easyButton = Button()
-    private let moderateButton = Button()
-    private let hardButton = Button()
-    private let backButton = Button()
+    fileprivate let startButton = SButton()
+    fileprivate let sizeField = UITextField()
+    fileprivate var stackView = UIStackView()
+    fileprivate var localStackView = UIStackView()
+    fileprivate var innerStack = UIStackView()
+    fileprivate var difficultyStack = UIStackView()
+    fileprivate var rowStack = UIStackView()
+    fileprivate let xButton = Button()
+    fileprivate let oButton = Button()
+    fileprivate let rowsLabel = InfoLabel(frame: CGRect.zero)
+    fileprivate let teamLabel = InfoLabel(frame: CGRect.zero)
+    fileprivate let difficultyLabel = InfoLabel(frame: CGRect.zero)
+    fileprivate let opponentLabel = InfoLabel(frame: CGRect.zero)
+    fileprivate let easyButton = Button()
+    fileprivate let moderateButton = Button()
+    fileprivate let hardButton = Button()
+    fileprivate let backButton = Button()
     var opponent : PFUser?
     var userTeam = Board.UserTeam.X
-    var difficulty = Difficulty.Moderate
+    var difficulty = Difficulty.moderate
     var type : GameType
-    private var rowButtons = [Button]()
+    fileprivate var rowButtons = [Button]()
     var r : Int = 6
     
     //MARK: - INIT
@@ -54,84 +78,84 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     }
     
     //MARK: - VIEW SETUP
-    override func didMoveToView(view: SKView) {
-        super.didMoveToView(view)
+    override func didMove(to view: SKView) {
+        super.didMove(to: view)
         layoutViews()
     }
     
-    private func layoutViews(){
-        startButton.frame = CGRectMake(20, (self.view?.center.y)! - 80, (self.view?.bounds.size.width)! - 40, 50)
+    fileprivate func layoutViews(){
+        startButton.frame = CGRect(x: 20, y: (self.view?.center.y)! - 80, width: (self.view?.bounds.size.width)! - 40, height: 50)
         startButton.center.x = (self.view?.center.x)!
-        startButton.setTitle("Start", forState: .Normal)
-        startButton.addTarget(self, action: "newGamePressed", forControlEvents: .TouchUpInside)
+        startButton.setTitle("Start", for: UIControlState())
+        startButton.addTarget(self, action: #selector(SingleSetupScene.newGamePressed), for: .touchUpInside)
         startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
         startButton.backgroundColor = xColor
                 
-        sizeField.frame = CGRectMake(0, 0, 50, 50)
+        sizeField.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         sizeField.backgroundColor = textColor
         sizeField.textColor = thirdColor
         sizeField.font = UIFont(name: boldFontName, size: 50)
         sizeField.placeholder = "7"
-        sizeField.keyboardType = UIKeyboardType.NumberPad
-        sizeField.textAlignment = .Center
-        sizeField.borderStyle = .RoundedRect
+        sizeField.keyboardType = UIKeyboardType.numberPad
+        sizeField.textAlignment = .center
+        sizeField.borderStyle = .roundedRect
         sizeField.layer.cornerRadius = 50
         sizeField.clipsToBounds = true
         sizeField.delegate = self
 
-        xButton.setImage(UIImage(named: "ex"), forState: .Normal)
+        xButton.setImage(UIImage(named: "ex"), for: UIControlState())
         xButton.backgroundColor = xColor
-        xButton.imageView?.contentMode = .Center
+        xButton.imageView?.contentMode = .center
         xButton.layer.cornerRadius = 40
         xButton.clipsToBounds = true
-        xButton.addTarget(self, action: "xPressed", forControlEvents: .TouchUpInside)
+        xButton.addTarget(self, action: #selector(SingleSetupScene.xPressed), for: .touchUpInside)
         
-        oButton.setImage(UIImage(named: "oh"), forState: .Normal)
+        oButton.setImage(UIImage(named: "oh"), for: UIControlState())
         oButton.backgroundColor = flint
-        oButton.imageView?.contentMode = .Center
+        oButton.imageView?.contentMode = .center
         oButton.layer.cornerRadius = 40
         oButton.clipsToBounds = true
-        oButton.addTarget(self, action: "oPressed", forControlEvents: .TouchUpInside)
+        oButton.addTarget(self, action: #selector(SingleSetupScene.oPressed), for: .touchUpInside)
         
-        easyButton.setImage(UIImage(named: "x1"), forState: .Normal)
+        easyButton.setImage(UIImage(named: "x1"), for: UIControlState())
         easyButton.layer.cornerRadius = 25
         easyButton.clipsToBounds = true
-        easyButton.imageView?.contentMode = .Center
+        easyButton.imageView?.contentMode = .center
         easyButton.backgroundColor = flint
-        easyButton.addTarget(self, action: "easyPressed", forControlEvents: .TouchUpInside)
+        easyButton.addTarget(self, action: #selector(SingleSetupScene.easyPressed), for: .touchUpInside)
         
-        moderateButton.setImage(UIImage(named: "xx"), forState: .Normal)
+        moderateButton.setImage(UIImage(named: "xx"), for: UIControlState())
         moderateButton.layer.cornerRadius = 25
         moderateButton.clipsToBounds = true
-        moderateButton.imageView?.contentMode = .Center
+        moderateButton.imageView?.contentMode = .center
         moderateButton.backgroundColor = oColor
-        moderateButton.addTarget(self, action: "moderatePressed", forControlEvents: .TouchUpInside)
+        moderateButton.addTarget(self, action: #selector(SingleSetupScene.moderatePressed), for: .touchUpInside)
         
-        hardButton.setImage(UIImage(named: "xxx"), forState: .Normal)
+        hardButton.setImage(UIImage(named: "xxx"), for: UIControlState())
         hardButton.layer.cornerRadius = 25
         hardButton.clipsToBounds = true
-        hardButton.imageView?.contentMode = .Center
+        hardButton.imageView?.contentMode = .center
         hardButton.backgroundColor = flint
-        hardButton.addTarget(self, action: "hardPressed", forControlEvents: .TouchUpInside)
+        hardButton.addTarget(self, action: #selector(SingleSetupScene.hardPressed), for: .touchUpInside)
         
         rowsLabel.text = "Rows"
         teamLabel.text = "Team"
         difficultyLabel.text = "Difficulty"
         
-        backButton.frame = CGRectMake(10, 20, 50, 50)
+        backButton.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
         backButton.backgroundColor = xColor
-        backButton.setImage(UIImage(named: "home"), forState: .Normal)
-        backButton.imageView?.contentMode = .Center
-        backButton.addTarget(self, action: "mainPressed", forControlEvents: .TouchUpInside)
+        backButton.setImage(UIImage(named: "home"), for: UIControlState())
+        backButton.imageView?.contentMode = .center
+        backButton.addTarget(self, action: #selector(SingleSetupScene.mainPressed), for: .touchUpInside)
         
         createRowsStack()
         
         switch type{
-        case .AI:
+        case .ai:
             addAIStackViews()
-        case .Local:
+        case .local:
             addLocalStackViews()
-        case .Online:
+        case .online:
             if opponent != nil{
                 opponentLabel.text = "VS: \(opponent!["name"])"
                 opponentLabel.font = UIFont(name: boldFontName, size: 20)
@@ -144,37 +168,37 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         
     }
     
-    private func createRowsStack(){
+    fileprivate func createRowsStack(){
         for i in 4...8 {
             let button = Button()
-            button.setTitle(String(i), forState: .Normal)
+            button.setTitle(String(i), for: UIControlState())
             button.titleLabel?.font = UIFont(name: boldFontName, size: 24)
             button.backgroundColor = flint
             button.tag = i
-            button.addTarget(self, action: "rowButtonPressed:", forControlEvents: .TouchUpInside)
-            button.widthAnchor.constraintEqualToConstant(50).active = true
-            button.heightAnchor.constraintEqualToConstant(50).active = true
+            button.addTarget(self, action: #selector(SingleSetupScene.rowButtonPressed(_:)), for: .touchUpInside)
+            button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 50).isActive = true
             if i == r{ button.backgroundColor = thirdColor}
             rowButtons.append(button)
         }
         rowStack = UIStackView(arrangedSubviews: rowButtons)
-        rowStack.axis = .Horizontal
-        rowStack.alignment = .Center
-        rowStack.distribution = .EqualSpacing
+        rowStack.axis = .horizontal
+        rowStack.alignment = .center
+        rowStack.distribution = .equalSpacing
         rowStack.spacing = 21
-        if UIScreen.mainScreen().bounds.width == 320{
+        if UIScreen.main.bounds.width == 320{
             rowStack.spacing = 8
         }
         
     }
     
-    private func addLocalStackViews(){
+    fileprivate func addLocalStackViews(){
     
         localStackView = UIStackView(arrangedSubviews: [backButton, startButton, rowsLabel, rowStack])
-        localStackView.axis = .Vertical
-        localStackView.alignment = .Center
+        localStackView.axis = .vertical
+        localStackView.alignment = .center
         localStackView.spacing = 21
-        localStackView.distribution = .EqualSpacing
+        localStackView.distribution = .equalSpacing
         localStackView.translatesAutoresizingMaskIntoConstraints = false
         localStackView.alpha = 1
         self.view?.addSubview(localStackView)
@@ -182,28 +206,28 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         addLocalTypeAutoContraints()
     }
     
-    private func addAIStackViews(){
+    fileprivate func addAIStackViews(){
         
         innerStack = UIStackView(arrangedSubviews: [xButton, oButton])
-        innerStack.axis = .Horizontal
-        innerStack.alignment = .Center
-        innerStack.distribution = .FillEqually
+        innerStack.axis = .horizontal
+        innerStack.alignment = .center
+        innerStack.distribution = .fillEqually
         innerStack.spacing = 50
         
         difficultyStack = UIStackView(arrangedSubviews: [easyButton, moderateButton, hardButton])
-        difficultyStack.axis = .Horizontal
-        difficultyStack.alignment = .Center
-        difficultyStack.distribution = .FillEqually
+        difficultyStack.axis = .horizontal
+        difficultyStack.alignment = .center
+        difficultyStack.distribution = .fillEqually
         difficultyStack.spacing = 20
 
         stackView = UIStackView(arrangedSubviews: [backButton, startButton, rowsLabel, rowStack, teamLabel, innerStack, difficultyLabel, difficultyStack])
-        stackView.axis = .Vertical
-        stackView.alignment = .Center
+        stackView.axis = .vertical
+        stackView.alignment = .center
         stackView.spacing = 21
-        if UIScreen.mainScreen().bounds.width == 320{
+        if UIScreen.main.bounds.width == 320{
             stackView.spacing = 11
         }
-        stackView.distribution = .EqualSpacing
+        stackView.distribution = .equalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.alpha = 0
         self.view?.addSubview(stackView)
@@ -211,18 +235,18 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         addAITypeAutoContraints()
     }
     
-    private func addOnlineStackViews(){
+    fileprivate func addOnlineStackViews(){
         innerStack = UIStackView(arrangedSubviews: [xButton, oButton])
-        innerStack.axis = .Horizontal
-        innerStack.alignment = .Center
-        innerStack.distribution = .FillEqually
+        innerStack.axis = .horizontal
+        innerStack.alignment = .center
+        innerStack.distribution = .fillEqually
         innerStack.spacing = 50
         
         stackView = UIStackView(arrangedSubviews: [backButton,opponentLabel, startButton, rowsLabel, rowStack, teamLabel, innerStack])
-        stackView.axis = .Vertical
-        stackView.alignment = .Center
+        stackView.axis = .vertical
+        stackView.alignment = .center
         stackView.spacing = 21
-        stackView.distribution = .EqualSpacing
+        stackView.distribution = .equalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.alpha = 0
         self.view?.addSubview(stackView)
@@ -231,71 +255,71 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
 
     }
     //MARK: - AUTOCONTRAINTS
-    private func addLocalTypeAutoContraints(){
+    fileprivate func addLocalTypeAutoContraints(){
         let margins = self.view?.layoutMarginsGuide
-        localStackView.leadingAnchor.constraintEqualToAnchor(margins?.leadingAnchor).active = true
-        localStackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
-        localStackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
-        localStackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: 0).active = true
-        localStackView.heightAnchor.constraintEqualToConstant(300).active = true
+        localStackView.leadingAnchor.constraint(equalTo: (margins?.leadingAnchor)!).isActive = true
+        localStackView.trailingAnchor.constraint(equalTo: (margins?.trailingAnchor)!).isActive = true
+        localStackView.centerXAnchor.constraint(equalTo: (margins?.centerXAnchor)!).isActive = true
+        localStackView.centerYAnchor.constraint(equalTo: (margins?.centerYAnchor)!, constant: 0).isActive = true
+        localStackView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         addMainAutoContraints()
     }
     
-    private func addMainAutoContraints(){
+    fileprivate func addMainAutoContraints(){
         let margins = self.view?.layoutMarginsGuide
-        startButton.heightAnchor.constraintEqualToConstant(50).active = true
-        startButton.widthAnchor.constraintGreaterThanOrEqualToAnchor(margins?.widthAnchor).active = true
-        sizeField.widthAnchor.constraintEqualToConstant(100).active = true
-        sizeField.heightAnchor.constraintEqualToConstant(100).active = true
-        backButton.widthAnchor.constraintEqualToConstant(50).active = true
-        backButton.heightAnchor.constraintEqualToConstant(50).active = true
+        startButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        startButton.widthAnchor.constraint(greaterThanOrEqualTo: (margins?.widthAnchor)!).isActive = true
+        sizeField.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        sizeField.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        backButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        backButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
-    private func addAITypeAutoContraints(){
+    fileprivate func addAITypeAutoContraints(){
         let margins = self.view?.layoutMarginsGuide
-        stackView.leadingAnchor.constraintEqualToAnchor(margins?.leadingAnchor).active = true
-        stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
-        stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
-        stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: 0).active = true
-        stackView.heightAnchor.constraintEqualToAnchor(margins?.heightAnchor, constant: -100).active = true
+        stackView.leadingAnchor.constraint(equalTo: (margins?.leadingAnchor)!).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: (margins?.trailingAnchor)!).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: (margins?.centerXAnchor)!).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: (margins?.centerYAnchor)!, constant: 0).isActive = true
+        stackView.heightAnchor.constraint(equalTo: (margins?.heightAnchor)!, constant: -100).isActive = true
         
         var width : CGFloat = 80
-        if UIScreen.mainScreen().bounds.width == 320{
+        if UIScreen.main.bounds.width == 320{
             width = 60
         }
-        xButton.widthAnchor.constraintEqualToConstant(width).active = true
-        xButton.heightAnchor.constraintEqualToConstant(width).active = true
-        oButton.widthAnchor.constraintEqualToConstant(width).active = true
-        oButton.heightAnchor.constraintEqualToConstant(width).active = true
+        xButton.widthAnchor.constraint(equalToConstant: width).isActive = true
+        xButton.heightAnchor.constraint(equalToConstant: width).isActive = true
+        oButton.widthAnchor.constraint(equalToConstant: width).isActive = true
+        oButton.heightAnchor.constraint(equalToConstant: width).isActive = true
         
-        easyButton.heightAnchor.constraintEqualToConstant(50).active = true
-        easyButton.widthAnchor.constraintEqualToConstant(100).active = true
-        moderateButton.heightAnchor.constraintEqualToConstant(50).active = true
-        moderateButton.widthAnchor.constraintEqualToConstant(100).active = true
-        hardButton.heightAnchor.constraintEqualToConstant(50).active = true
-        hardButton.widthAnchor.constraintEqualToConstant(100).active = true
+        easyButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        easyButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        moderateButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        moderateButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        hardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        hardButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         addMainAutoContraints()
     }
     
-    private func addOnlineTypeAutoContraints(){
+    fileprivate func addOnlineTypeAutoContraints(){
         let margins = self.view?.layoutMarginsGuide
-        stackView.leadingAnchor.constraintEqualToAnchor(margins?.leadingAnchor).active = true
-        stackView.trailingAnchor.constraintEqualToAnchor(margins?.trailingAnchor).active = true
-        stackView.centerXAnchor.constraintEqualToAnchor(margins?.centerXAnchor).active = true
-        stackView.centerYAnchor.constraintEqualToAnchor(margins?.centerYAnchor, constant: 0).active = true
-        stackView.heightAnchor.constraintEqualToAnchor(margins?.heightAnchor, constant: -140).active = true
+        stackView.leadingAnchor.constraint(equalTo: (margins?.leadingAnchor)!).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: (margins?.trailingAnchor)!).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: (margins?.centerXAnchor)!).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: (margins?.centerYAnchor)!, constant: 0).isActive = true
+        stackView.heightAnchor.constraint(equalTo: (margins?.heightAnchor)!, constant: -140).isActive = true
 
-        xButton.widthAnchor.constraintEqualToConstant(80).active = true
-        xButton.heightAnchor.constraintEqualToConstant(80).active = true
-        oButton.widthAnchor.constraintEqualToConstant(80).active = true
-        oButton.heightAnchor.constraintEqualToConstant(80).active = true
+        xButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        xButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        oButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        oButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         addMainAutoContraints()
     }
     
     //MARK: - TOUCHES
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view?.endEditing(true)
 
     }
@@ -323,32 +347,32 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     func easyPressed(){
         buttonSoundEffect.play()
         animateDifficultyButtonPress(easyButton, button1: moderateButton, button2: hardButton)
-        difficulty = .Easy
+        difficulty = .easy
     }
     
     func moderatePressed(){
         buttonSoundEffect.play()
         animateDifficultyButtonPress(moderateButton, button1: easyButton, button2: hardButton)
-        difficulty = .Moderate
+        difficulty = .moderate
     }
     
     func hardPressed(){
         buttonSoundEffect.play()
         animateDifficultyButtonPress(hardButton, button1: easyButton, button2: moderateButton)
-        difficulty = .Hard
+        difficulty = .hard
     }
     
     func mainPressed(){
         buttonSoundEffect.play()
         removeViews()
-        if type == .Online{
+        if type == .online{
             transitionsToOnlineScene()
         }else{
             transitionToMainScene()
         }
     }
     
-    func rowButtonPressed(sender: Button){
+    func rowButtonPressed(_ sender: Button){
         buttonSoundEffect.play()        
         let oldButton = rowButtons[r - 4]
         animateRowButtonPress(sender, button1: oldButton)
@@ -356,49 +380,49 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     }
 
     //MARK: - TRANSITIONS
-    private func transitionToBoardScene(dim : Int, rows : Int){
+    fileprivate func transitionToBoardScene(_ dim : Int, rows : Int){
         var aiGame = false
-        if type == .AI{
+        if type == .ai{
             aiGame = true
         }
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
+        UIView.animate(withDuration: 1.0, animations: { () -> Void in
             self.stackView.alpha = 0
             self.localStackView.alpha = 0
             self.view?.viewWithTag(1000)?.alpha = 0
-        }) { (done) -> Void in
-            if self.type == .Online{
+        }, completion: { (done) -> Void in
+            if self.type == .online{
                self.transitionToOnlineBoardScene(dim, rows: rows)
             }else{
                 let secondScene = Board(size: self.view!.frame.size, theDim: dim, theRows: rows, userTeam: self.userTeam, aiGame: aiGame, difficulty: self.difficulty)
-                secondScene.scaleMode = SKSceneScaleMode.AspectFill
+                secondScene.scaleMode = SKSceneScaleMode.aspectFill
                 self.scene!.view?.presentScene(secondScene, transition: transition)
             }
             self.removeViews()
-        }
+        }) 
     }
     
-    private func transitionToOnlineBoardScene(dim : Int, rows : Int){
-        var oTeam = opponent
-        var xTeam = PFUser.currentUser()
-        if self.userTeam.rawValue == o{
-            oTeam = PFUser.currentUser()
-            xTeam = opponent
-        }
-        XGameController.Singleton.sharedInstance.createNewGame(xTeam: xTeam!, oTeam: oTeam!, rows: rows, dim: dim) { (success, game, id, xId, oId) -> Void in
-            if success{
-                let secondScene = MultiplayerBoard(size: (self.view?.frame.size)!, theDim: dim, theRows: rows, userTeam: self.userTeam, aiGame: false)
-                secondScene.xUser = xTeam!
-                secondScene.oUser = oTeam!
-                
-                secondScene.xTurnLoad = true
-                secondScene.scaleMode = SKSceneScaleMode.AspectFill
-                let transition = SKTransition.crossFadeWithDuration(1)
-                secondScene.gameID = id
-                secondScene.xObjId = xId
-                secondScene.oObjId = oId
-                self.scene!.view?.presentScene(secondScene, transition: transition)
-            }
-        }
+    fileprivate func transitionToOnlineBoardScene(_ dim : Int, rows : Int){
+//        var oTeam = opponent
+//        var xTeam = PFUser.current()
+//        if self.userTeam.rawValue == o{
+//            oTeam = PFUser.current()
+//            xTeam = opponent
+//        }
+//        XGameController.Singleton.sharedInstance.createNewGame(xTeam: xTeam!, oTeam: oTeam!, rows: rows, dim: dim) { (success, game, id, xId, oId) -> Void in
+//            if success{
+//                let secondScene = MultiplayerBoard(size: (self.view?.frame.size)!, theDim: dim, theRows: rows, userTeam: self.userTeam, aiGame: false)
+//                secondScene.xUser = xTeam!
+//                secondScene.oUser = oTeam!
+//                
+//                secondScene.xTurnLoad = true
+//                secondScene.scaleMode = SKSceneScaleMode.AspectFill
+//                let transition = SKTransition.crossFadeWithDuration(1)
+//                secondScene.gameID = id
+//                secondScene.xObjId = xId
+//                secondScene.oObjId = oId
+//                self.scene!.view?.presentScene(secondScene, transition: transition)
+//            }
+//        }
     }
 
     
@@ -408,8 +432,8 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     }
     
     func transitionsToOnlineScene(){
-        let mainScene = GameScene(size: self.size)
-        self.scene?.view?.presentScene(mainScene)
+//        let mainScene = GameScene(size: self.size)
+//        self.scene?.view?.presentScene(mainScene)
     }
     
     //MARK: - CLEAN UP
@@ -422,54 +446,54 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     //MARK: - ANIMATIONS
     
 
-    private func animateInStackView(){
-        UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: .CurveEaseInOut, animations: { () -> Void in
+    fileprivate func animateInStackView(){
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.stackView.alpha = 1
             self.localStackView.alpha = 1
             }) { (done) -> Void in
         }
     }
 
-    func animateDifficultyButtonPress(pressedButton: UIButton, button1: UIButton, button2: UIButton){
-        UIView.animateWithDuration(0.25) { () -> Void in
+    func animateDifficultyButtonPress(_ pressedButton: UIButton, button1: UIButton, button2: UIButton){
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             pressedButton.backgroundColor = oColor
             button1.backgroundColor = flint
             button2.backgroundColor = flint
             pressedButton.alpha = 1
             button1.alpha = 1
             button2.alpha = 1
-        }
+        }) 
     }
     
-    func animateRowButtonPress(pressedButton: UIButton, button1: UIButton){
-        UIView.animateWithDuration(0.25) { () -> Void in
+    func animateRowButtonPress(_ pressedButton: UIButton, button1: UIButton){
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             pressedButton.backgroundColor = thirdColor
             button1.backgroundColor = flint
-        }
+        }) 
     }
     
     func animateXButtonPress(){
-        UIView.animateWithDuration(0.25) { () -> Void in
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             self.oButton.backgroundColor = flint
             self.xButton.backgroundColor = xColor
-        }
+        }) 
     }
     
     func animateOButtonPress(){
-        UIView.animateWithDuration(0.25) { () -> Void in
+        UIView.animate(withDuration: 0.25, animations: { () -> Void in
             self.oButton.backgroundColor = oColor
             self.xButton.backgroundColor = flint
-        }
+        }) 
     }
 
     //MARK: - TEXTFIELD DELEGATE
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else { return true }
         let newLength = text.utf16.count + string.utf16.count - range.length
         return newLength <= 1 // Bool
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
         let textInt = Int(text)
         if textInt < 5{
@@ -486,7 +510,7 @@ class InfoLabel: UILabel{
         self.numberOfLines = 0
         self.font = UIFont(name: boldFontName, size: 24)
         self.textColor = UIColor(red: 0.78, green: 0.81, blue: 0.83, alpha: 1.0)
-        self.textAlignment = .Center
+        self.textAlignment = .center
     }
 
     required init?(coder aDecoder: NSCoder) {

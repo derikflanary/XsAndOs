@@ -20,7 +20,7 @@ class LineShapeLayer : CAShapeLayer {
         setupValues(columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: team)
     }
     
-    init(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String, path: CGPathRef, color: CGColor) {
+    init(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String, path: CGPath, color: CGColor) {
         linesForParse = []
         super.init()
         setupValues(columnA, rowA: rowA, columnB: columnB, rowB: rowB, team: team)
@@ -28,24 +28,24 @@ class LineShapeLayer : CAShapeLayer {
         strokeColor = color
     }
 
-    private func setupValues(columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String){
+    fileprivate func setupValues(_ columnA: Int, rowA: Int, columnB: Int, rowB: Int, team: String){
         let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, position: nil)
         coordinates.append(coordinate)
         self.team = team
     }
     
-    func addCoordinate(columnA: Int, rowA: Int, columnB: Int, rowB: Int){
+    func addCoordinate(_ columnA: Int, rowA: Int, columnB: Int, rowB: Int){
         let coordinate = Coordinate(columnA: columnA, rowA: rowA, columnB: columnB, rowB: rowB, position: nil)
         coordinates.append(coordinate)
     }
     
-    func addCoordinatesFromLine(lineShapeLayer: LineShapeLayer){
+    func addCoordinatesFromLine(_ lineShapeLayer: LineShapeLayer){
         for coordinate in lineShapeLayer.coordinates{
             self.addCoordinate(coordinate.columnA, rowA: coordinate.rowA, columnB: coordinate.columnB, rowB: coordinate.rowB)
         }
     }
     
-    func setShapeAspects(newPath: CGPathRef){
+    func setShapeAspects(_ newPath: CGPath){
         path = newPath
         lineJoin = kCALineJoinRound
         lineCap = kCALineCapRound
@@ -57,19 +57,19 @@ class LineShapeLayer : CAShapeLayer {
 //        userInteractionEnabled = false
     }
     
-    func createPath(pointA pointA: CGPoint, pointB: CGPoint) -> CGPathRef{
+    func createPath(pointA: CGPoint, pointB: CGPoint) -> CGPath{
         let newPath = UIBezierPath()
-        newPath.moveToPoint(pointA)
-        newPath.addLineToPoint(pointB)
-        return newPath.CGPath
+        newPath.move(to: pointA)
+        newPath.addLine(to: pointB)
+        return newPath.cgPath
     }
     
-    func appendPath(newPath: CGPathRef){
+    func appendPath(_ newPath: CGPath){
         if path != nil{
-            let bez = UIBezierPath(CGPath: path!)
-            let bez2 = UIBezierPath(CGPath: newPath)
-            bez.appendPath(bez2)
-            path = bez.CGPath
+            let bez = UIBezierPath(cgPath: path!)
+            let bez2 = UIBezierPath(cgPath: newPath)
+            bez.append(bez2)
+            path = bez.cgPath
         }
     }
     
@@ -85,7 +85,7 @@ class LineShapeLayer : CAShapeLayer {
         }
     }
     
-    func coordinateToDict(coordinate: Coordinate) -> [String: Int]{
+    func coordinateToDict(_ coordinate: Coordinate) -> [String: Int]{
         let dict = ["c": coordinate.columnA,
             "r": coordinate.rowA,
             "k": coordinate.columnB,
@@ -93,7 +93,7 @@ class LineShapeLayer : CAShapeLayer {
         return dict
     }
     
-    func copyLineValues(lineShapeLayer: LineShapeLayer){
+    func copyLineValues(_ lineShapeLayer: LineShapeLayer){
         team = lineShapeLayer.team
         coordinates = lineShapeLayer.coordinates
         setShapeAspects(lineShapeLayer.path!)
@@ -101,9 +101,15 @@ class LineShapeLayer : CAShapeLayer {
     }
     
 
-    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+}
+
+extension LineShapeLayer: CAAnimationDelegate {
+    
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if flag{
             self.removeFromSuperlayer()
         }
     }
+    
 }
+

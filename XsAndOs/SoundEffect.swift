@@ -16,9 +16,9 @@ class SoundEffect: NSObject, AVAudioPlayerDelegate {
     init(fileName: String) {
         super.init()
         
-        let path = NSBundle.mainBundle().URLForResource(fileName, withExtension: "mp3")
+        let path = Bundle.main.url(forResource: fileName, withExtension: "mp3")
         do{
-            player = try AVAudioPlayer(contentsOfURL: path!)
+            player = try AVAudioPlayer(contentsOf: path!)
             player.prepareToPlay()
             player.delegate = self
             player.rate = 2.0
@@ -32,7 +32,7 @@ class SoundEffect: NSObject, AVAudioPlayerDelegate {
     }
     
     func play(){
-        let status = NSUserDefaults.standardUserDefaults().valueForKey("sound") as! String
+        let status = UserDefaults.standard.value(forKey: "sound") as! String
         guard status == "on" else {return}
         player.pause()
         player.currentTime = 0.0

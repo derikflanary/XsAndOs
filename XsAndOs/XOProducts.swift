@@ -14,13 +14,13 @@ import Foundation
 public enum XOProducts {
     
     /// TODO:  Change this to whatever you set on iTunes connect
-    private static let Prefix = "com.derikflanary.XsAndOs."
+    fileprivate static let Prefix = "com.derikflanary.XsAndOs."
     
     /// MARK: - Supported Product Identifiers
     public static let RemoveAds = Prefix + "removeAds"
     
     // All of the products assembled into a set of product identifiers.
-    private static let productIdentifiers: Set<String> = ["removeAds"]
+    fileprivate static let productIdentifiers: Set<String> = ["removeAds"]
 
     
     /// Static instance of IAPHelper that for rage products.
@@ -28,6 +28,6 @@ public enum XOProducts {
 }
 
 /// Return the resourcename for the product identifier.
-func resourceNameForProductIdentifier(productIdentifier: String) -> String? {
-    return productIdentifier.componentsSeparatedByString(".").last
+func resourceNameForProductIdentifier(_ productIdentifier: String) -> String? {
+    return productIdentifier.components(separatedBy: ".").last
 }
