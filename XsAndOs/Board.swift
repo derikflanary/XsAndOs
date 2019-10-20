@@ -596,11 +596,11 @@ class Board: XandOScene {
     
     func deleteLineFromArrays(_ lineToDelete: LineShapeLayer){
         if lineToDelete.team == x{
-            if let index = xLines.index(of: lineToDelete){
+            if let index = xLines.firstIndex(of: lineToDelete){
                 xLines.remove(at: index)
             }
         }else if lineToDelete.team == o{
-            if let index = oLines.index(of: lineToDelete){
+            if let index = oLines.firstIndex(of: lineToDelete){
                 oLines.remove(at: index)
             }
         }
@@ -822,7 +822,7 @@ class Board: XandOScene {
     func undoAppendedLine(){
         guard !previousMoveDetails.moveUnDid else{return}
         var lineArray = lineArrayForLastMove()
-        let index = lineArray.index(of: previousMoveDetails.newAppendedLine)
+        let index = lineArray.firstIndex(of: previousMoveDetails.newAppendedLine)
         let lineToRemove = lineArray[index!]
         lineToRemove.removeFromSuperlayer()
         lineArray.remove(at: index!)

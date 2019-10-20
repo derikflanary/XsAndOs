@@ -250,7 +250,7 @@ class LineAI {
                     insertStepInOpenSteps(step)
                     
                 }else{ //already in openlist
-                    if let index = openSteps.index(of: step){
+                    if let index = openSteps.firstIndex(of: step){
                         let oldStep = openSteps[index]
                         
                         // Check to see if the G score for that step is lower if we use the current step to get there
