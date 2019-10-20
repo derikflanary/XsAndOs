@@ -19,7 +19,6 @@ class MainScene: XandOScene{
     fileprivate var circle2 = CircleView()
     fileprivate let muteButton = Button()
     fileprivate let noAdsButton = Button()
-    fileprivate var pageControl: PageControl!
     fileprivate let exitButton = Button()
     fileprivate var products = [SKProduct]()
     
@@ -28,13 +27,7 @@ class MainScene: XandOScene{
     //MARK: - VIEW SETUP
     override func didMove(to view: SKView) {
         super.didMove(to: view)
-        
-        if !UserDefaults.standard.bool(forKey: "Tutorial"){
-            displayTutorial()
-            UserDefaults.standard.set(true, forKey: "Tutorial")
-        }else{
-            layoutViews()
-        }
+        layoutViews()
     }
     
     
@@ -62,9 +55,9 @@ class MainScene: XandOScene{
         muteButton.backgroundColor = oColor
         let status = UserDefaults.standard.value(forKey: "sound") as! String
         if status == "off"{
-            muteButton.setImage(UIImage(named: "mute"), for: UIControlState())
+            muteButton.setImage(UIImage(named: "mute"), for: UIControl.State())
         }else{
-            muteButton.setImage(UIImage(named: "sound"), for: UIControlState())
+            muteButton.setImage(UIImage(named: "sound"), for: UIControl.State())
         }
         self.view?.addSubview(muteButton)
         
@@ -74,7 +67,7 @@ class MainScene: XandOScene{
             noAdsButton.alpha = 0
             noAdsButton.backgroundColor = oColor
             noAdsButton.isEnabled = false
-            noAdsButton.setImage(UIImage(named:"noAds"), for: UIControlState())
+            noAdsButton.setImage(UIImage(named:"noAds"), for: UIControl.State())
             self.view?.addSubview(noAdsButton)
             
             requestProducts()
@@ -90,7 +83,7 @@ class MainScene: XandOScene{
     }
     
     //MARK: - BUTTON METHODS
-    func multiplayerPressed(){
+    @objc func multiplayerPressed(){
         buttonSoundEffect.play()
         transitionToSingleGameSetup(.local)
 //        if !buttonOpened{
@@ -102,16 +95,16 @@ class MainScene: XandOScene{
 //        }
     }
     
-    func singlePressed(){
+    @objc func singlePressed(){
         buttonSoundEffect.play()
         exitAnimation(type: .ai)
     }
     
-    func singlePressedCancelled(){
+    @objc func singlePressedCancelled(){
         singleButton.alpha = 1
     }
     
-    func localPressed(){
+    @objc func localPressed(){
         print("local pressed")
         buttonSoundEffect.play()
         exitAnimation(type: .local)
@@ -119,26 +112,26 @@ class MainScene: XandOScene{
     }
     
     
-    func onlinePressed(){
+    @objc func onlinePressed(){
         buttonSoundEffect.play()
         transitionToMultiplayerScene()
         print("online pressed")
     }
     
-    func mutePressed(){
+    @objc func mutePressed(){
         let status = UserDefaults.standard.value(forKey: "sound") as! String
         if status == "off"{
             UserDefaults.standard.set("on", forKey: "sound")
             NotificationCenter.default.post(name: Notification.Name(rawValue: "SoundOn"), object: nil)
-            muteButton.setImage(UIImage(named: "sound"), for: UIControlState())
+            muteButton.setImage(UIImage(named: "sound"), for: UIControl.State())
         }else{
             UserDefaults.standard.set("off", forKey: "sound")
             NotificationCenter.default.post(name: Notification.Name(rawValue: "SoundOff"), object: nil)
-            muteButton.setImage(UIImage(named: "mute"), for: UIControlState())
+            muteButton.setImage(UIImage(named: "mute"), for: UIControl.State())
         }
     }
     
-    func noAdsPressed(){
+    @objc func noAdsPressed(){
         let product = products[0]
 
         let alertController = UIAlertController(title: "", message: "Remove Ads Forever?", preferredStyle: .alert)
@@ -158,10 +151,8 @@ class MainScene: XandOScene{
 
     }
     
-    func exitPressed(){
+    @objc func exitPressed(){
         buttonSoundEffect.play()
-        pageControl.willMoveFromView(view!)
-        self.view?.removeGestureRecognizer(pageControl.panGestureRecognizer)
         UIView.animate(withDuration: 0.5, animations: { () -> Void in
             self.exitButton.alpha = 0
         }, completion: { (done) -> Void in
@@ -229,8 +220,8 @@ class MainScene: XandOScene{
             }
             
             }) { (dond) -> Void in
-                self.startButton.setTitle("Multiplayer", for: UIControlState())
-                self.singleButton.setTitle("Single Player", for: UIControlState())
+                self.startButton.setTitle("Multiplayer", for: UIControl.State())
+                self.singleButton.setTitle("Single Player", for: UIControl.State())
         }
     }
     
@@ -253,19 +244,19 @@ class MainScene: XandOScene{
             self.startButton.frame.size.width = 50
             self.startButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: (self.view?.center.y)! - 80, width: 50, height: 50)
             self.startButton.backgroundColor = oColor
-            self.startButton.setTitle("", for: UIControlState())
+            self.startButton.setTitle("", for: UIControl.State())
             self.startButton.alpha = 1
             
             }) { (done) -> Void in
                 self.circle1 = CircleView(frame: self.startButton.frame)
-                self.circle1.setTitle("Pass & Play", for: UIControlState())
+                self.circle1.setTitle("Pass & Play", for: UIControl.State())
                 self.circle1.addTarget(self, action: #selector(MainScene.localPressed), for: .touchUpInside)
                 self.view?.addSubview(self.circle1)
                 self.circle2 = CircleView(frame: self.startButton.frame)
-                self.circle2.setTitle("Online", for: UIControlState())
+                self.circle2.setTitle("Online", for: UIControl.State())
                 self.circle2.addTarget(self, action: #selector(MainScene.onlinePressed), for: .touchUpInside)
                 self.view?.addSubview(self.circle2)
-                self.startButton.setTitle("X", for: UIControlState())
+                self.startButton.setTitle("X", for: UIControl.State())
                 
                 UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveLinear, animations: { () -> Void in
                     self.circle2.center = CGPoint(x: self.startButton.center.x, y: self.startButton.center.y + 60)
@@ -309,28 +300,19 @@ class MainScene: XandOScene{
                     self.startButton.widthAnchor.constraint(equalToConstant: 50).isActive = false
                     self.startButton.frame = CGRect(x: 20, y: (self.view?.center.y)! - 80, width: (self.view?.bounds.size.width)! - 40, height: 50)
                     self.startButton.backgroundColor = xColor
-                    self.startButton.setTitle("Multiplayer", for: UIControlState())
+                    self.startButton.setTitle("Multiplayer", for: UIControl.State())
                     }) { (done) -> Void in}
                 }
     }
     
     //MARK: - TOUCHES
     
-    //MARK: - TUTORIAL
-    fileprivate func displayTutorial() {
-        self.view?.viewWithTag(1000)?.removeFromSuperview()
-        pageControl = PageControl(scene: self)
-        addContent()
-        pageControl.enable(4)
-        
-    }
-    
     fileprivate func addContent() {
         
         exitButton.frame = CGRect(x: 20, y: (self.view?.bounds.height)! - 60, width: (self.view?.bounds.size.width)! - 40, height: 50)
         exitButton.addTarget(self, action: #selector(MainScene.exitPressed), for: .touchUpInside)
         exitButton.backgroundColor = xColor
-        exitButton.setTitle("Let's Play", for: UIControlState())
+        exitButton.setTitle("Let's Play", for: UIControl.State())
         exitButton.alpha = 0
         exitButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
         self.view?.addSubview(exitButton)
@@ -355,8 +337,6 @@ class MainScene: XandOScene{
             let y = self.size.height / 2.0 + 50
             node.position = CGPoint(x:x, y:y)
             labelnode.position = CGPoint(x: x, y: y)
-            pageControl.addChild(node)
-            pageControl.addChild(labelnode)
         }
     }
 
@@ -374,7 +354,7 @@ class MainScene: XandOScene{
     }
     
     // When a product is purchased, this notification fires, redraw the correct row
-    func productPurchased(_ notification: Notification) {
+    @objc func productPurchased(_ notification: Notification) {
         
 //        let productIdentifier = notification.object as! String
         UserDefaults.standard.set(true, forKey: "adsRemoved")

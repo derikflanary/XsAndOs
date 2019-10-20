@@ -10,8 +10,6 @@
 		EE0379051C3F051100312DF4 /* XandOScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0379041C3F051100312DF4 /* XandOScene.swift */; };
 		EE0379091C3F1E1A00312DF4 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE0379071C3F1E1A00312DF4 /* Fabric.framework */; };
 		EE03790A1C3F1E1B00312DF4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */; };
-		EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = EE03D31C1C4AC9BE00078CF6 /* .gitkeep */; };
-		EE03D3241C4AC9BE00078CF6 /* SAConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE03D31D1C4AC9BE00078CF6 /* SAConfettiView.swift */; };
 		EE03D33A1C4EF71B00078CF6 /* SF-UI-Display-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */; };
 		EE03D33B1C4EF71B00078CF6 /* SF-UI-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */; };
 		EE03D33C1C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */; };
@@ -57,7 +55,6 @@
 		EE65F5591C31DF7900E51138 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE65F5581C31DF7900E51138 /* FBSDKCoreKit.framework */; };
 		EE65F55B1C31DF9000E51138 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE65F55A1C31DF9000E51138 /* FBSDKLoginKit.framework */; };
 		EE7FDDD81C65325F00B390BC /* LineAnimationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */; };
-		EE87E0631C7FC6A000CA059E /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87E0621C7FC6A000CA059E /* PageControl.swift */; };
 		EE87E0671C7FFC4D00CA059E /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87E0661C7FFC4D00CA059E /* IAPHelper.swift */; };
 		EE87E0691C7FFDFC00CA059E /* XOProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87E0681C7FFDFC00CA059E /* XOProducts.swift */; };
 		EE87E06C1C80D5D500CA059E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE87E06B1C80D5D500CA059E /* StoreKit.framework */; };
@@ -111,8 +108,6 @@
 		EE0379041C3F051100312DF4 /* XandOScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XandOScene.swift; sourceTree = "<group>"; };
 		EE0379071C3F1E1A00312DF4 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		EE0379081C3F1E1A00312DF4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		EE03D31C1C4AC9BE00078CF6 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		EE03D31D1C4AC9BE00078CF6 /* SAConfettiView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAConfettiView.swift; sourceTree = "<group>"; };
 		EE03D3251C4EF71B00078CF6 /* SF-UI-Display-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Black.otf"; sourceTree = "<group>"; };
 		EE03D3261C4EF71B00078CF6 /* SF-UI-Display-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Bold.otf"; sourceTree = "<group>"; };
 		EE03D3271C4EF71B00078CF6 /* SF-UI-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Heavy.otf"; sourceTree = "<group>"; };
@@ -165,7 +160,6 @@
 		EE65F5581C31DF7900E51138 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		EE65F55A1C31DF9000E51138 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "FacebookSDK/FacebookSDKs-iOS-20151111/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		EE7FDDD71C65325F00B390BC /* LineAnimationOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAnimationOperation.swift; sourceTree = "<group>"; };
-		EE87E0621C7FC6A000CA059E /* PageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PageControl.swift; path = "../../../../Downloads/GBPageControl-master/GBPageControl/PageControl.swift"; sourceTree = "<group>"; };
 		EE87E0661C7FFC4D00CA059E /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		EE87E0681C7FFDFC00CA059E /* XOProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XOProducts.swift; sourceTree = "<group>"; };
 		EE87E06B1C80D5D500CA059E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -244,40 +238,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EE03D3141C4AC9BE00078CF6 /* Confetti */ = {
-			isa = PBXGroup;
-			children = (
-				EE03D31B1C4AC9BE00078CF6 /* Classes */,
-			);
-			name = Confetti;
-			path = "../../../../Downloads/SAConfettiView-master/Pod";
-			sourceTree = "<group>";
-		};
-		EE03D31B1C4AC9BE00078CF6 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				EE03D31C1C4AC9BE00078CF6 /* .gitkeep */,
-				EE03D31D1C4AC9BE00078CF6 /* SAConfettiView.swift */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
 		EE03D34F1C4EF72300078CF6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				EE2403131C7D1FBE00849652 /* Chartboost.framework */,
 				EEA08ECB1C6BFA04002F09A9 /* StarsOverlay.swift */,
 				EE5E81821BDEC1410004424F /* GameScene.sks */,
-				EE03D3141C4AC9BE00078CF6 /* Confetti */,
-				EE03D3F01C56E5A000078CF6 /* Sounds */,
-				EEEE5BB41C77D32800B181F6 /* Font */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		EE03D3F01C56E5A000078CF6 /* Sounds */ = {
-			isa = PBXGroup;
-			children = (
 				EEC4F1F91C83AD6900F3E07E /* lose.mp3 */,
 				EEEE5BBD1C7B788D00B181F6 /* background.mp3 */,
 				EEEE5BB91C77D92700B181F6 /* board.mp3 */,
@@ -286,9 +252,9 @@
 				EEEE5BB61C77D83000B181F6 /* x.mp3 */,
 				EEEE5BB01C77C3A200B181F6 /* button.mp3 */,
 				EEEE5BB21C77D2C000B181F6 /* cheer.mp3 */,
+				EEEE5BB41C77D32800B181F6 /* Font */,
 			);
-			name = Sounds;
-			path = "../../../../Downloads/ExpandingMenu-master/Pod/Assets/Sounds";
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		EE03D3FA1C582E9200078CF6 /* Parent Scenes */ = {
@@ -411,7 +377,6 @@
 				EEE9E3DC1C6002DF0041E0BA /* AI */,
 				EE03D3FC1C582EC300078CF6 /* Multiplayer */,
 				EE534B7B1C45C6290085E806 /* Controllers */,
-				EE87E0611C7FC1BA00CA059E /* Tutorial */,
 				EEA08ECD1C6C4186002F09A9 /* Push Notifications */,
 				EE87E06A1C80BD1F00CA059E /* In App Purchases */,
 				EE03D3FE1C582EFF00078CF6 /* Facebook */,
@@ -485,14 +450,6 @@
 				EE65F1F21C31CA0D00E51138 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EE87E0611C7FC1BA00CA059E /* Tutorial */ = {
-			isa = PBXGroup;
-			children = (
-				EE87E0621C7FC6A000CA059E /* PageControl.swift */,
-			);
-			name = Tutorial;
 			sourceTree = "<group>";
 		};
 		EE87E06A1C80BD1F00CA059E /* In App Purchases */ = {
@@ -650,7 +607,7 @@
 					EE5E817C1BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = 92H4P6C5WB;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -665,12 +622,12 @@
 					};
 					EE5E81941BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 						TestTargetID = EE5E817C1BDEC1410004424F;
 					};
 					EE5E819F1BDEC1410004424F = {
 						CreatedOnToolsVersion = 7.0.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 						TestTargetID = EE5E817C1BDEC1410004424F;
 					};
 				};
@@ -714,7 +671,6 @@
 				EEC4F1FA1C83AD6900F3E07E /* lose.mp3 in Resources */,
 				EEEE5BB81C77D83000B181F6 /* x.mp3 in Resources */,
 				EE03D33D1C4EF71B00078CF6 /* SF-UI-Display-Light.otf in Resources */,
-				EE03D3231C4AC9BE00078CF6 /* .gitkeep in Resources */,
 				EE03D3411C4EF71B00078CF6 /* SF-UI-Display-Thin.otf in Resources */,
 				EE03D3401C4EF71B00078CF6 /* SF-UI-Display-Semibold.otf in Resources */,
 				EEEE5BBE1C7B788D00B181F6 /* background.mp3 in Resources */,
@@ -785,13 +741,11 @@
 				EEA08EC11C6A9407002F09A9 /* MainScene.swift in Sources */,
 				EEF0696E1C64087200CC5288 /* Settings.swift in Sources */,
 				EE2FB4D31C38D5A600C91D68 /* FriendListScene.swift in Sources */,
-				EE03D3241C4AC9BE00078CF6 /* SAConfettiView.swift in Sources */,
 				EEEE5B531C6E5F9E00B181F6 /* Difficulty.swift in Sources */,
 				EE8FD5161BF15E4A009191EA /* Nodes.swift in Sources */,
 				EE8FD5141BF158F0009191EA /* Array2D.swift in Sources */,
 				EEA08ECF1C6C4BAF002F09A9 /* Button.swift in Sources */,
 				EE5E81871BDEC1410004424F /* GameViewController.swift in Sources */,
-				EE87E0631C7FC6A000CA059E /* PageControl.swift in Sources */,
 				EEE9E3DE1C60043C0041E0BA /* LineAI.swift in Sources */,
 				EE03D4091C598A7800078CF6 /* Coordinate.swift in Sources */,
 				EE8D9EF61C65256A00B84761 /* AIOperation.swift in Sources */,
@@ -947,6 +901,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 92H4P6C5WB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.11.0",
@@ -963,7 +918,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "XsAndOs/XsAndOs-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -975,6 +931,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 92H4P6C5WB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.11.0",
@@ -990,7 +947,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "XsAndOs/XsAndOs-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1004,7 +962,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = derikflanary.XsAndOsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/XsAndOs.app/XsAndOs";
 			};
 			name = Debug;
@@ -1017,7 +976,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = derikflanary.XsAndOsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/XsAndOs.app/XsAndOs";
 			};
 			name = Release;
@@ -1030,7 +990,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = derikflanary.XsAndOsUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = XsAndOs;
 				USES_XCTRUNNER = YES;
 			};
@@ -1043,7 +1004,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = derikflanary.XsAndOsUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = XsAndOs;
 				USES_XCTRUNNER = YES;
 			};

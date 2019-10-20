@@ -86,7 +86,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     fileprivate func layoutViews(){
         startButton.frame = CGRect(x: 20, y: (self.view?.center.y)! - 80, width: (self.view?.bounds.size.width)! - 40, height: 50)
         startButton.center.x = (self.view?.center.x)!
-        startButton.setTitle("Start", for: UIControlState())
+        startButton.setTitle("Start", for: UIControl.State())
         startButton.addTarget(self, action: #selector(SingleSetupScene.newGamePressed), for: .touchUpInside)
         startButton.titleLabel?.font = UIFont(name: boldFontName, size: 36)
         startButton.backgroundColor = xColor
@@ -103,35 +103,35 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         sizeField.clipsToBounds = true
         sizeField.delegate = self
 
-        xButton.setImage(UIImage(named: "ex"), for: UIControlState())
+        xButton.setImage(UIImage(named: "ex"), for: UIControl.State())
         xButton.backgroundColor = xColor
         xButton.imageView?.contentMode = .center
         xButton.layer.cornerRadius = 40
         xButton.clipsToBounds = true
         xButton.addTarget(self, action: #selector(SingleSetupScene.xPressed), for: .touchUpInside)
         
-        oButton.setImage(UIImage(named: "oh"), for: UIControlState())
+        oButton.setImage(UIImage(named: "oh"), for: UIControl.State())
         oButton.backgroundColor = flint
         oButton.imageView?.contentMode = .center
         oButton.layer.cornerRadius = 40
         oButton.clipsToBounds = true
         oButton.addTarget(self, action: #selector(SingleSetupScene.oPressed), for: .touchUpInside)
         
-        easyButton.setImage(UIImage(named: "x1"), for: UIControlState())
+        easyButton.setImage(UIImage(named: "x1"), for: UIControl.State())
         easyButton.layer.cornerRadius = 25
         easyButton.clipsToBounds = true
         easyButton.imageView?.contentMode = .center
         easyButton.backgroundColor = flint
         easyButton.addTarget(self, action: #selector(SingleSetupScene.easyPressed), for: .touchUpInside)
         
-        moderateButton.setImage(UIImage(named: "xx"), for: UIControlState())
+        moderateButton.setImage(UIImage(named: "xx"), for: UIControl.State())
         moderateButton.layer.cornerRadius = 25
         moderateButton.clipsToBounds = true
         moderateButton.imageView?.contentMode = .center
         moderateButton.backgroundColor = oColor
         moderateButton.addTarget(self, action: #selector(SingleSetupScene.moderatePressed), for: .touchUpInside)
         
-        hardButton.setImage(UIImage(named: "xxx"), for: UIControlState())
+        hardButton.setImage(UIImage(named: "xxx"), for: UIControl.State())
         hardButton.layer.cornerRadius = 25
         hardButton.clipsToBounds = true
         hardButton.imageView?.contentMode = .center
@@ -144,7 +144,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         
         backButton.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
         backButton.backgroundColor = xColor
-        backButton.setImage(UIImage(named: "home"), for: UIControlState())
+        backButton.setImage(UIImage(named: "home"), for: UIControl.State())
         backButton.imageView?.contentMode = .center
         backButton.addTarget(self, action: #selector(SingleSetupScene.mainPressed), for: .touchUpInside)
         
@@ -171,7 +171,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     fileprivate func createRowsStack(){
         for i in 4...8 {
             let button = Button()
-            button.setTitle(String(i), for: UIControlState())
+            button.setTitle(String(i), for: UIControl.State())
             button.titleLabel?.font = UIFont(name: boldFontName, size: 24)
             button.backgroundColor = flint
             button.tag = i
@@ -325,44 +325,44 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     }
     
     //MARK: - BUTTON METHODS
-    func xPressed(){
+    @objc func xPressed(){
         buttonSoundEffect.play()
         animateXButtonPress()
         userTeam = .X
     }
     
-    func oPressed(){
+    @objc func oPressed(){
         buttonSoundEffect.play()
         animateOButtonPress()
         userTeam = .O
     }
     
-    func newGamePressed(){
+    @objc func newGamePressed(){
         buttonSoundEffect.play()
         var dim : Int
         dim = BoardSetupController().calculateDim(r)
         transitionToBoardScene(dim, rows: r)
     }
 
-    func easyPressed(){
+    @objc func easyPressed(){
         buttonSoundEffect.play()
         animateDifficultyButtonPress(easyButton, button1: moderateButton, button2: hardButton)
         difficulty = .easy
     }
     
-    func moderatePressed(){
+    @objc func moderatePressed(){
         buttonSoundEffect.play()
         animateDifficultyButtonPress(moderateButton, button1: easyButton, button2: hardButton)
         difficulty = .moderate
     }
     
-    func hardPressed(){
+    @objc func hardPressed(){
         buttonSoundEffect.play()
         animateDifficultyButtonPress(hardButton, button1: easyButton, button2: moderateButton)
         difficulty = .hard
     }
     
-    func mainPressed(){
+    @objc func mainPressed(){
         buttonSoundEffect.play()
         removeViews()
         if type == .online{
@@ -372,7 +372,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
         }
     }
     
-    func rowButtonPressed(_ sender: Button){
+    @objc func rowButtonPressed(_ sender: Button){
         buttonSoundEffect.play()        
         let oldButton = rowButtons[r - 4]
         animateRowButtonPress(sender, button1: oldButton)
@@ -447,7 +447,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
     
 
     fileprivate func animateInStackView(){
-        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: UIViewAnimationOptions(), animations: { () -> Void in
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: UIView.AnimationOptions(), animations: { () -> Void in
             self.stackView.alpha = 1
             self.localStackView.alpha = 1
             }) { (done) -> Void in

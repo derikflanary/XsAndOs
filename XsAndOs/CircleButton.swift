@@ -15,7 +15,7 @@ class CircleView: UIButton{
         self.clipsToBounds = true
         self.backgroundColor = oColor
         self.titleLabel?.font = UIFont(name: boldFontName, size: 24)
-        self.setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControlState())
+        self.setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControl.State())
         self.setTitleColor(UIColor(white: 0.95, alpha: 0.9), for: .highlighted)
         
     }

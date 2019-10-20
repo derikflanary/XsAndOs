@@ -32,9 +32,9 @@ class StarsOverlay: UIView {
     fileprivate var oparticle: CAEmitterCell!
     
     func setup() {
-        emitter.emitterMode = kCAEmitterLayerOutline
-        emitter.emitterShape = kCAEmitterLayerCircle
-        emitter.renderMode = kCAEmitterLayerOldestFirst
+        emitter.emitterMode = CAEmitterLayerEmitterMode.outline
+        emitter.emitterShape = CAEmitterLayerEmitterShape.circle
+        emitter.renderMode = CAEmitterLayerRenderMode.oldestFirst
         emitter.preservesDepth = true
         
         particle = CAEmitterCell()
@@ -87,7 +87,7 @@ class StarsOverlay: UIView {
         }
     }
     
-    func randomizeEmitterPosition() {
+    @objc func randomizeEmitterPosition() {
 //        let sizeWidth = max(bounds.width, bounds.height)
 //        let radius = CGFloat(arc4random()) % sizeWidth
 //        emitter.emitterSize = CGSize(width: radius, height: radius)

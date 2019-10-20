@@ -12,7 +12,7 @@ class Button: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControlState())
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControl.State())
         setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: .highlighted)
         layer.cornerRadius = self.frame.size.height/2
         clipsToBounds = true
@@ -41,7 +41,7 @@ class SButton: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControlState())
+        setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: UIControl.State())
         setTitleColor(UIColor(white: 0.95, alpha: 1.0), for: .highlighted)
         layer.cornerRadius = self.frame.size.height/2
         clipsToBounds = true

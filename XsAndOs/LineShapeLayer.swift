@@ -47,8 +47,8 @@ class LineShapeLayer : CAShapeLayer {
     
     func setShapeAspects(_ newPath: CGPath){
         path = newPath
-        lineJoin = kCALineJoinRound
-        lineCap = kCALineCapRound
+        lineJoin = CAShapeLayerLineJoin.round
+        lineCap = CAShapeLayerLineCap.round
         name = "line"
         fillColor = nil
         strokeEnd = 1.0

@@ -112,9 +112,9 @@ class Board: XandOScene {
         drawSquare()
         
         restartButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 50, y: 20, width: 100, height: 50)
-        restartButton.setTitleColor(UIColor.white, for: UIControlState())
+        restartButton.setTitleColor(UIColor.white, for: UIControl.State())
         restartButton.setTitleColor(UIColor.lightText, for: .highlighted)
-        restartButton.setTitle("Restart", for: UIControlState())
+        restartButton.setTitle("Restart", for: UIControl.State())
         restartButton.backgroundColor = thirdColor
         restartButton.addTarget(self, action: #selector(Board.restartPressed), for: .touchUpInside)
         restartButton.tag = 10
@@ -123,7 +123,7 @@ class Board: XandOScene {
         
         backButton.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
         backButton.backgroundColor = xColor
-        backButton.setImage(UIImage(named: "home"), for: UIControlState())
+        backButton.setImage(UIImage(named: "home"), for: UIControl.State())
         backButton.imageView?.contentMode = .center
         backButton.addTarget(self, action: #selector(Board.mainPressed), for: .touchUpInside)
         backButton.tag = 20
@@ -131,7 +131,7 @@ class Board: XandOScene {
         
         undoButton.frame = CGRect(x: (self.view?.frame.size.width)! - 60, y: 20, width: 50, height: 50)
         undoButton.backgroundColor = flint
-        undoButton.setImage(UIImage(named: "undo"), for: UIControlState())
+        undoButton.setImage(UIImage(named: "undo"), for: UIControl.State())
         undoButton.imageView?.contentMode = .center
         undoButton.addTarget(self, action: #selector(Board.undoLastMove), for: .touchUpInside)
         undoButton.tag = 30
@@ -260,7 +260,7 @@ class Board: XandOScene {
         pathAnimation.fromValue = 0
         pathAnimation.toValue = 1
         pathAnimation.isRemovedOnCompletion = false
-        pathAnimation.fillMode = kCAFillModeBoth
+        pathAnimation.fillMode = CAMediaTimingFillMode.both
         pathAnimation.delegate = self
         square.add(pathAnimation, forKey: pathAnimation.keyPath)
         squareSound.play()
@@ -693,9 +693,9 @@ class Board: XandOScene {
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
         animation.duration = 0.25
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut) // animation curve is Ease Out
         animation.autoreverses = true
-        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.fillMode = CAMediaTimingFillMode.both // keep to value after finishing
         animation.isRemovedOnCompletion = false // don't remove after finishing
         line.add(animation, forKey: animation.keyPath)
     }
@@ -704,10 +704,10 @@ class Board: XandOScene {
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
         animation.duration = 0.25
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut) // animation curve is Ease Out
         animation.autoreverses = true
         animation.delegate = line
-        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.fillMode = CAMediaTimingFillMode.both // keep to value after finishing
         animation.isRemovedOnCompletion = false // don't remove after finishing
         line.add(animation, forKey: animation.keyPath)
     }
@@ -760,13 +760,8 @@ class Board: XandOScene {
     
     func declareWinner(_ winningTeam: String){
         winner = true
-        var confetti = false
-        let confettiView = SAConfettiView(frame: self.view!.bounds)
         if winningTeam == userTeam.rawValue{
             cheerSound.play()
-            self.view!.addSubview(confettiView)
-            confettiView.startConfetti()
-            confetti = true
         }else{
             loseSound.play()
         }
@@ -774,10 +769,6 @@ class Board: XandOScene {
         let alertController = UIAlertController(title: "\(winningTeam) Wins", message: "Play again?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .cancel) { (action) in
             OperationQueue.main.addOperation({ () -> Void in
-                if confetti{
-                    confettiView.stopConfetti()
-                    confettiView.removeFromSuperview()
-                }
                 self.gameover()
             })
         }
@@ -789,7 +780,7 @@ class Board: XandOScene {
     
     //MARK: - UNDO MOVE
     
-    func undoLastMove(){
+    @objc func undoLastMove(){
         buttonSoundEffect.play()
         undoButton.backgroundColor = flint
         undoButton.isUserInteractionEnabled = false
@@ -954,12 +945,12 @@ class Board: XandOScene {
     
     //MARK: - BUTTON FUNCTIONS
     
-    func restartPressed(){
+    @objc func restartPressed(){
         buttonSoundEffect.play()
         resetBoard()
     }
     
-    func mainPressed(){
+    @objc func mainPressed(){
         buttonSoundEffect.play()
         removeViews()
         transitionToMainScene()

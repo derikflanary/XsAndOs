@@ -42,12 +42,12 @@ class GameViewController: UIViewController {
         
     }
     
-    func soundTurnedOn(){
+    @objc func soundTurnedOn(){
         backgroundMusic.loopPlay()
         print("sound on")
     }
     
-    func soundTurnedOff(){
+    @objc func soundTurnedOff(){
         backgroundMusic.stop()
         print("sound off")
     }

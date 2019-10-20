@@ -38,9 +38,9 @@ class LineAnimationOperation: Operation {
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
         animation.duration = 0.25
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut) // animation curve is Ease Out
         animation.autoreverses = true
-        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.fillMode = CAMediaTimingFillMode.both // keep to value after finishing
         animation.isRemovedOnCompletion = false // don't remove after finishing
         line.add(animation, forKey: animation.keyPath)
     }
@@ -49,10 +49,10 @@ class LineAnimationOperation: Operation {
         let animation = CABasicAnimation(keyPath: "lineWidth")
         animation.toValue = 6
         animation.duration = 0.25
-        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut) // animation curve is Ease Out
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut) // animation curve is Ease Out
         animation.autoreverses = true
         animation.delegate = line
-        animation.fillMode = kCAFillModeBoth // keep to value after finishing
+        animation.fillMode = CAMediaTimingFillMode.both // keep to value after finishing
         animation.isRemovedOnCompletion = false // don't remove after finishing
         line.add(animation, forKey: animation.keyPath)
     }
