@@ -13,11 +13,10 @@ class GameViewController: UIViewController {
 
     var scene : MainScene!
     var skView = SKView()
-    let backgroundMusic = SoundEffect(fileName: "background")
+    var backgroundMusic: SoundEffect?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.soundTurnedOn), name:NSNotification.Name(rawValue: "SoundOn"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(GameViewController.soundTurnedOff), name:NSNotification.Name(rawValue: "SoundOff"), object: nil)
         skView = self.view as! SKView
@@ -37,18 +36,21 @@ class GameViewController: UIViewController {
         
         let status = UserDefaults.standard.value(forKey: "sound") as! String
         if status == "on"{
-            backgroundMusic.loopPlay()
+            DispatchQueue.main.async {
+                self.backgroundMusic = SoundEffect(fileName: "background")
+                self.backgroundMusic?.loopPlay()
+            }
         }
         
     }
     
     @objc func soundTurnedOn(){
-        backgroundMusic.loopPlay()
+        backgroundMusic?.loopPlay()
         print("sound on")
     }
     
     @objc func soundTurnedOff(){
-        backgroundMusic.stop()
+        backgroundMusic?.stop()
         print("sound off")
     }
     
@@ -65,12 +67,4 @@ class GameViewController: UIViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-
-    override var prefersStatusBarHidden : Bool {
-        return true
-    }
 }

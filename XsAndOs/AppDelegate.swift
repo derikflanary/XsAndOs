@@ -13,7 +13,7 @@ import Crashlytics
 import GameAnalytics
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
@@ -27,9 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
             UserDefaults.standard.set(true, forKey: "FirstLaunch")
             UserDefaults.standard.setValue("on", forKey: "sound")
         }
-        
-        Chartboost.start(withAppId: "56cce719c909a65118b69870", appSignature: "459d2d89d8eb862c0d5f6e77cd2d4168b71d9ec7", delegate: self)
-        Chartboost.setShouldRequestInterstitialsInFirstSession(false)
 
         return true
     }
@@ -98,65 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ChartboostDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-
-    //MARK: - ADS
-    func didInitialize(_ status: Bool) {
-        print("chartboost did init")
-    }
-    
-    func shouldDisplayInterstitial(_ location: String!) -> Bool {
-        print("about to show ad at \(location)")
-        return true
-    }
-    
-    func didDisplayInterstitial(_ location: String!) {
-        print("ad displayed")
-    }
-    
-    func didDismissInterstitial(_ location: String!) {
-        print("dissmissed app")
-    }
-    
-    func didFail(toLoadInterstitial location: String!, withError error: CBLoadError) {
-        switch error{
-        case CBLoadError.internetUnavailable:
-            print("Failed to load Interstitial, no Internet connection !")
-
-        case .internal:
-            print("Failed to load Interstitial, internal error !")
-
-        case .networkFailure:
-            print("Failed to load Interstitial, network error !")
-
-        case .wrongOrientation:
-            print("Failed to load Interstitial, wrong orientation !")
-
-        case .tooManyConnections:
-            print("Failed to load Interstitial, too many connections !")
-
-        case .firstSessionInterstitialsDisabled:
-            print("Failed to load Interstitial, first session !")
-            
-        case .noAdFound:
-            print("Failed to load Interstitial, no ad found !")
-
-        case .sessionNotStarted :
-            print("Failed to load Interstitial, session not started !")
-            
-        case .noLocationFound :
-            print("Failed to load Interstitial, missing location parameter !")
-
-        case .prefetchingIncomplete:
-            print("Failed to load Interstitial, prefetching still in progress !")
-
-        case .impressionAlreadyVisible:
-            print("Failed to load Interstitial, impression already visible !")
-
-        default:
-            print("Failed to load Interstitial, unknown error !")
-        }
-
     }
 
 }

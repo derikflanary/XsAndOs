@@ -157,7 +157,7 @@ class SingleSetupScene: XandOScene, UITextFieldDelegate {
             addLocalStackViews()
         case .online:
             if opponent != nil{
-                opponentLabel.text = "VS: \(opponent!["name"])"
+                opponentLabel.text = "VS: \(String(describing: opponent!["name"]))"
                 opponentLabel.font = UIFont(name: boldFontName, size: 20)
                 opponentLabel.textColor = oColor
             }

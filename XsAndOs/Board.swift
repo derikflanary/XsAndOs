@@ -8,7 +8,7 @@
 import Parse 
 import SpriteKit
 
-let bottomPadding : CGFloat = 100
+let bottomPadding : CGFloat = 160
 let x = "X"
 let o = "O"
 
@@ -111,7 +111,7 @@ class Board: XandOScene {
         buildArrayOfNodes()
         drawSquare()
         
-        restartButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 50, y: 20, width: 100, height: 50)
+        restartButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 50, y: 60, width: 100, height: 50)
         restartButton.setTitleColor(UIColor.white, for: UIControl.State())
         restartButton.setTitleColor(UIColor.lightText, for: .highlighted)
         restartButton.setTitle("Restart", for: UIControl.State())
@@ -121,7 +121,7 @@ class Board: XandOScene {
         self.view?.addSubview(restartButton)
         restartButton.titleLabel?.font = UIFont(name: boldFontName, size: 18)
         
-        backButton.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
+        backButton.frame = CGRect(x: 10, y: 60, width: 50, height: 50)
         backButton.backgroundColor = xColor
         backButton.setImage(UIImage(named: "home"), for: UIControl.State())
         backButton.imageView?.contentMode = .center
@@ -129,7 +129,7 @@ class Board: XandOScene {
         backButton.tag = 20
         self.view?.addSubview(backButton)
         
-        undoButton.frame = CGRect(x: (self.view?.frame.size.width)! - 60, y: 20, width: 50, height: 50)
+        undoButton.frame = CGRect(x: (self.view?.frame.size.width)! - 60, y: 60, width: 50, height: 50)
         undoButton.backgroundColor = flint
         undoButton.setImage(UIImage(named: "undo"), for: UIControl.State())
         undoButton.imageView?.contentMode = .center
@@ -139,7 +139,7 @@ class Board: XandOScene {
         undoButton.isHidden = true
         
         turnLabel = SKLabelNode(text: x)
-        turnLabel.position = CGPoint(x: self.frame.width/2, y: yIsopin! * CGFloat(dim) + 150)
+        turnLabel.position = CGPoint(x: self.frame.width/2, y: yIsopin! * CGFloat(dim) + 180)
         turnLabel.fontColor = xColor
         turnLabel.fontName = mainFontName
         turnLabel.fontSize = 40
@@ -853,10 +853,6 @@ class Board: XandOScene {
     //MARK: - RESETTING GAME
     
     func gameover(){
-        if !UserDefaults.standard.bool(forKey: "adsRemoved"){
-            Chartboost.showInterstitial(CBLocationGameOver)
-        }
-        
         resetBoard()
     }
     
@@ -965,7 +961,7 @@ class Board: XandOScene {
 extension Board: CAAnimationDelegate {
 
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        boardSound.player.rate = 0.5
+        boardSound.player?.rate = 0.5
         boardSound.play()
     }
 

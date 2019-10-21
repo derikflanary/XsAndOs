@@ -32,54 +32,40 @@ class MainScene: XandOScene{
     
     
     fileprivate func layoutViews(){
-        
-        singleButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: startButton.frame.minY - 70, width: 50, height: 50)
-        singleButton.addTarget(self, action: #selector(MainScene.singlePressed), for: .touchUpInside)
-        singleButton.addTarget(self, action: #selector(MainScene.singlePressedCancelled), for: .touchDragExit)
-        singleButton.backgroundColor = xColor
-        singleButton.alpha = 0
-        singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
-        self.view?.addSubview(singleButton)
-
-        startButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: (self.view?.center.y)! - 80, width: 50, height: 50)
-        startButton.center.x = (self.view?.center.x)!
-        startButton.addTarget(self, action: #selector(MainScene.multiplayerPressed), for: .touchUpInside)
-        startButton.backgroundColor = xColor
-        startButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
-        startButton.alpha = 0
-        self.view?.addSubview(startButton)
-        
-        muteButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: (self.view?.frame.size.height)! - 100, width: 25, height: 25)
-        muteButton.addTarget(self, action: #selector(MainScene.mutePressed), for: .touchUpInside)
-        muteButton.alpha = 0
-        muteButton.backgroundColor = oColor
-        let status = UserDefaults.standard.value(forKey: "sound") as! String
-        if status == "off"{
-            muteButton.setImage(UIImage(named: "mute"), for: UIControl.State())
-        }else{
-            muteButton.setImage(UIImage(named: "sound"), for: UIControl.State())
+        DispatchQueue.main.async {
+            
+            self.singleButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: self.startButton.frame.minY - 70, width: 50, height: 50)
+            self.singleButton.addTarget(self, action: #selector(MainScene.singlePressed), for: .touchUpInside)
+            self.singleButton.addTarget(self, action: #selector(MainScene.singlePressedCancelled), for: .touchDragExit)
+            self.singleButton.backgroundColor = xColor
+            self.singleButton.alpha = 0
+            self.singleButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
+            self.view?.addSubview(self.singleButton)
+            
+            self.startButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: (self.view?.center.y)! - 80, width: 50, height: 50)
+            self.startButton.center.x = (self.view?.center.x)!
+            self.startButton.addTarget(self, action: #selector(MainScene.multiplayerPressed), for: .touchUpInside)
+            self.startButton.backgroundColor = xColor
+            self.startButton.titleLabel?.font = UIFont(name: boldFontName, size: 32)
+            self.startButton.alpha = 0
+            self.view?.addSubview(self.startButton)
+            
+            self.muteButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: (self.view?.frame.size.height)! - 100, width: 25, height: 25)
+            self.muteButton.addTarget(self, action: #selector(MainScene.mutePressed), for: .touchUpInside)
+            self.muteButton.alpha = 0
+            self.muteButton.backgroundColor = oColor
+            let status = UserDefaults.standard.value(forKey: "sound") as! String
+            if status == "off"{
+                self.muteButton.setImage(UIImage(named: "mute"), for: UIControl.State())
+            }else{
+                self.muteButton.setImage(UIImage(named: "sound"), for: UIControl.State())
+            }
+            self.view?.addSubview(self.muteButton)
+            
+            self.circle1.titleLabel?.font = UIFont(name: boldFontName, size: 32)
+            
+            self.entryAnimation()
         }
-        self.view?.addSubview(muteButton)
-        
-        if !UserDefaults.standard.bool(forKey: "adsRemoved"){
-            noAdsButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 + 25, y: (self.view?.frame.size.height)! - 100, width: 25, height: 25)
-            noAdsButton.addTarget(self, action: #selector(MainScene.noAdsPressed), for: .touchUpInside)
-            noAdsButton.alpha = 0
-            noAdsButton.backgroundColor = oColor
-            noAdsButton.isEnabled = false
-            noAdsButton.setImage(UIImage(named:"noAds"), for: UIControl.State())
-            self.view?.addSubview(noAdsButton)
-            
-            requestProducts()
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(MainScene.productPurchased(_:)), name: NSNotification.Name(rawValue: IAPHelperProductPurchasedNotification), object: nil)
-            
-            Chartboost.showInterstitial(CBLocationMainMenu)
-        }
-        
-        circle1.titleLabel?.font = UIFont(name: boldFontName, size: 32)
-        
-        entryAnimation()
     }
     
     //MARK: - BUTTON METHODS
@@ -211,13 +197,7 @@ class MainScene: XandOScene{
             self.singleButton.alpha = 1
             self.muteButton.alpha = 1
             
-            if !UserDefaults.standard.bool(forKey: "adsRemoved"){
-                self.noAdsButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 + 25, y: (self.view?.frame.size.height)! - 100, width: 50, height: 50)
-                self.noAdsButton.alpha = 1
-                self.muteButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 75, y: (self.view?.frame.size.height)! - 100, width: 50, height: 50)
-            }else{
-                self.muteButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25, y: (self.view?.frame.size.height)! - 100, width: 50, height: 50)
-            }
+            self.muteButton.frame = CGRect(x: (self.view?.frame.size.width)!/2 - 25 , y: (self.view?.frame.size.height)! - 100, width: 50, height: 50)
             
             }) { (dond) -> Void in
                 self.startButton.setTitle("Multiplayer", for: UIControl.State())
@@ -347,7 +327,9 @@ class MainScene: XandOScene{
         XOProducts.store.requestProductsWithCompletionHandler { success, products in
             if products.count > 0{
                 self.products = products
-                self.noAdsButton.isEnabled = true
+                DispatchQueue.main.async {
+                    self.noAdsButton.isEnabled = true                    
+                }
                 print(products)
             }
         }
